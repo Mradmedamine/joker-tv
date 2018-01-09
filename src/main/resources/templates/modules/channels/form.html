@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{desktop-layout}">
+
+	<div class="panel panel-default details-container file-details-container" layout:fragment="desktop-page-content"> 
+		<div class="panel-heading">
+       		<div class="row">
+                 <div class="col-lg-12">
+                    <span class="title">
+                       	<i class="fa fa-television fa-fw"></i>
+                        Channels
+                    </span>
+                 </div>
+       		</div>
+		</div>				
+		<div class="panel-body">
+			<div class="col-lg-12">
+			    <form class="form-horizontal details-form file-details-form" role="form">
+		    		<div class="form-group">
+			    		<label for="ActiveCode" class="col-sm-2 control-label">Login</label>
+			    		<div class="col-sm-4">
+			    			<input type="text" name="ActiveCode" class="form-control" />
+			    		</div>
+			    	</div>
+			    	<div class="form-group">
+			    		<label for="uid" class="col-sm-2 control-label">UID</label>
+			    		<div class="col-sm-4">
+			    			<input type="text" name="uid" class="form-control" />
+			    		</div>
+			    	</div>
+			    	<div class="form-group">
+			    		<label for="serial" class="col-sm-2 control-label">Serial</label>
+			    		<div class="col-sm-4">
+			    			<input type="text" name="serial" class="form-control" />
+			    		</div>
+			    	</div>
+			    	<div class="form-group">
+			    		<label for="model" class="col-sm-2 control-label">Model</label>
+			    		<div class="col-sm-4">
+			    			<select name="model" class="selectpicker col-sm-4" required>
+							  <option value="K0" selected="true">
+							  	K0
+							  </option>
+							  <option value="K3">
+							  	K3
+							  </option>
+							</select>	
+			    		</div>
+			    	</div>
+			    </form>
+		        <hr>
+				<div id="result-container" class="result-container" th:include="~{modules/channels/dataTable::content}"></div>
+		   	</div>
+		</div>
+		<div class="panel-footer container">
+			<div class="pull-right"> 
+				<button type="button" class="btn btn-primary btn-save">Fetch</button>
+			</div>
+		</div>
+	</div>
+
+	<th:block layout:fragment="js-import"> 	
+		<script th:src="@{/js/channels.js}" ></script> 
+	</th:block>
+	
+</html>

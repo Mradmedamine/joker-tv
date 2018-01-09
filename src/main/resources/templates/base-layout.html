@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<head lang="en">
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    
+		<!-- Style -->
+
+		<link rel="stylesheet" type="text/css" th:href="@{library/bootstrap/css/bootstrap.min.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{library/font-awesome/css/font-awesome.min.css}" />
+		
+		<link rel="stylesheet" type="text/css" th:href="@{css/editorial-uca.css}" />
+		
+		<!-- JavaScript -->
+		
+		<script th:src="@{library/jquery/jquery.min.js}" ></script>
+		
+	</head>
+	<body>
+		<div id="wrapper">
+			<div layout:fragment="content"></div>
+		</div>
+	</body>
+</html>

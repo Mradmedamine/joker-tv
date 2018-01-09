@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:th="http://www.thymeleaf.org" 
+		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<head lang="en">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joker TV</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link th:href="@{/library/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/library/bootstrap/css/bootstrap-select.min.css}" rel="stylesheet">
+    
+    <!-- MetisMenu CSS -->
+    <link th:href="@{/library/metisMenu/metisMenu.min.css}" rel="stylesheet">
+
+    <!-- Toastr -->
+    <link th:href="@{/library/toastr/toastr.min.css}" rel="stylesheet">
+    
+  	<!-- DataTables CSS -->
+  	<link th:href="@{/library/datatables/css/dataTables.buttons.min.css}" rel="stylesheet">
+    <link th:href="@{/library/datatables-plugins/dataTables.bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/library/datatables-responsive/dataTables.responsive.css}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link th:href="@{/library/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/css/editorial-uca.css}" rel="stylesheet" >
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- NAVIGATION -->
+        
+        <nav class="navbar navbar-default navbar-static-top navbar-uca" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" th:href="@{/}">	
+                	<img class="logo-uca" th:src="@{/images/editorial-logo.png}" />
+                </a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right top-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> 
+                        <small sec:authentication="name"></small> 
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                        	<a href="#"><i class="fa fa-user fa-fw"></i><th:block th:text="#{desktop.layout.topbar.userProfile}"/></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                        	<a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <th:block th:text="#{desktop.layout.topbar.logout}"/></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+			<!-- SIDEBAR -->
+			<div th:replace="~{fragments/sidebar::content}"></div>
+        </nav>
+
+        <div id="page-wrapper" >
+        	<div layout:fragment="desktop-page-content"></div>
+			<div layout:fragment="modals"></div>
+        </div>
+        
+    </div>
+	
+	<!---- LIBRARIES ---->
+	
+    <!-- JQuery -->
+    <script th:src="@{/library/jquery/jquery.min.js}"></script>
+    <script th:src="@{/library/jquery/jquery.validate.js}"></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script th:src="@{/library/bootstrap/js/bootstrap.min.js}"></script>
+	<script th:src="@{/library/bootstrap/js/bootstrap-select.min.js}"></script>
+	<script th:src="@{/library/bootstrap/js/bootstrap-filestyle.min.js}"></script>
+	<script th:src="@{/library/bootstrapValidator/bootstrapValidator.js}"></script>
+		
+    <!-- MetisMenu Plugin JavaScript -->
+    <script th:src="@{/library/metisMenu/metisMenu.min.js}"></script>
+
+    <!-- Toastr -->
+    <script th:src="@{/library/toastr/toastr.min.js}"></script>
+    
+   <!-- DataTables JavaScript -->
+    <script th:src="@{/library/datatables/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/library/datatables/js/dataTables.buttons.min.js}"></script>
+    <script th:src="@{/library/datatables-plugins/dataTables.bootstrap.min.js}"></script>
+    <script th:src="@{/library/datatables-responsive/dataTables.responsive.js}"></script>
+    
+    <script th:src="@{/library/buttons.html5.min.js}"></script>
+    
+    <!---- UCA ---->
+    <th:block th:include="i18n::content"></th:block>
+    
+	<script th:src="@{/js/jquery.extend.js}" ></script>
+	<script th:src="@{/js/desktop.js}" ></script>
+		
+	<th:block layout:fragment="js-import"></th:block>
+	
+</body>
+
+</html>

@@ -1,4 +1,4 @@
 /target/
 /.classpath
 /.project
-/src/main/resources/static/css/editorial-uca.css
+./src/main/resources/static/css/editorial-uca.css
