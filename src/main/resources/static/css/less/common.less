@@ -1,0 +1,140 @@
+#wrapper {
+	width: 100%;
+	min-height: 100vh;
+	*:not(i):not(.glyphicon) {
+		font-family: verdana;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.clickable {
+		cursor: pointer;
+	}
+
+	.control-label {
+		float: left;
+	}
+	
+	.margin20px{
+		margin : 20px;
+	}
+	.centered-text {
+		text-align: center;
+	}
+	.abbreviated {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 340px;
+	}
+
+	.btn.uca {
+		border-radius: 2px;
+		font-size: 13px;
+	}
+
+	.btn-default.uca {
+		border-color: #ccc;
+		color: #777;
+	}
+
+	.btn-outline {
+		color: inherit;
+		background-color: transparent;
+		transition: all .5s;
+	}
+
+	.btn-primary.btn-outline {
+		color: #428bca;
+	}
+
+	.btn-success.btn-outline {
+		color: #5cb85c;
+	}
+
+	.btn-info.btn-outline {
+		color: #5bc0de;
+	}
+
+	.btn-warning.btn-outline {
+		color: #f0ad4e;
+	}
+
+	.btn-danger.btn-outline {
+		color: #d9534f;
+	}
+
+	.btn-primary.btn-outline:hover , .btn-success.btn-outline:hover , .btn-info.btn-outline:hover , .btn-warning.btn-outline:hover , .btn-danger.btn-outline:hover {
+		color: white;
+	}
+
+	.material-switch {
+		> input[type="checkbox"] {
+			display: none;
+		}
+
+		> label {
+			cursor: pointer;
+			height: 0px;
+			position: relative;
+			width: 40px;
+			margin: auto;
+			margin-left: 10%;
+		}
+
+		> label::before {
+			background: rgb(0, 0, 0);
+			box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+			border-radius: 8px;
+			content: '';
+			height: 16px;
+			margin-top: -8px;
+			position: absolute;
+			opacity: 0.3;
+			transition: all 0.4s ease-in-out;
+			width: 40px;
+		}
+
+		> label::after {
+			background: rgb(255, 255, 255);
+			border-radius: 16px;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+			content: '';
+			height: 24px;
+			left: -4px;
+			margin-top: -8px;
+			position: absolute;
+			top: -4px;
+			transition: all 0.3s ease-in-out;
+			width: 24px;
+		}
+
+		> input[type="checkbox"]:checked {
+			+ label::before {
+				background: inherit;
+				opacity: 0.5;
+			}
+
+			+ label::after {
+				background: inherit;
+				left: 20px;
+			}
+		}
+	}
+
+	.error , .has-error {
+		color: red
+	}
+}
+
+html {
+	height: 100vh;
+}
+
+body {
+	min-height: 100vh;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAGklEQVQIW2N89+7dfyEhIUYGJIDCgYlTKAgAmtcEBhJsYjsAAAAASUVORK5CYII=) repeat;
+}
+
