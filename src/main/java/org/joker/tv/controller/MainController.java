@@ -13,6 +13,10 @@ public class MainController {
 		return "redirect:/activation";
 	}
 
+	//String url = getAbsoluteUrl(getConnectorConfig().getFilePath() + getConnectorConfig().getAdd());
+	//UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url).queryParam("parentId", file.getDocumentId());
+	//String builtUrl = uriBuilder.build().encode().toUriString();
+	
 	@RequestMapping("/activation")
 	public String activation(Model model) {
 		return "modules/activation/form";
