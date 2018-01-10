@@ -1,14 +1,12 @@
 $(function() {
 
-    var fileFormContainer = $('#file-form-container');
-
     initActivationForm();
 
     function initActivationForm() {
 	// Fields
-	var form = $(fileFormContainer).find('form');
+	var form = $('#activation-form');
 	var formFields = $(form).find('input, select, textArea');
-	var saveBtn = $(panelFooter).find('.btn-save');
+	var saveBtn = $('.btn-save');
 
 	var url = 'http://7star.jokeriptv.com/7star/activation.php';
 
