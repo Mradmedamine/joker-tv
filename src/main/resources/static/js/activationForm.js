@@ -3,27 +3,35 @@ $(function() {
     initActivationForm();
 
     function initActivationForm() {
-	// Fields
 	var form = $('#activation-form');
-	var formFields = $(form).find('input, select, textArea');
-	var saveBtn = $('.btn-save');
-
-	var url = 'http://7star.jokeriptv.com/7star/activation.php';
-
-	$(saveBtn).on('click', function(e) {
+	var activateBtn = $('.btn-save');
+	$(activateBtn).on('click', function(e) {
 	    if ($(form).valid()) {
 		var data = $(form).serializeObject();
 		$.ajax({
-		    type : 'GET',
-		    url : url,
+		    type : 'POST',
+		    url : '/activation',
 		    data : data,
+		    dataType : 'json',
 		    success : function(data) {
-			toastr["success"](data);
-			$('#toast-container .toast-success').show();
+			var status = data['status'];
+			var messageType;
+			switch (status) {
+			case '000':
+			    messageType = 'error';
+			    break;
+			case '550':
+			    messageType = 'warning';
+			    break;
+			case '100':
+			    messageType = 'success';
+			    break;
+			}
+			toastr[messageType](data['message']);
+			$('#toast-container .toast-' + messageType).show();
 		    }
 		});
 	    }
 	});
-
     }
 });

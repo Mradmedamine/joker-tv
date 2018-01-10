@@ -18,35 +18,31 @@
 		</div>				
 		<div class="panel-body">
 			<div class="col-lg-12">
-			    <form class="form-horizontal details-form file-details-form" role="form">
-		    		<div class="form-group">
-			    		<label for="ActiveCode" class="col-sm-2 control-label">Login</label>
-			    		<div class="col-sm-4">
-			    			<input type="text" name="ActiveCode" class="form-control" />
+			    <form id="channels-form" class="form-horizontal details-form file-details-form" role="form">
+		  			<div class="form-group">
+			    		<label for="login" class="col-sm-2 control-label">Login</label>
+			    		<div class="col-sm-3">
+			    			<input type="text" name="login" class="form-control" />
 			    		</div>
 			    	</div>
 			    	<div class="form-group">
-			    		<label for="uid" class="col-sm-2 control-label">UID (MAC Address)</label>
-			    		<div class="col-sm-4">
-			    			<input type="text" name="uid" class="form-control" />
+			    		<label for="macAddress" class="col-sm-2 control-label">MAC Address</label>
+			    		<div class="col-sm-3">
+			    			<input type="text" name="macAddress" class="form-control" />(IF NO MAC PLEASE SEND "NULL")
 			    		</div>
 			    	</div>
 			    	<div class="form-group">
-			    		<label for="serial" class="col-sm-2 control-label">Serial</label>
-			    		<div class="col-sm-4">
-			    			<input type="text" name="serial" class="form-control" />
+			    		<label for="serialNumber" class="col-sm-2 control-label">Serial</label>
+			    		<div class="col-sm-3">
+			    			<input type="text" name="serialNumber" class="form-control" />
 			    		</div>
 			    	</div>
 			    	<div class="form-group">
 			    		<label for="model" class="col-sm-2 control-label">Model</label>
-			    		<div class="col-sm-4">
-			    			<select name="model" class="selectpicker col-sm-4" required>
-							  <option value="K0" selected="true">
-							  	K0
-							  </option>
-							  <option value="K3">
-							  	K3
-							  </option>
+			    		<div>
+			    			<select name="model" class="selectpicker col-sm-3" required>
+							  <option value="K0" selected="true">K0</option>
+							  <option value="K3">K3</option>
 							</select>	
 			    		</div>
 			    	</div>
