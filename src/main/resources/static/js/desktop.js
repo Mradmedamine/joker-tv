@@ -60,7 +60,7 @@ $(function() {
 	
 	
 	$(document).on('click', ".table-uca tr[class*='clickable']", function(event) {
-		window.location = $(this).data('href')
+		window.open($(this).data('href'), $(this).data('target'));
 	});
 	
 	

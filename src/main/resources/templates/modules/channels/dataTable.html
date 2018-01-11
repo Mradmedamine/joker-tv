@@ -16,7 +16,7 @@
 		 	 </tr>
 	     </thead>
 	     <tbody>
-			<tr th:each="channel : ${channels?.tv_channel}" class="clickable" th:attr="data-href=${channel.streaming_url}">
+			<tr th:each="channel : ${channels?.tv_channel}" class="clickable" data-target="_blank" th:attr="data-href=${channel.streaming_url}">
 				<td class="hidden" th:text="${channel.id}"></td>
 				<td><img th:src="${channel.icon_url}" alt="" height="60px" width="60px"></td>
 				<td th:text="${channel.caption}"></td>
