@@ -19,30 +19,7 @@
 		<div class="panel-body">
 			<div class="col-lg-12">
 			    <form id="channels-form" class="form-horizontal details-form file-details-form" role="form">
-		  			<div class="form-group">
-			    		<label for="login" class="col-sm-2 control-label">Login</label>
-			    		<div class="col-sm-3">
-			    			<input type="text" name="login" class="form-control" />
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<label for="macAddress" class="col-sm-2 control-label">MAC Address</label>
-			    		<div class="col-sm-3">
-			    			<input type="text" name="macAddress" class="form-control" />(IF NO MAC PLEASE SEND "NULL")
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<label for="serialNumber" class="col-sm-2 control-label">Serial</label>
-			    		<div class="col-sm-3">
-			    			<input type="text" name="serialNumber" class="form-control" />
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<label for="model" class="col-sm-2 control-label">Model</label>
-			    		<div class="col-sm-3">
-			    			<input type="text" name="model" class="form-control" />
-			    		</div>
-			    	</div>
+		  			<th:block th:include="~{fragments/productForm :: content}"/>
 			    </form>
 		        <hr>
 				<div id="result-container" class="result-container" th:include="~{modules/channels/dataTable::content}"></div>
