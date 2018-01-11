@@ -1,6 +1,6 @@
 package org.joker.tv.validator;
 
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.User;
 import org.joker.tv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

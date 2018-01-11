@@ -1,4 +1,4 @@
-package org.joker.tv.model.front.web.dto;
+package org.joker.tv.model;
 
 import java.io.Serializable;
 

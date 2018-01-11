@@ -1,4 +1,4 @@
-package org.joker.tv.model.domain.entity;
+package org.joker.tv.model.entity;
 
 import javax.persistence.*;
 import java.util.Set;

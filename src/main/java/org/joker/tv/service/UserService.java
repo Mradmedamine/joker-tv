@@ -1,6 +1,6 @@
 package org.joker.tv.service;
 
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.User;
 
 public interface UserService {
 

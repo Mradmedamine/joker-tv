@@ -1,4 +1,4 @@
-package org.joker.tv.model.domain.entity;
+package org.joker.tv.model.entity;
 
 import java.util.Set;
 

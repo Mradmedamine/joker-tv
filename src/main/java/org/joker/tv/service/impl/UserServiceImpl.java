@@ -1,6 +1,6 @@
 package org.joker.tv.service.impl;
 
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.User;
 import org.joker.tv.repository.RoleRepository;
 import org.joker.tv.repository.UserRepository;
 import org.joker.tv.service.UserService;

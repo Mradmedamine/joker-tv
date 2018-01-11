@@ -1,7 +1,7 @@
 package org.joker.tv.service.impl;
 
-import org.joker.tv.model.domain.entity.Role;
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.Role;
+import org.joker.tv.model.entity.User;
 import org.joker.tv.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

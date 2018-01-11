@@ -2,7 +2,7 @@ package org.joker.tv.controller;
 
 import java.util.Locale;
 
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.User;
 import org.joker.tv.service.SecurityService;
 import org.joker.tv.service.UserService;
 import org.joker.tv.validator.UserValidator;

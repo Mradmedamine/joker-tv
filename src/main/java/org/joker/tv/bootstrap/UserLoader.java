@@ -3,8 +3,8 @@ package org.joker.tv.bootstrap;
 import java.util.Collections;
 
 import org.apache.log4j.Logger;
-import org.joker.tv.model.domain.entity.Role;
-import org.joker.tv.model.domain.entity.User;
+import org.joker.tv.model.entity.Role;
+import org.joker.tv.model.entity.User;
 import org.joker.tv.repository.RoleRepository;
 import org.joker.tv.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
