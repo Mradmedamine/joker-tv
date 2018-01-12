@@ -1,8 +1,8 @@
-package org.joker.tv.model;
+package org.joker.tv.model.front.web;
 
 import java.io.Serializable;
 
-public class Product
+public class Device
 	implements Serializable
 {
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>	
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="content">
+	<table id="movies-datatables" width="100%" class="table table-striped table-bordered table-hover table-uca">
+	     <thead>
+		     <tr> 
+		     	<th class="hidden">id</th>
+		     	<th width="14%">Icon</th>
+		     	<th width="24%">Caption</th>
+		 	 </tr>
+	     </thead>
+	     <tbody>
+			<tr th:each="movie : ${movies}" class="clickable" data-target="_blank" th:attr="data-href=${movie.vUrl}">
+				<td class="hidden" th:text="${movie.id}"></td>
+				<td><img th:src="${movie.posterUrl}" alt="" height="60px" width="60px"></td>
+				<td th:text="${movie.caption}"></td>
+			</tr>
+	    </tbody>
+	</table>
+</th:block>
+</html>

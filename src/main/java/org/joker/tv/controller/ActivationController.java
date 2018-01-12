@@ -2,8 +2,8 @@ package org.joker.tv.controller;
 
 import java.net.URI;
 
-import org.joker.tv.model.ActivationResult;
-import org.joker.tv.model.Product;
+import org.joker.tv.model.front.web.ActivationResult;
+import org.joker.tv.model.front.web.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +35,7 @@ public class ActivationController
 
 	@PostMapping("/activation")
 	@ResponseBody
-	public ActivationResult activateProduct(Product product, Model model)
+	public ActivationResult activateProduct(Device product, Model model)
 	{
 		UriComponentsBuilder uriBuilder =
 			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("login", product.getActiveCode())

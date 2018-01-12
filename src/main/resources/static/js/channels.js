@@ -1,7 +1,5 @@
 $(function() {
 
-    var channelContainer = $('#channels-container');
-
     initChannelsForm();
     initChannelsDataTables();
 
@@ -11,8 +9,8 @@ $(function() {
 
     function initChannelsForm() {
 	var form = $('#channels-form');
-	var activateBtn = $('.btn-save');
-	$(activateBtn).on('click', function(e) {
+	var submitBtn = $('.btn-save');
+	$(submitBtn).on('click', function(e) {
 	    if ($(form).valid()) {
 		var data = $(form).serializeObject();
 		$.ajax({

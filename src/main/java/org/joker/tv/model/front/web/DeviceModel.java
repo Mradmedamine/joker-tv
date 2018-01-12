@@ -1,12 +1,12 @@
-package org.joker.tv.model;
+package org.joker.tv.model.front.web;
 
-public enum ProductModel {
+public enum DeviceModel {
 
 	K0("K0"), K3("K3");
 
 	private String value;
 
-	private ProductModel(String value) {
+	private DeviceModel(String value) {
 		this.setValue(value);
 	}
 

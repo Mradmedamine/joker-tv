@@ -1,4 +1,4 @@
-package org.joker.tv.model;
+package org.joker.tv.model.front.web.channel;
 
 public class TVCategories {
 

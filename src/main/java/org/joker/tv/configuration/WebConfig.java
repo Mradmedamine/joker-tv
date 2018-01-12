@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -26,7 +25,10 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+public class WebConfig
+	extends WebMvcConfigurerAdapter
+	implements ApplicationContextAware
+{
 
 	@Value("${thymeleaf.templates.cache}")
 	private String thymeleafCache;
@@ -36,28 +38,35 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 	private ApplicationContext applicationContext;
 
-	public void setApplicationContext(ApplicationContext applicationContext) {
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+	{
 		this.applicationContext = applicationContext;
 	}
-	
+
 	@Bean
-	public ITemplateResolver templateResolver() {
+	public ITemplateResolver templateResolver()
+	{
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
 		templateResolver.setApplicationContext(applicationContext);
 		templateResolver.setPrefix("classpath:/templates/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode("HTML");
 		templateResolver.setCharacterEncoding("UTF-8");
-		if (thymeleafCache.equals("true")) {
+		if (thymeleafCache.equals("true"))
+		{
 			templateResolver.setCacheable(true);
-		} else {
+		}
+		else
+		{
 			templateResolver.setCacheable(false);
 		}
 		return templateResolver;
 	}
 
 	@Bean
-	public SpringTemplateEngine templateEngine() {
+	public SpringTemplateEngine templateEngine()
+	{
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setEnableSpringELCompiler(true);
 		templateEngine.setTemplateResolver(templateResolver());
@@ -68,14 +77,16 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	}
 
 	@Bean
-	public LocaleResolver localeResolver() {
+	public LocaleResolver localeResolver()
+	{
 		SessionLocaleResolver slr = new SessionLocaleResolver();
 		slr.setDefaultLocale(Locale.ENGLISH);
 		return slr;
 	}
 
 	@Bean
-	public ViewResolver viewResolver() {
+	public ViewResolver viewResolver()
+	{
 		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
 		viewResolver.setTemplateEngine(templateEngine());
 		viewResolver.setCharacterEncoding("UTF-8");
@@ -83,17 +94,21 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	}
 
 	@Bean
-	public RestTemplate restTemplate() {
+	public RestTemplate restTemplate()
+	{
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(new MyGsonHttpMessageConverter());
+		//		restTemplate.getInterceptors().add(new RestLoggingInterceptor());
 		return restTemplate;
 	}
-	
-	private IDialect springSecurityDialect() {
+
+	private IDialect springSecurityDialect()
+	{
 		return new SpringSecurityDialect();
 	}
-	
-	private IDialect layoutDialect() {
+
+	private IDialect layoutDialect()
+	{
 		return new LayoutDialect();
 	}
 }
