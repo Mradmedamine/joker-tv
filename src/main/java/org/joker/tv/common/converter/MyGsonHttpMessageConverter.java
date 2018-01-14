@@ -1,4 +1,4 @@
-package org.joker.tv.converter;
+package org.joker.tv.common.converter;
 
 import java.util.Arrays;
 import java.util.List;

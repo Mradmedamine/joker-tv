@@ -1,4 +1,4 @@
-package org.joker.tv.controller;
+package org.joker.tv.common;
 
 public interface Constants {
 
@@ -7,6 +7,6 @@ public interface Constants {
 	 */
 	public static final String BASE_URL_7STAR = "http://7star.jokeriptv.com/7star";
 	public static final String ACTIVATION_URL_7STAR = BASE_URL_7STAR + "/activation.php";
-	public static final String CHANNELS_URL_7STAR = BASE_URL_7STAR + "/Run.php";
+	public static final String _7STAR_URL = BASE_URL_7STAR + "/Run.php";
 
 }

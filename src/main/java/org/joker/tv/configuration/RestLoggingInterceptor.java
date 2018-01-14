@@ -3,7 +3,7 @@ package org.joker.tv.configuration;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joker.tv.util.HttpClientUtils;
+import org.joker.tv.common.util.HttpClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;

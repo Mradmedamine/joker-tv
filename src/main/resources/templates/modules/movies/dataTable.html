@@ -12,9 +12,9 @@
 		 	 </tr>
 	     </thead>
 	     <tbody>
-			<tr th:each="movie : ${movies}" class="clickable" data-target="_blank" th:attr="data-href=${movie.vUrl}">
+			<tr th:each="movie : ${movies}" class="clickable" data-target="_blank" th:attr="data-href=${movie.v_url}">
 				<td class="hidden" th:text="${movie.id}"></td>
-				<td><img th:src="${movie.posterUrl}" alt="" height="60px" width="60px"></td>
+				<td><img th:src="${movie.poster_url}" alt="" height="60px" width="60px"></td>
 				<td th:text="${movie.caption}"></td>
 			</tr>
 	    </tbody>

@@ -1,4 +1,4 @@
-package org.joker.tv.util;
+package org.joker.tv.common.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +74,7 @@ public abstract class HttpClientUtils
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Charset getCharset(ClientHttpResponse response)
 	{
 		HttpHeaders headers = response.getHeaders();

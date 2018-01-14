@@ -1,4 +1,4 @@
-package org.joker.tv.util;
+package org.joker.tv.common.util;
 
 import java.text.MessageFormat;
 

@@ -6,20 +6,19 @@ import java.util.List;
 public class VodCategories
 	implements Serializable
 {
-	/**
-	 *
-	 */
+	
 	private static final long serialVersionUID = 730330245898835773L;
-	private List<VodCategory> vodCategory;
+	
+	private List<VodCategory> vod_category;
 
-	public List<VodCategory> getVodCategory()
-	{
-		return vodCategory;
+	public List<VodCategory> getVod_category() {
+		return vod_category;
 	}
 
-	public void setVodCategory(List<VodCategory> vodCategory)
-	{
-		this.vodCategory = vodCategory;
+	public void setVod_category(List<VodCategory> vod_category) {
+		this.vod_category = vod_category;
 	}
+
+
 
 }

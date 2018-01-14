@@ -2,6 +2,7 @@ package org.joker.tv.controller;
 
 import java.net.URI;
 
+import org.joker.tv.common.Constants;
 import org.joker.tv.model.front.web.ActivationResult;
 import org.joker.tv.model.front.web.Device;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,12 +20,6 @@ public class ActivationController
 
 	@Autowired
 	private RestTemplate restTemplate;
-
-	@RequestMapping("/")
-	public String index(Model model)
-	{
-		return "redirect:/activation";
-	}
 
 	@GetMapping("/activation")
 	public String activation(Model model)

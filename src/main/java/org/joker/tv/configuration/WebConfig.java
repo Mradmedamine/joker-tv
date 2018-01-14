@@ -2,7 +2,7 @@ package org.joker.tv.configuration;
 
 import java.util.Locale;
 
-import org.joker.tv.converter.MyGsonHttpMessageConverter;
+import org.joker.tv.common.converter.MyGsonHttpMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;

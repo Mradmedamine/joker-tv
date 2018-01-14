@@ -6,10 +6,8 @@ public class ChannelsResult
 	implements Serializable
 {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 2018779061400449111L;
+	
 	private TVCategories tv_categories;
 	private TVChannel[] tv_channel;
 
