@@ -29,11 +29,28 @@ public class ActivationController
 
 	@PostMapping("/activation")
 	@ResponseBody
-	public ActivationResult activateProduct(Device product, Model model)
+	public ActivationResult activateProduct(Device device, Model model)
 	{
 		UriComponentsBuilder uriBuilder =
-			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("login", product.getActiveCode())
-				.queryParam("uid", product.getMacAddress()).queryParam("serial", product.getSerialNumber()).queryParam("model", product.getModel());
+			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("login", device.getActiveCode())
+				.queryParam("uid", device.getMacAddress()).queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
+		URI url = uriBuilder.build().encode().toUri();
+		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
+	}
+
+	@GetMapping("/iks")
+	public String iks(Model model)
+	{
+		return "modules/iks/form";
+	}
+
+	@PostMapping("/iks")
+	@ResponseBody
+	public ActivationResult iks(Device device, Model model)
+	{
+		UriComponentsBuilder uriBuilder =
+			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("ac", device.getActiveCode()).queryParam("ma", device.getMacAddress())
+				.queryParam("sn", device.getSerialNumber());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
 	}
