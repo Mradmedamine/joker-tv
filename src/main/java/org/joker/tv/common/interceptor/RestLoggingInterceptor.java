@@ -1,4 +1,4 @@
-package org.joker.tv.configuration;
+package org.joker.tv.common.interceptor;
 
 import java.io.IOException;
 

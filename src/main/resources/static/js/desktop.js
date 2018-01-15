@@ -1,17 +1,17 @@
 var dataTablesMessages = {
 	"emptyTable" 		: message.datatable.emptySearchResultMessage,
-	"info" 			: message.datatable.info,
+	"info" 				: message.datatable.info,
 	"infoEmpty" 		: message.datatable.infoEmpty,
 	"infoFiltered" 		: message.datatable.infoFiltered,
 	"lengthMenu" 		: message.datatable.lengthMenu,
 	"loadingFiles" 		: message.datatable.loadingFiles,
 	"processing" 		: message.datatable.processing,
-	"search" 		: message.datatable.search,
+	"search" 			: message.datatable.search,
 	"zeroFiles" 		: message.datatable.zeroFiles,
 	"paginate" : {
 	    "first" 		: message.datatable.pagination.first,
-	    "last" 		: message.datatable.pagination.last,
-	    "next" 		: message.datatable.pagination.next,
+	    "last" 			: message.datatable.pagination.last,
+	    "next" 			: message.datatable.pagination.next,
 	    "previous"  	: message.datatable.pagination.previous
 	}
 }
