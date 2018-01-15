@@ -12,8 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public abstract class BaseEntity
-{
+public abstract class BaseEntity {
 
 	private Long id;
 	private LocalDateTime createdAt;
@@ -21,63 +20,51 @@ public abstract class BaseEntity
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long getId()
-	{
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id)
-	{
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	@Column(name = "created_at")
-	LocalDateTime getCreatedAt()
-	{
+	LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt)
-	{
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
 	@Column(name = "modified_at")
-	public LocalDateTime getModifiedAt()
-	{
+	public LocalDateTime getModifiedAt() {
 		return modifiedAt;
 	}
 
-	public void setModifiedAt(LocalDateTime modifiedAt)
-	{
+	public void setModifiedAt(LocalDateTime modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
 
 	@PrePersist
-	void createdAt()
-	{
+	void createdAt() {
 		createdAt = modifiedAt = LocalDateTime.now();
 	}
 
 	@PreUpdate
-	void updatedAt()
-	{
+	void updatedAt() {
 		modifiedAt = LocalDateTime.now();
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
-		if (this == o)
-		{
+	public boolean equals(Object o) {
+		if (this == o) {
 			return true;
 		}
-		if (o == null)
-		{
+		if (o == null) {
 			return false;
 		}
-		if (getClass() != o.getClass())
-		{
+		if (getClass() != o.getClass()) {
 			return false;
 		}
 		BaseEntity dto = (BaseEntity) o;

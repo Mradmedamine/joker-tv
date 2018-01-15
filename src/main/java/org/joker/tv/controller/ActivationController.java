@@ -15,42 +15,35 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
-public class ActivationController
-{
+public class ActivationController {
 
 	@Autowired
 	private RestTemplate restTemplate;
 
 	@GetMapping("/activation")
-	public String activation(Model model)
-	{
+	public String activation(Model model) {
 		return "modules/activation/form";
 	}
 
 	@PostMapping("/activation")
 	@ResponseBody
-	public ActivationResult activateProduct(Device device, Model model)
-	{
-		UriComponentsBuilder uriBuilder =
-			UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("login", device.getActiveCode())
+	public ActivationResult activateProduct(Device device, Model model) {
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("login", device.getActiveCode())
 				.queryParam("uid", device.getMacAddress()).queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
 	}
 
 	@GetMapping("/iks")
-	public String iks(Model model)
-	{
+	public String iks(Model model) {
 		return "modules/iks/form";
 	}
 
 	@PostMapping("/iks")
 	@ResponseBody
-	public ActivationResult iks(Device device, Model model)
-	{
-		UriComponentsBuilder uriBuilder =
-			UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("ac", device.getActiveCode()).queryParam("ma", device.getMacAddress())
-				.queryParam("sn", device.getSerialNumber());
+	public ActivationResult iks(Device device, Model model) {
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("ac", device.getActiveCode())
+				.queryParam("ma", device.getMacAddress()).queryParam("sn", device.getSerialNumber());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
 	}

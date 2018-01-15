@@ -49,7 +49,7 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model, String error, String logout, Locale locale) {
-		Object[] args = new Object[] {};
+		Object[] args = new Object[]{};
 		if (error != null) {
 			String loginFailureMessage = messageSource.getMessage("common.login.failure", args, locale);
 			model.addAttribute("error", loginFailureMessage);

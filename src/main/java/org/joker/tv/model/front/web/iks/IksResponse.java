@@ -11,5 +11,5 @@ public class IksResponse {
 	public void setServers(Servers servers) {
 		Servers = servers;
 	}
-	
+
 }

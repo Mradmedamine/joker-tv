@@ -25,10 +25,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
-public class WebConfig
-	extends WebMvcConfigurerAdapter
-	implements ApplicationContextAware
-{
+public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	@Value("${thymeleaf.templates.cache}")
 	private String thymeleafCache;
@@ -39,34 +36,28 @@ public class WebConfig
 	private ApplicationContext applicationContext;
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext)
-	{
+	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
 	@Bean
-	public ITemplateResolver templateResolver()
-	{
+	public ITemplateResolver templateResolver() {
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
 		templateResolver.setApplicationContext(applicationContext);
 		templateResolver.setPrefix("classpath:/templates/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode("HTML");
 		templateResolver.setCharacterEncoding("UTF-8");
-		if (thymeleafCache.equals("true"))
-		{
+		if (thymeleafCache.equals("true")) {
 			templateResolver.setCacheable(true);
-		}
-		else
-		{
+		} else {
 			templateResolver.setCacheable(false);
 		}
 		return templateResolver;
 	}
 
 	@Bean
-	public SpringTemplateEngine templateEngine()
-	{
+	public SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setEnableSpringELCompiler(true);
 		templateEngine.setTemplateResolver(templateResolver());
@@ -77,16 +68,14 @@ public class WebConfig
 	}
 
 	@Bean
-	public LocaleResolver localeResolver()
-	{
+	public LocaleResolver localeResolver() {
 		SessionLocaleResolver slr = new SessionLocaleResolver();
 		slr.setDefaultLocale(Locale.ENGLISH);
 		return slr;
 	}
 
 	@Bean
-	public ViewResolver viewResolver()
-	{
+	public ViewResolver viewResolver() {
 		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
 		viewResolver.setTemplateEngine(templateEngine());
 		viewResolver.setCharacterEncoding("UTF-8");
@@ -94,21 +83,18 @@ public class WebConfig
 	}
 
 	@Bean
-	public RestTemplate restTemplate()
-	{
+	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(new MyGsonHttpMessageConverter());
-		//		restTemplate.getInterceptors().add(new RestLoggingInterceptor());
+		// restTemplate.getInterceptors().add(new RestLoggingInterceptor());
 		return restTemplate;
 	}
 
-	private IDialect springSecurityDialect()
-	{
+	private IDialect springSecurityDialect() {
 		return new SpringSecurityDialect();
 	}
 
-	private IDialect layoutDialect()
-	{
+	private IDialect layoutDialect() {
 		return new LayoutDialect();
 	}
 }

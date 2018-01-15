@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 public interface ChannelService {
 
 	ChannelsResult getChannels(Device product);
-	
-	 List<Movie> getMovies(Device product, Model model);
-	
+
+	List<Movie> getMovies(Device product, Model model);
+
 }

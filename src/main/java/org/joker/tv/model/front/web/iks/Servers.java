@@ -1,10 +1,10 @@
 package org.joker.tv.model.front.web.iks;
 
 public class Servers {
-	
+
 	private Server[] server;
 	private Object message;
-	
+
 	public Server[] getServer() {
 		return server;
 	}
