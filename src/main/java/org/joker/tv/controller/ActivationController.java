@@ -32,7 +32,7 @@ public class ActivationController
 	public ActivationResult activateProduct(Device device, Model model)
 	{
 		UriComponentsBuilder uriBuilder =
-			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("login", device.getActiveCode())
+			UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("login", device.getActiveCode())
 				.queryParam("uid", device.getMacAddress()).queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
@@ -49,7 +49,7 @@ public class ActivationController
 	public ActivationResult iks(Device device, Model model)
 	{
 		UriComponentsBuilder uriBuilder =
-			UriComponentsBuilder.fromHttpUrl(Constants.ACTIVATION_URL_7STAR).queryParam("ac", device.getActiveCode()).queryParam("ma", device.getMacAddress())
+			UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("ac", device.getActiveCode()).queryParam("ma", device.getMacAddress())
 				.queryParam("sn", device.getSerialNumber());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();

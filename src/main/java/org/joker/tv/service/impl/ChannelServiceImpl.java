@@ -43,7 +43,7 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	private UriComponentsBuilder getBasicChannelsUriComponentsBuilder(Device device) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_URL)
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL)
 		        .queryParam("login", device.getActiveCode()).queryParam("uid", device.getMacAddress())
 		        .queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
 		return uriBuilder;
