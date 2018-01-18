@@ -23,8 +23,7 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Override
 	public ChannelsResult getChannels(Device product) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("page",
-		        "channelsList");
+		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("page", "channelsList");
 		URI url = uriBuilder.build().encode().toUri();
 		ChannelsResult channels = restTemplate.getForObject(url, ChannelsResult.class);
 		return channels;
@@ -32,8 +31,7 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Override
 	public List<Movie> getMovies(Device product, Model model) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("category_id", 15)
-		        .queryParam("page", "vodMovieList");
+		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("category_id", 15).queryParam("page", "vodMovieList");
 		URI url = uriBuilder.build().encode().toUri();
 		VodsResult result = restTemplate.getForObject(url, VodsResult.class);
 		if (result != null) {
@@ -43,16 +41,9 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	private UriComponentsBuilder getBasicChannelsUriComponentsBuilder(Device device) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL)
-		        .queryParam("login", device.getActiveCode()).queryParam("uid", device.getMacAddress())
-		        .queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL).queryParam("login", device.getActiveCode())
+				.queryParam("uid", device.getMacAddress()).queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
 		return uriBuilder;
 	}
 
-//	private String fixUrls(List<Movie> movies) {
-//		String noise = "http://62.4.22.34:1980/images/";
-//		for(Movie movie : movies) {
-//		}
-//	}
-	
 }
