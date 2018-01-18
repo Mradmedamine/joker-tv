@@ -1,4 +1,4 @@
-package org.joker.tv.controller;
+package org.joker.tv.controller.web;
 
 import org.joker.tv.model.front.web.Device;
 import org.joker.tv.model.front.web.channel.ChannelsResult;

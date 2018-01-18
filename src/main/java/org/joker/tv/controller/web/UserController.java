@@ -1,4 +1,4 @@
-package org.joker.tv.controller;
+package org.joker.tv.controller.web;
 
 import java.util.Locale;
 
