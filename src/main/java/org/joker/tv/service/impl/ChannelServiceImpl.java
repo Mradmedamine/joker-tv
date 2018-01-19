@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.joker.tv.common.Constants;
-import org.joker.tv.model.front.web.Device;
+import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.channel.ChannelsResult;
 import org.joker.tv.model.front.web.vod.Movie;
 import org.joker.tv.model.front.web.vod.VodsResult;
@@ -22,16 +22,18 @@ public class ChannelServiceImpl implements ChannelService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public ChannelsResult getChannels(Device product) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("page", "channelsList");
+	public ChannelsResult getChannels(DeviceDto product) {
+		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("page",
+		        "channelsList");
 		URI url = uriBuilder.build().encode().toUri();
 		ChannelsResult channels = restTemplate.getForObject(url, ChannelsResult.class);
 		return channels;
 	}
 
 	@Override
-	public List<Movie> getMovies(Device product, Model model) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("category_id", 15).queryParam("page", "vodMovieList");
+	public List<Movie> getMovies(DeviceDto product, Model model) {
+		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("category_id", 15)
+		        .queryParam("page", "vodMovieList");
 		URI url = uriBuilder.build().encode().toUri();
 		VodsResult result = restTemplate.getForObject(url, VodsResult.class);
 		if (result != null) {
@@ -40,9 +42,10 @@ public class ChannelServiceImpl implements ChannelService {
 		return null;
 	}
 
-	private UriComponentsBuilder getBasicChannelsUriComponentsBuilder(Device device) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL).queryParam("login", device.getActiveCode())
-				.queryParam("uid", device.getMacAddress()).queryParam("serial", device.getSerialNumber()).queryParam("model", device.getModel());
+	private UriComponentsBuilder getBasicChannelsUriComponentsBuilder(DeviceDto device) {
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL)
+		        .queryParam("login", device.getLogin()).queryParam("uid", device.getUid())
+		        .queryParam("serial", device.getSerial()).queryParam("model", device.getModel());
 		return uriBuilder;
 	}
 

@@ -1,5 +1,7 @@
 package org.joker.tv.model.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,7 +13,21 @@ public class DeviceSubscription extends BaseEntity {
 	private String macAddress;
 	private String serialNumber;
 	private String model;
-
+	private boolean isActive;
+	private LocalDate expiration;
+	
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	public LocalDate getExpiration() {
+		return expiration;
+	}
+	public void setExpiration(LocalDate expiration) {
+		this.expiration = expiration;
+	}
 	public String getActiveCode() {
 		return activeCode;
 	}
