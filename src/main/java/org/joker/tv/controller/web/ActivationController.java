@@ -5,6 +5,7 @@ import java.net.URI;
 import org.joker.tv.common.Constants;
 import org.joker.tv.model.front.web.ActivationResult;
 import org.joker.tv.model.front.web.DeviceDto;
+import org.joker.tv.service.ActivationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,9 @@ public class ActivationController {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private ActivationService activationService;
+
 	@GetMapping("/activation")
 	public String activation(Model model) {
 		return "modules/activation/form";
@@ -28,10 +32,7 @@ public class ActivationController {
 	@PostMapping("/activation")
 	@ResponseBody
 	public ActivationResult activateProduct(DeviceDto device, Model model) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("login", device.getLogin())
-				.queryParam("uid", device.getUid()).queryParam("serial", device.getSerial()).queryParam("model", device.getModel());
-		URI url = uriBuilder.build().encode().toUri();
-		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
+		return activationService.activateDevice(device);
 	}
 
 	@GetMapping("/iks")
@@ -42,8 +43,9 @@ public class ActivationController {
 	@PostMapping("/iks")
 	@ResponseBody
 	public ActivationResult iks(DeviceDto device, Model model) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL).queryParam("ac", device.getLogin())
-				.queryParam("ma", device.getUid()).queryParam("sn", device.getSerial());
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_ACTIVATION_URL)
+		        .queryParam("ac", device.getLogin()).queryParam("ma", device.getUid())
+		        .queryParam("sn", device.getSerial());
 		URI url = uriBuilder.build().encode().toUri();
 		return restTemplate.getForEntity(url, ActivationResult.class).getBody();
 	}
