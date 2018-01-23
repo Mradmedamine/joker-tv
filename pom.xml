@@ -89,11 +89,17 @@
 			<version>${commons-fileupload.version}</version>
 		</dependency>
 
+		<!-- MySQL -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>compile</scope>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.h2database</groupId> -->
+<!-- 			<artifactId>h2</artifactId> -->
+<!-- 			<scope>compile</scope> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -117,6 +123,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<finalName>${project.build.finalName}</finalName>
+					<executable>true</executable>
 				</configuration>
 			</plugin>
 			<plugin>

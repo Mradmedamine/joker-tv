@@ -1,13 +1,18 @@
 package org.joker.tv.service.impl;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joker.tv.common.Constants;
+import org.joker.tv.common.util.MappingUtils;
+import org.joker.tv.model.entity.Channel;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.channel.ChannelsResult;
+import org.joker.tv.model.front.web.channel.TVChannel;
 import org.joker.tv.model.front.web.vod.Movie;
 import org.joker.tv.model.front.web.vod.VodsResult;
+import org.joker.tv.repository.ChannelRepository;
 import org.joker.tv.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,19 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private ChannelRepository channelRepository;
+
+	@Override
+	public ChannelsResult getChannels() {
+		List<Channel> channels = channelRepository.findAll();
+		ChannelsResult channelsResult = new ChannelsResult();
+		List<TVChannel> tvChannels = new ArrayList<TVChannel>(channels.size());
+		channels.forEach(channel -> tvChannels.add(MappingUtils.map(channel, TVChannel.class)));
+		channelsResult.setTv_channel(tvChannels);
+		return channelsResult;
+	}
 
 	@Override
 	public ChannelsResult getChannels(DeviceDto product) {

@@ -2,20 +2,22 @@ package org.joker.tv.model.front.web;
 
 public enum SubscriptionStatus {
 
-	OK(100), INVALID(000), REPEATED(550);
+	OK("100"), INVALID("000"), REPEATED("550");
 
-	private int value;
+	private String value;
 
-	SubscriptionStatus(int value) {
+	SubscriptionStatus(String value) {
 		setValue(value);
 	}
 
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
+
+
 
 }

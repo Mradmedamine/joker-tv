@@ -28,7 +28,7 @@ public class ChannelController {
 
 	@PostMapping("/channels")
 	public String channelsList(DeviceDto product, Model model) {
-		ChannelsResult channels = channelService.getChannels(product);
+		ChannelsResult channels = channelService.getChannels();
 		model.addAttribute("channels", channels);
 		return "modules/channels/dataTable :: content";
 	}

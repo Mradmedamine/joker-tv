@@ -21,7 +21,7 @@ $(function() {
 					$('#result-container').html(data);
 					initChannelsDataTables();
 					toastr['success']('success !');
-					$('#toast-container .toast-' + messageType).show();
+					$('#toast-container .toast-success').show();
 				}
 				});
 			}

@@ -7,7 +7,7 @@ public class ActivationResult implements Serializable {
 	private static final long serialVersionUID = 8765467349525354470L;
 
 	private int account;
-	private int status;
+	private String status;
 	private String message;
 
 	public int getAccount() {
@@ -18,11 +18,11 @@ public class ActivationResult implements Serializable {
 		this.account = account;
 	}
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

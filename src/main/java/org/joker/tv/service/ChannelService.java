@@ -9,6 +9,13 @@ import org.springframework.ui.Model;
 
 public interface ChannelService {
 
+	ChannelsResult getChannels();
+
+	/**
+	 * OLD
+	 * @param product
+	 * @return
+	 */
 	ChannelsResult getChannels(DeviceDto product);
 
 	List<Movie> getMovies(DeviceDto product, Model model);
