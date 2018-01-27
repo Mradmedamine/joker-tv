@@ -1,31 +1,112 @@
 $(function() {
 
-	initChannelsForm();
-	initChannelsDataTables();
+    var channelsContainer = $('.channels-container');
 
-	function initChannelsDataTables() {
-		var channelsDataTable = $('#channels-datatables').DataTable(dataTablesConfig);
-	}
+    initChannelsForm();
+    initChannelsDataTables();
+    initModal();
 
-	function initChannelsForm() {
-		var form = $('#channels-form');
-		var submitBtn = $('.btn-save');
-		$(submitBtn).on('click', function(e) {
-			if ($(form).valid()) {
-				var data = $(form).serializeObject();
-				$.ajax({
-				type : 'POST',
-				url : '/channels',
-				data : data,
-				success : function(data) {
-					$('#result-container').html(data);
-					initChannelsDataTables();
-					toastr['success']('success !');
-					$('#toast-container .toast-success').show();
-				}
-				});
-			}
+    function initChannelsDataTables() {
+	var channelsDataTable = $('#channels-datatables').DataTable(dataTablesConfig);
+	return channelsDataTable.rows().count();
+    }
+
+    function initChannelsForm() {
+	var form = $(channelsContainer).find('#channels-form');
+	var submitBtn = $(channelsContainer).find('.btn-save');
+	$(submitBtn).on('click', function(e) {
+	    if ($(form).valid()) {
+		var data = $(form).serializeObject();
+		$.ajax({
+		    type : 'POST',
+		    url : '/channels',
+		    data : data,
+		    success : function(data) {
+			$('#result-container').html(data);
+			var numberOfChannels = initChannelsDataTables();
+			toastr['success'](numberOfChannels + ' Channels were found');
+			$('#toast-container .toast-success').show();
+		    }
 		});
-	}
+	    }
+	});
+    }
+
+    function initModal() {
+
+	var modal = $('#page-wrapper').find('#documentModal');
+	var actionForm = $(modal).find('form');
+	var closeBtn = $(modal).find('.close');
+	var backBtn = $(modal).find('.panel-footer .btn-back');
+	var saveBtn = $(modal).find('.panel-footer .btn-save');
+	var newBtn = $('#importChannels');
+
+	var fileInput = $(actionForm).find(':file');
+	var fileName = $(fileInput).attr('data-placeholder');
+	$(fileInput).filestyle({
+	    placeholder : fileName
+	});
+
+	$(newBtn).on('click', function() {
+	    $(modal).show();
+	});
+
+	$(closeBtn).on('click', function() {
+	    $(actionForm).reset();
+	    $(modal).hide();
+	});
+
+	$(backBtn).on('click', function() {
+	    $(actionForm).reset();
+	    $(modal).hide();
+	});
+
+	$(saveBtn).on('click', function() {
+	    $(actionForm).submit();
+	});
+
+	$(actionForm).submit(function() {
+	    if ($(actionForm).valid()) {
+		var file = $(actionForm).find('#physicalFile').prop('files')[0];
+		if (file && file.size > 2048576) {
+		    toastr["error"](message.common.fileSizeError);
+		    $('#toast-container .toast-error').show();
+		    return false;
+		}
+		if (!file) {
+		    file = new File([ "" ], "");
+		}
+		var formObject = $(this).serializeObject();
+		var formData = new FormData();
+		formData.append("physicalFile", file);
+
+		$.ajax({
+		    type : 'POST',
+		    url : "/channels/upload",
+		    data : formData,
+		    async : false,
+		    cache : false,
+		    contentType : false,
+		    processData : false,
+		    success : function(result) {
+			$(modal).hide();
+			toastr['success'](message.common.savingSuccessMessage);
+			$('#toast-container .toast-success').show();
+		    },
+		    error : function(error) {
+			toastr['error']("error bad format ");
+			$('#toast-container .toast-error').show();
+		    }
+		});
+	    }
+	    return false;
+	});
+
+	$(window).on('click', function(event) {
+	    if (event.target == modal) {
+		$(modal).hide();
+	    }
+	});
+    }
 
 });

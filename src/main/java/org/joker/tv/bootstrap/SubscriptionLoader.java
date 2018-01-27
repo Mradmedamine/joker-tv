@@ -22,7 +22,7 @@ public class SubscriptionLoader implements ApplicationListener<ContextRefreshedE
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		populateDate();
+//		populateDate();
 	}
 
 	private void populateDate() {

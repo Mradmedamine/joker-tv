@@ -22,7 +22,7 @@ public class ChannelsLoader implements ApplicationListener<ContextRefreshedEvent
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		populateDate();
+//		populateDate();
 	}
 
 	private void populateDate() {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ChannelApiController {
 
 	@Autowired
-	ChannelService channelService;
+	private ChannelService channelService;
 
 	@GetMapping("/channels")
 	@ResponseBody

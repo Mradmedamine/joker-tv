@@ -1,17 +1,29 @@
 package org.joker.tv.controller.web;
 
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.channel.ChannelsResult;
 import org.joker.tv.service.ChannelService;
+import org.joker.tv.service.impl.SecurityServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ChannelController {
+
+//	private static final Logger logger = LoggerFactory.getLogger(ChannelController.class);
 
 	@Autowired
 	ChannelService channelService;
@@ -33,6 +45,13 @@ public class ChannelController {
 		return "modules/channels/dataTable :: content";
 	}
 
+	@ResponseBody
+	@PostMapping(value = "/channels/upload", consumes = { "multipart/mixed", MediaType.MULTIPART_FORM_DATA_VALUE })
+	public String uploadM3UFile(@RequestParam("physicalFile") MultipartFile file, Model model) throws IOException {
+		channelService.processChannelsFile(file);
+		return StringUtils.EMPTY;
+	}
+
 	@GetMapping("/movies")
 	public String movies(Model model) {
 		return "modules/movies/form";
@@ -40,7 +59,7 @@ public class ChannelController {
 
 	@PostMapping("/movies")
 	public String moviesList(DeviceDto product, Model model) {
-		model.addAttribute("movies", channelService.getMovies(product, model));
+		model.addAttribute("movies", channelService.getMoviesFromRemoteUrl(product, model));
 		return "modules/movies/dataTable :: content";
 	}
 

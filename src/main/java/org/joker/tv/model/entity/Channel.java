@@ -16,6 +16,16 @@ public class Channel extends BaseEntity {
 	private String num_future_epg_days;
 	private String num_past_epg_days;
 
+	public Channel() {
+		super();
+	}
+
+	public Channel(String caption, String streaming_url) {
+		super();
+		this.caption = caption;
+		this.streaming_url = streaming_url;
+	}
+
 	public String getNum_future_epg_days() {
 		return num_future_epg_days;
 	}

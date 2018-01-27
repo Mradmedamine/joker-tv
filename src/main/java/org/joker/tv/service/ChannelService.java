@@ -6,18 +6,23 @@ import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.channel.ChannelsResult;
 import org.joker.tv.model.front.web.vod.Movie;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ChannelService {
 
 	ChannelsResult getChannels();
 
+	void processChannelsFile(MultipartFile file);
+	
 	/**
 	 * OLD
 	 * @param product
 	 * @return
 	 */
-	ChannelsResult getChannels(DeviceDto product);
+	ChannelsResult getChannelsFromRemoteUrl(DeviceDto product);
 
-	List<Movie> getMovies(DeviceDto product, Model model);
+	List<Movie> getMoviesFromRemoteUrl(DeviceDto product, Model model);
+
+
 
 }
