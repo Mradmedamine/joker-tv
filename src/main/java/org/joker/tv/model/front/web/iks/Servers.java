@@ -1,23 +1,28 @@
 package org.joker.tv.model.front.web.iks;
 
+import java.util.List;
+
+import org.joker.tv.model.entity.Server;
+import org.joker.tv.model.front.web.MessageDetails;
+
 public class Servers {
 
-	private Server[] server;
-	private Object message;
+	private List<Server> server;
+	private MessageDetails message;
 
-	public Server[] getServer() {
+	public List<Server> getServer() {
 		return server;
 	}
 
-	public void setServer(Server[] server) {
+	public void setServer(List<Server> server) {
 		this.server = server;
 	}
 
-	public Object getMessage() {
+	public MessageDetails getMessage() {
 		return message;
 	}
 
-	public void setMessage(Object message) {
+	public void setMessage(MessageDetails message) {
 		this.message = message;
 	}
 

@@ -2,6 +2,8 @@ package org.joker.tv.bootstrap;
 
 import org.apache.log4j.Logger;
 import org.joker.tv.model.entity.DeviceSubscription;
+import org.joker.tv.model.entity.Server;
+import org.joker.tv.repository.ServerRepository;
 import org.joker.tv.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -15,6 +17,8 @@ public class SubscriptionLoader implements ApplicationListener<ContextRefreshedE
 
 	private SubscriptionRepository subscriptionRepository;
 
+	private ServerRepository serverRepository;
+
 	@Autowired
 	public void setSubscriptionRepository(SubscriptionRepository subscriptionRepository) {
 		this.subscriptionRepository = subscriptionRepository;
@@ -22,7 +26,22 @@ public class SubscriptionLoader implements ApplicationListener<ContextRefreshedE
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-//		populateDate();
+		// populateDate();
+		addServers();
+	}
+
+	private void addServers() {
+		serverRepository.save(newServer());
+	}
+
+	private Server newServer() {
+		Server server = new Server();
+		server.setHost("host1.iks.net");
+		server.setPort("9586");
+		server.setServerid("1");
+		server.setUser("test");
+		server.setPass("test");
+		return server;
 	}
 
 	private void populateDate() {

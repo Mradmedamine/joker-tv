@@ -1,8 +1,13 @@
-package org.joker.tv.model.front.web.iks;
+package org.joker.tv.model.entity;
 
 import java.io.Serializable;
 
-public class Server implements Serializable {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "server")
+public class Server extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 7364370531378833508L;
 

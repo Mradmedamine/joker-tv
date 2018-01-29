@@ -12,13 +12,8 @@ public interface ChannelService {
 
 	ChannelsResult getChannels();
 
-	void processChannelsFile(MultipartFile file);
+	void processM3uFile(MultipartFile file);
 	
-	/**
-	 * OLD
-	 * @param product
-	 * @return
-	 */
 	ChannelsResult getChannelsFromRemoteUrl(DeviceDto product);
 
 	List<Movie> getMoviesFromRemoteUrl(DeviceDto product, Model model);

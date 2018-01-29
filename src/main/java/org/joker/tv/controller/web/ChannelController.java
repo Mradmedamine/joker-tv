@@ -6,9 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.channel.ChannelsResult;
 import org.joker.tv.service.ChannelService;
-import org.joker.tv.service.impl.SecurityServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.joker.tv.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,10 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ChannelController {
 
-//	private static final Logger logger = LoggerFactory.getLogger(ChannelController.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(ChannelController.class);
 
 	@Autowired
-	ChannelService channelService;
+	private ChannelService channelService;
+
+	@Autowired
+	private SubscriptionService subscriptionService;
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -39,16 +41,18 @@ public class ChannelController {
 	}
 
 	@PostMapping("/channels")
-	public String channelsList(DeviceDto product, Model model) {
-		ChannelsResult channels = channelService.getChannels();
-		model.addAttribute("channels", channels);
+	public String channelsList(DeviceDto device, Model model) {
+		if (subscriptionService.hasSubscription(device)) {
+			ChannelsResult channels = channelService.getChannels();
+			model.addAttribute("channels", channels);
+		}
 		return "modules/channels/dataTable :: content";
 	}
 
 	@ResponseBody
 	@PostMapping(value = "/channels/upload", consumes = { "multipart/mixed", MediaType.MULTIPART_FORM_DATA_VALUE })
 	public String uploadM3UFile(@RequestParam("physicalFile") MultipartFile file, Model model) throws IOException {
-		channelService.processChannelsFile(file);
+		channelService.processM3uFile(file);
 		return StringUtils.EMPTY;
 	}
 

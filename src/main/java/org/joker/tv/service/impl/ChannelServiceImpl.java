@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.iptv.m3u.Encoding;
 import org.iptv.m3u.Format;
-import org.iptv.m3u.M3uParser;
 import org.iptv.m3u.ParsingMode;
 import org.iptv.m3u.PlaylistParser;
 import org.iptv.m3u.data.Playlist;
@@ -39,7 +38,7 @@ public class ChannelServiceImpl implements ChannelService {
 	private ChannelRepository channelRepository;
 
 	@Override
-	public void processChannelsFile(MultipartFile multipart) {
+	public void processM3uFile(MultipartFile multipart) {
 		try {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
 			PlaylistParser m3uParser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8,
