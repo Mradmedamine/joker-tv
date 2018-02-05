@@ -20,7 +20,7 @@ public class ActivationApiController {
 	@GetMapping("/activation")
 	@ResponseBody
 	public ActivationResult activation(DeviceDto device, Model model) {
-		return activationService.activateDevice(device);
+		return activationService.activateIPTVSubscription(device);
 	}
 
 }

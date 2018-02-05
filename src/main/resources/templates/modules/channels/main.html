@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{desktop-layout}">
+
+	<div class="panel panel-default details-container channels-container" layout:fragment="desktop-page-content"> 
+		<div class="panel-heading">
+       		<div class="row">
+                 <div class="col-lg-12">
+                    <span class="title">
+                       	<i class="fa fa-television fa-fw"></i>
+                        Channels
+                    </span>
+                    <a id="importChannels" class="btn btn-default btn-add pull-right">
+			  			<i class="fa fa-plus fa-fw"></i>
+			  			Import
+			  		</a>
+                 </div>
+       		</div>
+		</div>				
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<div id="result-container" class="result-container" th:include="~{modules/channels/dataTable::content}"></div>
+		   	</div>
+		</div>
+		<div class="panel-footer container">
+			<div class="pull-right"> 
+			</div>
+		</div>
+	</div>
+
+	<th:block layout:fragment="modals"> 	
+		<th:block th:include="~{modules/channels/importChannelsModal::content}">
+		</th:block>
+	</th:block>
+	
+	<th:block layout:fragment="js-import"> 	
+		<script th:src="@{/js/channels.js}" ></script> 
+	</th:block>
+	
+</html>

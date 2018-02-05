@@ -2,7 +2,7 @@ $(function() {
 
     var channelsContainer = $('.channels-container');
 
-    initChannelsForm();
+//    initChannelsForm();
     initChannelsDataTables();
     initModal();
 
@@ -11,26 +11,26 @@ $(function() {
 	return channelsDataTable.rows().count();
     }
 
-    function initChannelsForm() {
-	var form = $(channelsContainer).find('#channels-form');
-	var submitBtn = $(channelsContainer).find('.btn-save');
-	$(submitBtn).on('click', function(e) {
-	    if ($(form).valid()) {
-		var data = $(form).serializeObject();
-		$.ajax({
-		    type : 'POST',
-		    url : '/channels',
-		    data : data,
-		    success : function(data) {
-			$('#result-container').html(data);
-			var numberOfChannels = initChannelsDataTables();
-			toastr['success'](numberOfChannels + ' Channels were found');
-			$('#toast-container .toast-success').show();
-		    }
-		});
-	    }
-	});
-    }
+//    function initChannelsForm() {
+//	var form = $(channelsContainer).find('#channels-form');
+//	var submitBtn = $(channelsContainer).find('.btn-save');
+//	$(submitBtn).on('click', function(e) {
+//	    if ($(form).valid()) {
+//		var data = $(form).serializeObject();
+//		$.ajax({
+//		    type : 'POST',
+//		    url : '/channels',
+//		    data : data,
+//		    success : function(data) {
+//			$('#result-container').html(data);
+//			var numberOfChannels = initChannelsDataTables();
+//			toastr['success'](numberOfChannels + ' Channels were found');
+//			$('#toast-container .toast-success').show();
+//		    }
+//		});
+//	    }
+//	});
+//    }
 
     function initModal() {
 
@@ -92,6 +92,9 @@ $(function() {
 			$(modal).hide();
 			toastr['success'](message.common.savingSuccessMessage);
 			$('#toast-container .toast-success').show();
+			timer = setTimeout(function() {
+			    location.reload();
+			}, 1000);
 		    },
 		    error : function(error) {
 			toastr['error']("error bad format ");

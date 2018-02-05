@@ -1,10 +1,12 @@
 package org.joker.tv.controller.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joker.tv.model.front.web.DeviceDto;
-import org.joker.tv.model.front.web.channel.ChannelsResult;
+import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
+import org.joker.tv.model.front.web.iptv.vod.Movie;
 import org.joker.tv.service.ChannelService;
 import org.joker.tv.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ChannelController {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(ChannelController.class);
-
 	@Autowired
 	private ChannelService channelService;
 
@@ -37,12 +36,14 @@ public class ChannelController {
 
 	@GetMapping("/channels")
 	public String channels(Model model) {
-		return "modules/channels/form";
+		ChannelsResult channels = channelService.getChannels();
+		model.addAttribute("channels", channels);
+		return "modules/channels/main";
 	}
 
 	@PostMapping("/channels")
 	public String channelsList(DeviceDto device, Model model) {
-		if (subscriptionService.hasSubscription(device)) {
+		if (subscriptionService.hasIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			model.addAttribute("channels", channels);
 		}
@@ -51,20 +52,23 @@ public class ChannelController {
 
 	@ResponseBody
 	@PostMapping(value = "/channels/upload", consumes = { "multipart/mixed", MediaType.MULTIPART_FORM_DATA_VALUE })
-	public String uploadM3UFile(@RequestParam("physicalFile") MultipartFile file, Model model) throws IOException {
-		channelService.processM3uFile(file);
+	public String uploadChannelsM3UFile(@RequestParam("physicalFile") MultipartFile file, Model model) throws IOException {
+		channelService.extractChannelsFromM3uFile(file);
 		return StringUtils.EMPTY;
 	}
 
 	@GetMapping("/movies")
 	public String movies(Model model) {
-		return "modules/movies/form";
+		List<Movie> movies = channelService.getMovies();
+		model.addAttribute("movies", movies);
+		return "modules/movies/main";
 	}
 
-	@PostMapping("/movies")
-	public String moviesList(DeviceDto product, Model model) {
-		model.addAttribute("movies", channelService.getMoviesFromRemoteUrl(product, model));
-		return "modules/movies/dataTable :: content";
+	@ResponseBody
+	@PostMapping(value = "/movies/upload", consumes = { "multipart/mixed", MediaType.MULTIPART_FORM_DATA_VALUE })
+	public String uploadMovieM3UFile(@RequestParam("physicalFile") MultipartFile file, Model model) throws IOException {
+		channelService.extractVodsFromM3uFile(file);
+		return StringUtils.EMPTY;
 	}
 
 }

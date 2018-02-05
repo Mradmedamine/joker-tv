@@ -39,9 +39,31 @@
 		ul li {
 			border-bottom: 1px solid #e7e7e7;
 		}
-
 		ul li a.active {
 			background-color: rgba(181, 181, 181, 0.17);
+		}
+		
+		.arrow {
+			float: right;
+		}
+		.fa.arrow:before {
+			content: "\f104";
+		}
+		
+		.active > a > .fa.arrow:before {
+			content: "\f107";
+		}
+
+		.nav-second-level li , .sidebar .nav-third-level li {
+			border-bottom: none ! important;
+		}
+
+		.nav-second-level li a {
+			padding-left: 37px;
+		}
+
+		.nav-third-level li a {
+			padding-left: 52px;
 		}
 	}
 
@@ -82,12 +104,12 @@
 #page-wrapper {
 	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAGklEQVQIW2N89+7dfyEhIUYGJIDCgYlTKAgAmtcEBhJsYjsAAAAASUVORK5CYII=) repeat;
 	background-color: white ! important;
-//	color: #777! important;
 	padding: 1px 0px 1px 0px;
 	min-height: 581px ! important;
 	.dt-buttons.uca {
 		padding: 0px 15px 15px 15px;
-	}  
+	}
+
 	.panel {
 		margin: 10px;
 		color: #777;
@@ -123,7 +145,7 @@
 					margin-right: 10px;
 					float: left;
 				}
-				
+
 				.search-item {
 					margin-left: 10px;
 					margin-right: 10px;
@@ -142,13 +164,14 @@
 					font-size: 14px;
 				}
 			}
+
 			.result-container {
 				.dataTables_wrapper {
 					table {
 						tbody {
 							td:last-child {
 								text-align: center;
-							}	
+							}
 						}
 					}
 				}
@@ -231,7 +254,7 @@
 			cursor: pointer;
 		}
 	}
-	
+
 	.table-uca {
 		border: 0px ! important;
 		table-layout: fixed;

@@ -1,6 +1,10 @@
 package org.joker.tv.model.front.web;
 
-public class MessageDetails {
+import java.io.Serializable;
+
+public class MessageDetails implements Serializable {
+
+	private static final long serialVersionUID = -7092337524227085819L;
 
 	private String messageKey;
 	private String messageBody;

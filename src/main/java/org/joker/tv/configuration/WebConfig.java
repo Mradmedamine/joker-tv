@@ -20,6 +20,7 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
@@ -46,7 +47,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		templateResolver.setApplicationContext(applicationContext);
 		templateResolver.setPrefix("classpath:/templates/");
 		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode("HTML");
+		templateResolver.setTemplateMode(TemplateMode.HTML);
 		templateResolver.setCharacterEncoding("UTF-8");
 		if (thymeleafCache.equals("true")) {
 			templateResolver.setCacheable(true);

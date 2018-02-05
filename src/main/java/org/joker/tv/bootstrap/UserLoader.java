@@ -8,13 +8,12 @@ import org.joker.tv.model.entity.User;
 import org.joker.tv.repository.RoleRepository;
 import org.joker.tv.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class UserLoader extends BaseDataLoader {
 
 	private static Logger log = Logger.getLogger(UserLoader.class);
 
@@ -42,10 +41,12 @@ public class UserLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-//		populateDate();
+		if (isCreateMode()) {
+			populateUsersData();
+		}
 	}
 
-	private void populateDate() {
+	private void populateUsersData() {
 		Role userRole = new Role();
 		userRole.setName(USER_ROLE);
 		userRole = roleRepository.save(userRole);

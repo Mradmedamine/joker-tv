@@ -11,6 +11,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @MappedSuperclass
 public abstract class BaseEntity {
 
@@ -20,6 +22,7 @@ public abstract class BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonIgnore
 	public Long getId() {
 		return id;
 	}
@@ -29,6 +32,7 @@ public abstract class BaseEntity {
 	}
 
 	@Column(name = "created_at")
+	@JsonIgnore
 	LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -38,6 +42,7 @@ public abstract class BaseEntity {
 	}
 
 	@Column(name = "modified_at")
+	@JsonIgnore
 	public LocalDateTime getModifiedAt() {
 		return modifiedAt;
 	}

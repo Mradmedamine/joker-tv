@@ -29,40 +29,11 @@ $(function() {
 
 	var desktopPage = $('#page-wrapper');
 	
-	$(desktopPage).find('#side-menu').metisMenu();
-	
-	$(document).on('click', ".table-uca .btn-delete", function(event) {
-		event.stopPropagation();
-		// TODO replace for toastr
-		if (!confirm(message.common.confirmDeletion)) {
-			return 
-		}
-		var tr = $(this).closest('tr');
-		var url = $(tr).data('href');
-		$.ajax({
-			type : 'DELETE',
-			url :  url,
-			contentType : 'application/json',
-			success : function(data) {
-				if (data == -1) {
-					toastr["error"](message.common.dbIntegrityError);
-					$('#toast-container .toast-error').show();
-				} else if (data == -100) {
-					toastr["error"](message.common.internalServerError);
-					$('#toast-container .toast-error').show();
-				} else {
-					var table = $(tr).closest('table').DataTable();
-					table.row(tr).remove().draw();
-				}
-			}
-		});
-	});
-	
+	$('#side-menu').metisMenu();	
 	
 	$(document).on('click', ".table-uca tr[class*='clickable']", function(event) {
 		window.open($(this).data('href'), $(this).data('target'));
 	});
-	
 	
 	$(window).bind('load resize', function() {
 		var topOffset = 50;
@@ -97,6 +68,32 @@ $(function() {
 		}
 	}
 
+	$(document).on('click', ".table-uca .btn-delete", function(event) {
+		event.stopPropagation();
+		// TODO replace for toastr
+		if (!confirm(message.common.confirmDeletion)) {
+			return 
+		}
+		var tr = $(this).closest('tr');
+		var url = $(tr).data('href');
+		$.ajax({
+			type : 'DELETE',
+			url :  url,
+			contentType : 'application/json',
+			success : function(data) {
+				if (data == -1) {
+					toastr["error"](message.common.dbIntegrityError);
+					$('#toast-container .toast-error').show();
+				} else if (data == -100) {
+					toastr["error"](message.common.internalServerError);
+					$('#toast-container .toast-error').show();
+				} else {
+					var table = $(tr).closest('table').DataTable();
+					table.row(tr).remove().draw();
+				}
+			}
+		});
+	});
 	toastr.options = {
 		"closeButton" : false,
 		"debug" : false,

@@ -1,11 +1,13 @@
 $(function() {
 
-    initmoviesDataTables();
-    initModal();
-    
-    function initmoviesDataTables() {
-	var moviesDataTable = $('#movies-datatables').DataTable(dataTablesConfig);
-	return moviesDataTable.rows().count();
+    var subscriptionsContainer = $('.subscriptions-container');
+
+    initSubscriptionsDataTables();
+//    initModal();
+
+    function initSubscriptionsDataTables() {
+	var subscriptionsDataTable = $('#subscriptions-datatables').DataTable(dataTablesConfig);
+	return subscriptionsDataTable.rows().count();
     }
 
     function initModal() {
@@ -15,7 +17,7 @@ $(function() {
 	var closeBtn = $(modal).find('.close');
 	var backBtn = $(modal).find('.panel-footer .btn-back');
 	var saveBtn = $(modal).find('.panel-footer .btn-save');
-	var newBtn = $('#importMovies');
+	var newBtn = $('#importSubscriptions');
 
 	var fileInput = $(actionForm).find(':file');
 	var fileName = $(fileInput).attr('data-placeholder');
@@ -58,7 +60,7 @@ $(function() {
 
 		$.ajax({
 		    type : 'POST',
-		    url : "/movies/upload",
+		    url : "/subscriptions/upload",
 		    data : formData,
 		    async : false,
 		    cache : false,

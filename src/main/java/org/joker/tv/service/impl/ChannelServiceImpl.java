@@ -1,7 +1,6 @@
 package org.joker.tv.service.impl;
 
 import java.io.ByteArrayInputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,53 +10,77 @@ import org.iptv.m3u.ParsingMode;
 import org.iptv.m3u.PlaylistParser;
 import org.iptv.m3u.data.Playlist;
 import org.iptv.m3u.data.TrackData;
-import org.joker.tv.common.Constants;
 import org.joker.tv.common.util.MappingUtils;
+import org.joker.tv.model.entity.BaseChannel;
 import org.joker.tv.model.entity.Channel;
-import org.joker.tv.model.front.web.DeviceDto;
-import org.joker.tv.model.front.web.channel.ChannelsResult;
-import org.joker.tv.model.front.web.channel.TVChannel;
-import org.joker.tv.model.front.web.vod.Movie;
-import org.joker.tv.model.front.web.vod.VodsResult;
+import org.joker.tv.model.entity.Vod;
+import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
+import org.joker.tv.model.front.web.iptv.channel.TVChannel;
+import org.joker.tv.model.front.web.iptv.vod.Movie;
 import org.joker.tv.repository.ChannelRepository;
+import org.joker.tv.repository.VodRepository;
 import org.joker.tv.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
 	@Autowired
-	private RestTemplate restTemplate;
-
-	@Autowired
 	private ChannelRepository channelRepository;
 
+	@Autowired
+	private VodRepository vodRepository;
+
 	@Override
-	public void processM3uFile(MultipartFile multipart) {
+	public void extractChannelsFromM3uFile(MultipartFile multipart) {
+		List<Channel> channels = processM3UFile(multipart, Channel.class);
+		channelRepository.deleteAll();
+		channelRepository.save(channels);
+	}
+
+	@Override
+	public void extractVodsFromM3uFile(MultipartFile multipart) {
+		List<Vod> vods = processM3UFile(multipart, Vod.class);
+		vodRepository.deleteAll();
+		vodRepository.save(vods);
+	}
+
+	private <T extends BaseChannel> List<T> processM3UFile(MultipartFile multipart, Class<T> clazz) {
 		try {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
 			PlaylistParser m3uParser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8,
 			        ParsingMode.LENIENT);
 			Playlist playlist = m3uParser.parse();
 			inputStream.close();
-			List<Channel> entityChannels = new ArrayList<>();
-			for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
-				String name = "";
-				if (trackData.getTrackInfo() != null) {
-					name = trackData.getTrackInfo().getTitle();
-				}
-				String url = trackData.getUri();
-				entityChannels.add(new Channel(name, url));
-			}
-			channelRepository.save(entityChannels);
+			return buildChannelList(playlist, clazz);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz)
+	        throws InstantiationException, IllegalAccessException {
+		List<T> entityChannels = new ArrayList<>();
+		for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
+			String name = "";
+			if (trackData.getTrackInfo() != null) {
+				name = trackData.getTrackInfo().getTitle();
+			}
+			String url = trackData.getUri();
+			T channelOb = newChannelObject(clazz, name, url);
+			entityChannels.add(channelOb);
+		}
+		return entityChannels;
+	}
+
+	private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url)
+	        throws InstantiationException, IllegalAccessException {
+		T channelOb = clazz.newInstance();
+		channelOb.setStreaming_url(url);
+		channelOb.setCaption(name);
+		return channelOb;
 	}
 
 	@Override
@@ -71,31 +94,16 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	@Override
-	public ChannelsResult getChannelsFromRemoteUrl(DeviceDto product) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("page",
-		        "channelsList");
-		URI url = uriBuilder.build().encode().toUri();
-		ChannelsResult channels = restTemplate.getForObject(url, ChannelsResult.class);
-		return channels;
-	}
-
-	@Override
-	public List<Movie> getMoviesFromRemoteUrl(DeviceDto product, Model model) {
-		UriComponentsBuilder uriBuilder = getBasicChannelsUriComponentsBuilder(product).queryParam("category_id", 15)
-		        .queryParam("page", "vodMovieList");
-		URI url = uriBuilder.build().encode().toUri();
-		VodsResult result = restTemplate.getForObject(url, VodsResult.class);
-		if (result != null) {
-			return result.getMovies();
-		}
-		return null;
-	}
-
-	private UriComponentsBuilder getBasicChannelsUriComponentsBuilder(DeviceDto device) {
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants._7STAR_RUN_URL)
-		        .queryParam("login", device.getLogin()).queryParam("uid", device.getUid())
-		        .queryParam("serial", device.getSerial()).queryParam("model", device.getModel());
-		return uriBuilder;
+	public List<Movie> getMovies() {
+		List<Vod> vods = vodRepository.findAll();
+		List<Movie> movies = new ArrayList<Movie>(vods.size());
+		vods.forEach(vod -> {
+			Movie movie = new Movie();
+			movie.setCaption(vod.getCaption());
+			movie.setV_url(vod.getStreaming_url());
+			movies.add(movie);
+		});
+		return movies;
 	}
 
 }

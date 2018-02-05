@@ -4,14 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "channel")
-public class Channel extends BaseChannel {
+@Table(name = "vod")
+public class Vod extends BaseChannel {
 
-	public Channel(String name, String url) {
+	public Vod(String name, String url) {
 		super(name, url);
 	}
 
-	public Channel() {
+	public Vod() {
 		super();
 	}
 

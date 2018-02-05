@@ -4,14 +4,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.joker.tv.model.entity.DeviceSubscription;
+import org.joker.tv.model.entity.BaseSubscription;
+import org.joker.tv.model.entity.IPTVSubscription;
+import org.joker.tv.model.entity.SharingSubscription;
 import org.joker.tv.model.front.web.ActivationResult;
 import org.joker.tv.model.front.web.DeviceDto;
-import org.joker.tv.model.front.web.MessageDetails;
-import org.joker.tv.model.front.web.SubscriptionStatus;
-import org.joker.tv.model.front.web.iks.Servers;
-import org.joker.tv.repository.ServerRepository;
-import org.joker.tv.repository.SubscriptionRepository;
+import org.joker.tv.model.front.web.ActivationStatus;
+import org.joker.tv.model.front.web.SubscriptionType;
+import org.joker.tv.repository.IPTVSubscriptionRepository;
+import org.joker.tv.repository.SharingSubscriptionRepository;
 import org.joker.tv.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,39 +21,63 @@ import org.springframework.stereotype.Service;
 public class SubscriptionServiceImpl implements SubscriptionService {
 
 	@Autowired
-	private SubscriptionRepository subscriptionRepository;
+	private IPTVSubscriptionRepository ipTvSubscriptionRepository;
+
 	@Autowired
-	private ServerRepository serverRepository;
+	private SharingSubscriptionRepository sharingSubscriptionRepository;
 
 	@Override
-	public ActivationResult activateDevice(DeviceDto device) {
-
-		DeviceSubscription subscription = getDeviceSubscription(device);
-
+	public ActivationResult activateIPTVSubscription(DeviceDto device) {
+		IPTVSubscription subscription = getIPTVSubscription(device);
 		ActivationResult activationResult = new ActivationResult();
 		activationResult.setAccount(0);
 		if (subscription == null) {
 			activationResult.setMessage("Subscription code is invalid. Please call customer care.");
-			activationResult.setStatus(SubscriptionStatus.INVALID.getValue());
-		} else if (subscription.isActive()) {
-			activationResult.setMessage("Code already actvivated. Please call customer care.");
-			activationResult.setStatus(SubscriptionStatus.REPEATED.getValue());
+			activationResult.setStatus(ActivationStatus.INVALID.getValue());
+		} else if (subscription.getIsActive()) {
+			activationResult.setMessage("Code already activated. Please call customer care.");
+			activationResult.setStatus(ActivationStatus.REPEATED.getValue());
 		} else {
-			subscription.setActive(true);
-			subscription.setExpiration(LocalDate.now().plusYears(1));
-			subscriptionRepository.save(subscription);
-			activationResult.setMessage("ID:1 Your Account is now Active until: "
-			        + subscription.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")));
-			activationResult.setStatus(SubscriptionStatus.OK.getValue());
+			activateNewIPTVSubscription(subscription);
+			String expiration = subscription.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
+			activationResult.setMessage("ID:1 Your Account is now Active until: " + expiration);
+			activationResult.setStatus(ActivationStatus.OK.getValue());
 		}
 		return activationResult;
 	}
 
+	private void activateNewIPTVSubscription(IPTVSubscription subscription) {
+		subscription.setIsActive(true);
+		subscription.setExpiration(LocalDate.now().plusYears(1));
+		ipTvSubscriptionRepository.save(subscription);
+	}
+
 	@Override
-	public DeviceSubscription getDeviceSubscription(DeviceDto device) {
-		List<DeviceSubscription> queryResult = subscriptionRepository.findByCriteria(device.getLogin(), device.getUid(),
-		        device.getSerial());
-		DeviceSubscription subscription = null;
+	public IPTVSubscription getIPTVSubscription(DeviceDto device) {
+		return (IPTVSubscription) getSubscriptionCommon(device, SubscriptionType.IPTV);
+	}
+
+	@Override
+	public SharingSubscription getSharingSubscription(DeviceDto device) {
+		return (SharingSubscription) getSubscriptionCommon(device, SubscriptionType.SHARING);
+	}
+
+	private BaseSubscription getSubscriptionCommon(DeviceDto device, SubscriptionType sharing) {
+		String login = device.getLogin();
+		String uuid = device.getUid();
+		String serial = device.getSerial();
+		List<? extends BaseSubscription> queryResult = null;
+		switch (sharing) {
+		case IPTV:
+			queryResult = ipTvSubscriptionRepository.findByCriteria(login, uuid, serial);
+			break;
+		case SHARING:
+			queryResult = sharingSubscriptionRepository.findByCriteria(login, uuid, serial);
+			break;
+		default:
+			break;
+		}
+		BaseSubscription subscription = null;
 		if (queryResult != null && !queryResult.isEmpty()) {
 			subscription = queryResult.get(0);
 		}
@@ -60,20 +85,22 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public Boolean hasSubscription(DeviceDto device) {
-		return getDeviceSubscription(device) != null;
+	public Boolean hasIPTVSubscription(DeviceDto device) {
+		return getIPTVSubscription(device) != null;
 	}
 
 	@Override
-	public Servers getIksData(DeviceDto device) {
-		Servers servers = new Servers();
-		if (hasSubscription(device)) {
-			servers.setServer(serverRepository.findAll());
-			servers.setMessage(new MessageDetails("1", "account registered successfully, it will expire: xx.xx.xx"));
-		} else {
-			servers.setMessage(new MessageDetails("2", "Wrong activation code"));
-		}
-		return servers;
+	public Boolean hasSharingSubscription(DeviceDto device) {
+		return getSharingSubscription(device) != null;
 	}
 
+	@Override
+	public List<IPTVSubscription> getAllIPTVSubscriptions() {
+		return ipTvSubscriptionRepository.findAll();
+	}
+
+	@Override
+	public List<SharingSubscription> getAllSharingSubscriptions() {
+		return sharingSubscriptionRepository.findAll();
+	}
 }
