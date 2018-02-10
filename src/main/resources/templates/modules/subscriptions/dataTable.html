@@ -19,10 +19,12 @@
 			<tr th:each="subscription : ${subscriptions}">
 				<td class="hidden" th:text="${subscription.id}"></td>
 				<td th:text="${subscription.activeCode}"></td>
-				<td th:text="${subscription.macAddress}"></td>
-				<td th:text="${subscription.serialNumber}"></td>
-				<td th:text="${subscription.model}"></td>
-				<td th:text="${subscription.isActive}"></td>
+				<td th:text="${subscription.device.macAddress}"></td>
+				<td th:text="${subscription.device.serialNumber}"></td>
+				<td th:text="${subscription.device.model}"></td>
+				<td>
+					<i th:class="|fa fa-${subscription.status.name == 'ACTIVATED' ? 'check-circle' : 'times' } fa-fw|"></i>
+				</td> 
 				<td th:text="${subscription.expiration}"></td>
 			</tr>
 	    </tbody>

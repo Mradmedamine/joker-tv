@@ -1,9 +1,13 @@
 $(function() {
 
+    const
+    IPTV = 'IPTV', SHARING = 'SHARING';
+
     var subscriptionsContainer = $('.subscriptions-container');
+    var subscriptionType = $(subscriptionsContainer).data('subscription-type');
 
     initSubscriptionsDataTables();
-//    initModal();
+    initModal();
 
     function initSubscriptionsDataTables() {
 	var subscriptionsDataTable = $('#subscriptions-datatables').DataTable(dataTablesConfig);
@@ -12,18 +16,12 @@ $(function() {
 
     function initModal() {
 
-	var modal = $('#page-wrapper').find('#documentModal');
+	var modal = $('#page-wrapper').find('#subscriptionModal');
 	var actionForm = $(modal).find('form');
 	var closeBtn = $(modal).find('.close');
 	var backBtn = $(modal).find('.panel-footer .btn-back');
 	var saveBtn = $(modal).find('.panel-footer .btn-save');
-	var newBtn = $('#importSubscriptions');
-
-	var fileInput = $(actionForm).find(':file');
-	var fileName = $(fileInput).attr('data-placeholder');
-	$(fileInput).filestyle({
-	    placeholder : fileName
-	});
+	var newBtn = $('#newSubscription');
 
 	$(newBtn).on('click', function() {
 	    $(modal).show();
@@ -45,27 +43,14 @@ $(function() {
 
 	$(actionForm).submit(function() {
 	    if ($(actionForm).valid()) {
-		var file = $(actionForm).find('#physicalFile').prop('files')[0];
-		if (file && file.size > 2048576) {
-		    toastr["error"](message.common.fileSizeError);
-		    $('#toast-container .toast-error').show();
-		    return false;
-		}
-		if (!file) {
-		    file = new File([ "" ], "");
-		}
 		var formObject = $(this).serializeObject();
-		var formData = new FormData();
-		formData.append("physicalFile", file);
+		var url = subscriptionType === IPTV ? '/iptv' : '/sharing';
+		url += '/subscriptions';
 
 		$.ajax({
 		    type : 'POST',
-		    url : "/subscriptions/upload",
-		    data : formData,
-		    async : false,
-		    cache : false,
-		    contentType : false,
-		    processData : false,
+		    url : url,
+		    data : formObject,
 		    success : function(result) {
 			$(modal).hide();
 			toastr['success'](message.common.savingSuccessMessage);

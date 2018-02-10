@@ -2,24 +2,39 @@ package org.joker.tv.model.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.joker.tv.model.front.web.ComponentStatus;
 
 @MappedSuperclass
 public abstract class BaseSubscription extends BaseEntity {
 
 	private String activeCode;
-	private String macAddress;
-	private String serialNumber;
-	private String model;
-	private boolean isActive;
 	private LocalDate expiration;
+	private ComponentStatus status;
+	private Device device;
 
-	public boolean getIsActive() {
-		return isActive;
+	{
+		status = ComponentStatus.DEACTIVATED;
 	}
 
-	public void setIsActive(boolean isActive) {
-		this.isActive = isActive;
+	@Column(unique = true)
+	public String getActiveCode() {
+		return activeCode;
+	}
+
+	public void setActiveCode(String activeCode) {
+		this.activeCode = activeCode;
+	}
+
+	@PrePersist
+	void generateActiveCode() {
+		activeCode = RandomStringUtils.randomAlphanumeric(10);
 	}
 
 	public LocalDate getExpiration() {
@@ -30,36 +45,21 @@ public abstract class BaseSubscription extends BaseEntity {
 		this.expiration = expiration;
 	}
 
-	public String getActiveCode() {
-		return activeCode;
+	public ComponentStatus getStatus() {
+		return status;
 	}
 
-	public void setActiveCode(String activeCode) {
-		this.activeCode = activeCode;
+	public void setStatus(ComponentStatus status) {
+		this.status = status;
 	}
 
-	public String getMacAddress() {
-		return macAddress;
+	@ManyToOne
+	@JoinColumn(name = "device_id")
+	public Device getDevice() {
+		return device;
 	}
 
-	public void setMacAddress(String macAddress) {
-		this.macAddress = macAddress;
+	public void setDevice(Device device) {
+		this.device = device;
 	}
-
-	public String getSerialNumber() {
-		return serialNumber;
-	}
-
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
 }

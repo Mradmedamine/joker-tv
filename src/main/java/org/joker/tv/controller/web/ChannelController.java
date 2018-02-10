@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joker.tv.model.front.web.DeviceDto;
+import org.joker.tv.model.front.web.SubscriptionDto;
 import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
 import org.joker.tv.model.front.web.iptv.vod.Movie;
 import org.joker.tv.service.ChannelService;
-import org.joker.tv.service.SubscriptionService;
+import org.joker.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class ChannelController {
 	private ChannelService channelService;
 
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private IPTVSubscriptionService subscriptionService;
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -42,8 +42,8 @@ public class ChannelController {
 	}
 
 	@PostMapping("/channels")
-	public String channelsList(DeviceDto device, Model model) {
-		if (subscriptionService.hasIPTVSubscription(device)) {
+	public String channelsList(SubscriptionDto device, Model model) {
+		if (subscriptionService.hasValidIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			model.addAttribute("channels", channels);
 		}

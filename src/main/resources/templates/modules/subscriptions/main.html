@@ -13,7 +13,7 @@
                        	<i class="fa fa-user fa-fw"></i>
                         Subscriptions
                     </span>
-                    <a id="importSubscriptions" class="btn btn-default btn-add pull-right">
+                    <a id="newSubscription" class="btn btn-default uca btn-add pull-right">
 			  			<i class="fa fa-plus fa-fw"></i>
 			  			Add
 			  		</a>
@@ -32,8 +32,8 @@
 	</div>
 
 	<th:block layout:fragment="modals"> 	
-<!-- 		<th:block th:include="~{modules/subscriptions/importSubscriptionsModal::content}"> -->
-<!-- 		</th:block> -->
+		<th:block th:include="~{modules/subscriptions/subscriptionModal::content}">
+		</th:block>
 	</th:block>
 	
 	<th:block layout:fragment="js-import"> 	

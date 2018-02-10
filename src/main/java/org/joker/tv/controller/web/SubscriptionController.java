@@ -1,9 +1,10 @@
 package org.joker.tv.controller.web;
 
-import org.joker.tv.model.front.web.ActivationResult;
+import org.apache.commons.lang3.StringUtils;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.SubscriptionType;
-import org.joker.tv.service.SubscriptionService;
+import org.joker.tv.service.IPTVSubscriptionService;
+import org.joker.tv.service.SharingSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,30 +16,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SubscriptionController {
 
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private IPTVSubscriptionService iptvSubscriptionService;
 
-	@GetMapping("/activation")
-	public String activation(Model model) {
-		return "modules/activation/form";
-	}
-
-	@PostMapping("/activation")
-	@ResponseBody
-	public ActivationResult activateProduct(DeviceDto device, Model model) {
-		return subscriptionService.activateIPTVSubscription(device);
-	}
+	@Autowired
+	private SharingSubscriptionService sharingSubscriptionService;
 
 	@GetMapping("/iptv/subscriptions")
 	public String iptvSubscriptions(Model model) {
-		model.addAttribute("subscriptions", subscriptionService.getAllIPTVSubscriptions());
+		model.addAttribute("subscriptions", iptvSubscriptionService.getAllIPTVSubscriptions());
 		model.addAttribute("subscriptionType", SubscriptionType.IPTV);
 		return "modules/subscriptions/main";
 	}
 
+	@PostMapping("/iptv/subscriptions")
+	@ResponseBody
+	public String addIptvSubscription(DeviceDto device, Model model) {
+		iptvSubscriptionService.saveIPTVSubscription(device);
+		return StringUtils.EMPTY;
+	}
+
 	@GetMapping("/sharing/subscriptions")
 	public String sharingSubscriptions(Model model) {
-		model.addAttribute("subscriptions", subscriptionService.getAllSharingSubscriptions());
+		model.addAttribute("subscriptions", sharingSubscriptionService.getAllSharingSubscriptions());
 		model.addAttribute("subscriptionType", SubscriptionType.SHARING);
 		return "modules/subscriptions/main";
 	}
+
+	@PostMapping("/sharing/subscriptions")
+	@ResponseBody
+	public String addSharingSubscription(DeviceDto device, Model model) {
+		sharingSubscriptionService.saveSharingSubscription(device);
+		return StringUtils.EMPTY;
+	}
+
 }

@@ -22,7 +22,7 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	public static SecurityService securityService;
+	private SecurityService securityService;
 
 	@Autowired
 	private UserValidator userValidator;

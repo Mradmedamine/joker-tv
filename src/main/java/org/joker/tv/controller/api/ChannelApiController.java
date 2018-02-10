@@ -1,9 +1,13 @@
 package org.joker.tv.controller.api;
 
-import org.joker.tv.model.front.web.DeviceDto;
+import java.util.List;
+
+import org.joker.tv.model.front.web.SubscriptionDto;
 import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
+import org.joker.tv.model.front.web.iptv.vod.Movie;
+import org.joker.tv.model.front.web.iptv.vod.VodsResult;
 import org.joker.tv.service.ChannelService;
-import org.joker.tv.service.SubscriptionService;
+import org.joker.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,21 +16,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/unsecured/api")
+@RequestMapping("/unsecured/api/iptv")
 public class ChannelApiController {
 
 	@Autowired
 	private ChannelService channelService;
-	
+
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private IPTVSubscriptionService subscriptionService;
 
 	@GetMapping("/channels")
 	@ResponseBody
-	public ChannelsResult channels(DeviceDto device, Model model) {
-		if (subscriptionService.hasIPTVSubscription(device)) {
+	public ChannelsResult channels(SubscriptionDto device, Model model) {
+		if (subscriptionService.hasValidIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			return channels;
+		}
+		return null;
+	}
+
+	@GetMapping("/movies")
+	@ResponseBody
+	public VodsResult vods(SubscriptionDto device, Model model) {
+		if (subscriptionService.hasValidIPTVSubscription(device)) {
+			List<Movie> movies = channelService.getMovies();
+			VodsResult vodsResult = new VodsResult();
+			vodsResult.setMovies(movies);
+			return vodsResult;
 		}
 		return null;
 	}

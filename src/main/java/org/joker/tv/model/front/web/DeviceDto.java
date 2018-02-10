@@ -4,35 +4,26 @@ import java.io.Serializable;
 
 public class DeviceDto implements Serializable {
 
-	private static final long serialVersionUID = 2961978224247217895L;
+	private static final long serialVersionUID = 5955452684230020088L;
 
-	private String login;
-	private String uid;
-	private String serial;
+	private String serialNumber;
+	private String macAddress;
 	private String model;
 
-	public String getLogin() {
-		return login;
+	public String getSerialNumber() {
+		return serialNumber;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
-	public String getUid() {
-		return uid;
+	public String getMacAddress() {
+		return macAddress;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-	public String getSerial() {
-		return serial;
-	}
-
-	public void setSerial(String serial) {
-		this.serial = serial;
+	public void setMacAddress(String macAddress) {
+		this.macAddress = macAddress;
 	}
 
 	public String getModel() {

@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface IPTVSubscriptionRepository extends JpaRepository<IPTVSubscription, Long> {//
+public interface IPTVSubscriptionRepository extends JpaRepository<IPTVSubscription, Long>, BaseSubscriptionRepository {//
 
-	@Query("SELECT e FROM IPTVSubscription e WHERE e.activeCode = :activeCode AND e.macAddress = :macAddress "
-	        + "AND e.serialNumber = :serialNumber")
-	List<IPTVSubscription> findByCriteria(@Param("activeCode") String activeCode,
+	@Query("SELECT e FROM IPTVSubscription e WHERE e.activeCode = :activeCode AND e.device.macAddress = :macAddress "
+	        + "AND e.device.serialNumber = :serialNumber")
+	List<IPTVSubscription> findOneByCriteria(@Param("activeCode") String activeCode,
 	        @Param("macAddress") String macAddress, @Param("serialNumber") String from);
 
 }
