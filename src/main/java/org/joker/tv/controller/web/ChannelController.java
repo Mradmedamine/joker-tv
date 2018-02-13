@@ -43,7 +43,7 @@ public class ChannelController {
 
 	@PostMapping("/channels")
 	public String channelsList(SubscriptionDto device, Model model) {
-		if (subscriptionService.hasValidIPTVSubscription(device)) {
+		if (subscriptionService.isValidIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			model.addAttribute("channels", channels);
 		}

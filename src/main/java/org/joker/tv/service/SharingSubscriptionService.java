@@ -10,14 +10,12 @@ import org.joker.tv.model.front.web.sharing.Servers;
 
 public interface SharingSubscriptionService {
 
-	SharingSubscription getSharingSubscription(SubscriptionDto device);
-
 	List<SharingSubscription> getAllSharingSubscriptions();
 
-	Boolean hasValidSharingSubscription(SubscriptionDto device);
+	Boolean isValidSharingSubscription(SubscriptionDto subscription);
 
-	void saveSharingSubscription(DeviceDto deviceDto);
+	void newSharingSubscription(DeviceDto deviceDto);
 
-	Servers activateSharing(IksRequest iksData);
+	Servers activateSharingSubscription(IksRequest iksData);
 	
 }

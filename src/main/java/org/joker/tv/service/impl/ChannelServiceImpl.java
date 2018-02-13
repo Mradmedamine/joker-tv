@@ -12,7 +12,7 @@ import org.iptv.m3u.data.Playlist;
 import org.iptv.m3u.data.TrackData;
 import org.joker.tv.common.util.MappingUtils;
 import org.joker.tv.model.entity.BaseChannel;
-import org.joker.tv.model.entity.Channel;
+import org.joker.tv.model.entity.ChannelEntity;
 import org.joker.tv.model.entity.Vod;
 import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
 import org.joker.tv.model.front.web.iptv.channel.TVChannel;
@@ -35,7 +35,7 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Override
 	public void extractChannelsFromM3uFile(MultipartFile multipart) {
-		List<Channel> channels = processM3UFile(multipart, Channel.class);
+		List<ChannelEntity> channels = processM3UFile(multipart, ChannelEntity.class);
 		channelRepository.deleteAll();
 		channelRepository.save(channels);
 	}
@@ -85,7 +85,7 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Override
 	public ChannelsResult getChannels() {
-		List<Channel> channels = channelRepository.findAll();
+		List<ChannelEntity> channels = channelRepository.findAll();
 		ChannelsResult channelsResult = new ChannelsResult();
 		List<TVChannel> tvChannels = new ArrayList<TVChannel>(channels.size());
 		channels.forEach(channel -> tvChannels.add(MappingUtils.map(channel, TVChannel.class)));

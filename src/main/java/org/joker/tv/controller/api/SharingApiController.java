@@ -21,7 +21,7 @@ public class SharingApiController {
 	@GetMapping("/activation")
 	@ResponseBody
 	public IksResponse activation(IksRequest iksData, Model model) {
-		Servers servers = subscriptionService.activateSharing(iksData);
+		Servers servers = subscriptionService.activateSharingSubscription(iksData);
 		IksResponse IksResponse = new IksResponse();
 		IksResponse.setServers(servers);
 		return IksResponse;

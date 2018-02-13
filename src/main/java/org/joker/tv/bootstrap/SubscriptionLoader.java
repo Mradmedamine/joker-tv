@@ -1,10 +1,11 @@
 package org.joker.tv.bootstrap;
 
 import org.apache.log4j.Logger;
-import org.joker.tv.model.entity.Device;
+import org.joker.tv.model.entity.DeviceEntity;
 import org.joker.tv.model.entity.IPTVSubscription;
-import org.joker.tv.model.entity.Server;
+import org.joker.tv.model.entity.ServerEntity;
 import org.joker.tv.model.entity.SharingSubscription;
+import org.joker.tv.model.front.web.ComponentStatus;
 import org.joker.tv.repository.DeviceRepository;
 import org.joker.tv.repository.IPTVSubscriptionRepository;
 import org.joker.tv.repository.ServerRepository;
@@ -74,7 +75,7 @@ public class SubscriptionLoader extends BaseDataLoader {
 	}
 
 	private IPTVSubscription newIPTVSubscription(String activeCode, String macAddress, String serial) {
-		Device device = new Device();
+		DeviceEntity device = new DeviceEntity();
 		device.setMacAddress(macAddress);
 		device.setSerialNumber(serial);
 		device.setModel("K3");
@@ -82,6 +83,7 @@ public class SubscriptionLoader extends BaseDataLoader {
 		IPTVSubscription iptvSubscription = new IPTVSubscription();
 		iptvSubscription.setActiveCode(activeCode);
 		iptvSubscription.setDevice(device);
+		iptvSubscription.setStatus(ComponentStatus.NEW);
 		return iptvSubscription;
 	}
 
@@ -92,7 +94,7 @@ public class SubscriptionLoader extends BaseDataLoader {
 	}
 
 	private SharingSubscription newSharingSubscription(String activeCode, String macAddress, String serial) {
-		Device device = new Device();
+		DeviceEntity device = new DeviceEntity();
 		device.setMacAddress(macAddress);
 		device.setSerialNumber(serial);
 		device.setModel("K3");
@@ -100,6 +102,7 @@ public class SubscriptionLoader extends BaseDataLoader {
 		SharingSubscription sharingSubscription = new SharingSubscription();
 		sharingSubscription.setActiveCode(activeCode);
 		sharingSubscription.setDevice(device);
+		sharingSubscription.setStatus(ComponentStatus.NEW);
 		return sharingSubscription;
 	}
 
@@ -107,13 +110,11 @@ public class SubscriptionLoader extends BaseDataLoader {
 		serverRepository.save(newServer());
 	}
 
-	private Server newServer() {
-		Server server = new Server();
+	private ServerEntity newServer() {
+		ServerEntity server = new ServerEntity();
 		server.setServerid("1");
 		server.setHost("iks.7starstb.net");
 		server.setPort("18021");
-		server.setUser("test");
-		server.setPass("test");
 		return server;
 	}
 

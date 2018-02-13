@@ -17,10 +17,11 @@ public abstract class BaseSubscription extends BaseEntity {
 	private String activeCode;
 	private LocalDate expiration;
 	private ComponentStatus status;
-	private Device device;
+	private DeviceEntity device;
 
-	{
-		status = ComponentStatus.DEACTIVATED;
+	@PrePersist
+	private void generateActiveCode() {
+		activeCode = RandomStringUtils.randomAlphanumeric(10);
 	}
 
 	@Column(unique = true)
@@ -30,11 +31,6 @@ public abstract class BaseSubscription extends BaseEntity {
 
 	public void setActiveCode(String activeCode) {
 		this.activeCode = activeCode;
-	}
-
-	@PrePersist
-	void generateActiveCode() {
-		activeCode = RandomStringUtils.randomAlphanumeric(10);
 	}
 
 	public LocalDate getExpiration() {
@@ -55,11 +51,11 @@ public abstract class BaseSubscription extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "device_id")
-	public Device getDevice() {
+	public DeviceEntity getDevice() {
 		return device;
 	}
 
-	public void setDevice(Device device) {
+	public void setDevice(DeviceEntity device) {
 		this.device = device;
 	}
 }

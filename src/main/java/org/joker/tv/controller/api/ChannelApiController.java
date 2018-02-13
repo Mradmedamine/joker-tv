@@ -28,7 +28,7 @@ public class ChannelApiController {
 	@GetMapping("/channels")
 	@ResponseBody
 	public ChannelsResult channels(SubscriptionDto device, Model model) {
-		if (subscriptionService.hasValidIPTVSubscription(device)) {
+		if (subscriptionService.isValidIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			return channels;
 		}
@@ -38,7 +38,7 @@ public class ChannelApiController {
 	@GetMapping("/movies")
 	@ResponseBody
 	public VodsResult vods(SubscriptionDto device, Model model) {
-		if (subscriptionService.hasValidIPTVSubscription(device)) {
+		if (subscriptionService.isValidIPTVSubscription(device)) {
 			List<Movie> movies = channelService.getMovies();
 			VodsResult vodsResult = new VodsResult();
 			vodsResult.setMovies(movies);

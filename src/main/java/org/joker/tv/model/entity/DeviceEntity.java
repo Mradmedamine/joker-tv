@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "device")
-public class Device extends BaseEntity {
+public class DeviceEntity extends BaseEntity {
 
 	private String serialNumber;
 	private String macAddress;

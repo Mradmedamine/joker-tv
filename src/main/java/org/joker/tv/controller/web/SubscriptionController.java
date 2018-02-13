@@ -1,6 +1,8 @@
 package org.joker.tv.controller.web;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joker.tv.common.Constants;
+import org.joker.tv.model.HasSubscriptionAlreadyException;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.SubscriptionType;
 import org.joker.tv.service.IPTVSubscriptionService;
@@ -31,7 +33,11 @@ public class SubscriptionController {
 	@PostMapping("/iptv/subscriptions")
 	@ResponseBody
 	public String addIptvSubscription(DeviceDto device, Model model) {
-		iptvSubscriptionService.saveIPTVSubscription(device);
+		try {
+			iptvSubscriptionService.newIPTVSubscription(device);
+		} catch (HasSubscriptionAlreadyException ex) {
+			return Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE;
+		}
 		return StringUtils.EMPTY;
 	}
 
@@ -45,8 +51,12 @@ public class SubscriptionController {
 	@PostMapping("/sharing/subscriptions")
 	@ResponseBody
 	public String addSharingSubscription(DeviceDto device, Model model) {
-		sharingSubscriptionService.saveSharingSubscription(device);
-		return StringUtils.EMPTY;
+		try {
+			sharingSubscriptionService.newSharingSubscription(device);
+		} catch (HasSubscriptionAlreadyException ex) {
+			return Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE;
+		}
+		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
 	}
 
 }

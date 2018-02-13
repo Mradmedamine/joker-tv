@@ -53,14 +53,14 @@ $(function() {
 		    data : formObject,
 		    success : function(result) {
 			$(modal).hide();
-			toastr['success'](message.common.savingSuccessMessage);
+			toastr['success'](result);
 			$('#toast-container .toast-success').show();
 			timer = setTimeout(function() {
 			    location.reload();
 			}, 1000);
 		    },
 		    error : function(error) {
-			toastr['error']("error bad format ");
+			toastr['error']("error occured ! ");
 			$('#toast-container .toast-error').show();
 		    }
 		});

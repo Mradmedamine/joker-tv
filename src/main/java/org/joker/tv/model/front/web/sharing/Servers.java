@@ -2,19 +2,19 @@ package org.joker.tv.model.front.web.sharing;
 
 import java.util.List;
 
-import org.joker.tv.model.entity.Server;
 import org.joker.tv.model.front.web.MessageDetails;
+import org.joker.tv.model.front.web.ServerSubscriptionInfo;
 
 public class Servers {
 
-	private List<Server> server;
+	private List<ServerSubscriptionInfo> server;
 	private MessageDetails message;
 
-	public List<Server> getServer() {
+	public List<ServerSubscriptionInfo> getServer() {
 		return server;
 	}
 
-	public void setServer(List<Server> server) {
+	public void setServer(List<ServerSubscriptionInfo> server) {
 		this.server = server;
 	}
 

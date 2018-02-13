@@ -23,7 +23,7 @@
 				<td th:text="${subscription.device.serialNumber}"></td>
 				<td th:text="${subscription.device.model}"></td>
 				<td>
-					<i th:class="|fa fa-${subscription.status.name == 'ACTIVATED' ? 'check-circle' : 'times' } fa-fw|"></i>
+					<i class="fa fa-check-circle fa-fw" th:classappend="${subscription.status.name == 'ACTIVATED' ? 'green' : ''}"></i>
 				</td> 
 				<td th:text="${subscription.expiration}"></td>
 			</tr>

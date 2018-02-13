@@ -3,14 +3,16 @@ package org.joker.tv.service.impl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.joker.tv.model.entity.Device;
+import org.joker.tv.model.entity.ServerEntity;
 import org.joker.tv.model.entity.SharingSubscription;
 import org.joker.tv.model.front.web.ComponentStatus;
 import org.joker.tv.model.front.web.DeviceDto;
 import org.joker.tv.model.front.web.MessageDetails;
+import org.joker.tv.model.front.web.ServerSubscriptionInfo;
 import org.joker.tv.model.front.web.SubscriptionDto;
 import org.joker.tv.model.front.web.SubscriptionType;
 import org.joker.tv.model.front.web.sharing.IksRequest;
@@ -23,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SharingSubscriptionServiceImpl extends BaseSubscriptionService implements SharingSubscriptionService {
+public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl implements SharingSubscriptionService {
 
 	private static final Period DEFAULT_SUBSCRIPTION_PERIOD = Period.ofYears(1);
 
@@ -34,14 +36,8 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionService impl
 	private ServerRepository serverRepository;
 
 	@Override
-	public SharingSubscription getSharingSubscription(SubscriptionDto device) {
-		return (SharingSubscription) getSubscriptionCommon(device, SubscriptionType.SHARING);
-	}
-
-	@Override
-	public Boolean hasValidSharingSubscription(SubscriptionDto device) {
-		Optional<SharingSubscription> subscription = Optional.ofNullable(getSharingSubscription(device));
-		return subscription.isPresent() && !isExpired(subscription.get());
+	public Boolean isValidSharingSubscription(SubscriptionDto subscriptionDto) {
+		return isValidSubscription(subscriptionDto);
 	}
 
 	@Override
@@ -50,12 +46,8 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionService impl
 	}
 
 	@Override
-	public void saveSharingSubscription(DeviceDto deviceDto) {
-		Device entityDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
-		SharingSubscription sharingSubscription = new SharingSubscription();
-		sharingSubscription.setDevice(entityDevice);
-		sharingSubscription.setStatus(ComponentStatus.NEW);
-		sharingSubscriptionRepository.save(sharingSubscription);
+	public void newSharingSubscription(DeviceDto deviceDto) {
+		newSubscription(deviceDto, SubscriptionType.SHARING);
 	}
 
 	@Override
@@ -64,32 +56,51 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionService impl
 	}
 
 	@Override
-	public Servers activateSharing(IksRequest iksData) {
+	public Servers activateSharingSubscription(IksRequest iksData) {
 		SubscriptionDto subscriptionDto = mapToSubscriptionDto(iksData);
-		Optional<SharingSubscription> subscription = Optional.ofNullable(getSharingSubscription(subscriptionDto));
+		Optional<SharingSubscription> subscription = getSharingSubscription(subscriptionDto);
 		Servers servers = new Servers();
-		return subscription.map(subscr -> handleActivation(subscr, servers)).orElse(wrongActivation(servers));
+		return subscription.map(subscr -> handleActivation(subscr, servers)).orElse(wrongActivationCode(servers));
 	}
 
-	private Servers wrongActivation(Servers servers) {
+	private Servers wrongActivationCode(Servers servers) {
 		servers.setMessage(new MessageDetails("2", "Wrong activation code"));
 		return servers;
-
 	}
 
 	private Servers handleActivation(SharingSubscription subscription, Servers servers) {
 		if (isExpired(subscription)) {
 			servers.setMessage(new MessageDetails("3", "code Expired !"));
 		} else {
+			String messageBody = "account expiration : ";
 			if (subscription.getStatus() == ComponentStatus.NEW) {
 				subscription = doActivateNewSubscription(subscription);
+				messageBody = "account registered successfully, it will expire: ";
 			}
 			String expiration = subscription.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
-			servers.setMessage(
-			        new MessageDetails("1", "account registered successfully, it will expire: " + expiration));
-			servers.setServer(serverRepository.findAll());
+			messageBody += expiration;
+			servers.setMessage(new MessageDetails("1", messageBody));
+			servers.setServer(getServerSubscriptionInfoList(subscription));
 		}
 		return servers;
+	}
+
+	private List<ServerSubscriptionInfo> getServerSubscriptionInfoList(SharingSubscription subscription) {
+		List<ServerSubscriptionInfo> serversInfoList = new ArrayList<>();
+		serverRepository.findAll().forEach(server -> {
+			serversInfoList.add(newServerSubscriptionInfo(server, subscription));
+		});
+		return serversInfoList;
+	}
+
+	private ServerSubscriptionInfo newServerSubscriptionInfo(ServerEntity server, SharingSubscription subscription) {
+		ServerSubscriptionInfo serverSubscription = new ServerSubscriptionInfo();
+		serverSubscription.setServerid(server.getServerid());
+		serverSubscription.setHost(server.getHost());
+		serverSubscription.setPort(server.getPort());
+		serverSubscription.setUser(subscription.getUser());
+		serverSubscription.setPass(subscription.getPass());
+		return serverSubscription;
 	}
 
 	private SharingSubscription doActivateNewSubscription(SharingSubscription subscription) {
@@ -107,4 +118,7 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionService impl
 		return device;
 	}
 
+	private Optional<SharingSubscription> getSharingSubscription(SubscriptionDto device) {
+		return getSubscription(device).map(v -> (SharingSubscription) v);
+	}
 }
