@@ -10,7 +10,9 @@ import org.joker.tv.service.SharingSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,6 +43,11 @@ public class SubscriptionController {
 		return StringUtils.EMPTY;
 	}
 
+	@DeleteMapping("/IPTV/subscriptions/{id}")
+	public @ResponseBody Long delete(Model model, @PathVariable Long id) {
+		return iptvSubscriptionService.delete(id);
+	}
+	
 	@GetMapping("/sharing/subscriptions")
 	public String sharingSubscriptions(Model model) {
 		model.addAttribute("subscriptions", sharingSubscriptionService.getAllSharingSubscriptions());
@@ -58,5 +65,10 @@ public class SubscriptionController {
 		}
 		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
 	}
-
+	
+	@DeleteMapping("/SHARING/subscriptions/{id}")
+	public @ResponseBody Long deleteSharingSubscription(Model model, @PathVariable Long id) {
+		return sharingSubscriptionService.delete(id);
+	}
+	
 }

@@ -18,6 +18,7 @@ import org.joker.tv.repository.BaseSubscriptionRepository;
 import org.joker.tv.repository.IPTVSubscriptionRepository;
 import org.joker.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,25 +31,33 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl imp
 
 	@Override
 	public ActivationResult activateIPTVSubscription(SubscriptionDto device) {
-		ActivationResult activationResult = new ActivationResult();
-		activationResult.setAccount(0);
-		return getIPTVSubscription(device).map(subscription -> {
-			if (subscription.getStatus() == ComponentStatus.ACTIVATED) {
-				activationResult.setMessage("Code already activated. Please call customer care.");
-				activationResult.setStatus(ActivationStatus.REPEATED.getValue());
-			} else {
-				activateNewIPTVSubscription(subscription);
-				String expiration = subscription.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
-				activationResult.setMessage("ID:1 Your Account is now Active until: " + expiration);
-				activationResult.setStatus(ActivationStatus.OK.getValue());
-			}
-			return activationResult;
-		}).orElse(invalidActivationResult(activationResult));
+		return getIPTVSubscription(device).map(this::getValidActivationResult).orElse(invalidActivationResult());
 	}
 
-	private ActivationResult invalidActivationResult(ActivationResult activationResult) {
+	private ActivationResult getValidActivationResult(IPTVSubscription subscription) {
+		ActivationResult activationResult = newActivationResult();
+		if (subscription.getStatus() == ComponentStatus.ACTIVATED) {
+			activationResult.setMessage("Code already activated. now Active until: " + subscription.getExpiration());
+			activationResult.setStatus(ActivationStatus.OK.getValue());
+		} else {
+			activateNewIPTVSubscription(subscription);
+			String expiration = subscription.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
+			activationResult.setMessage("ID:1 Your Account is now Active until: " + expiration);
+			activationResult.setStatus(ActivationStatus.OK.getValue());
+		}
+		return activationResult;
+	}
+
+	private ActivationResult invalidActivationResult() {
+		ActivationResult activationResult = newActivationResult();
 		activationResult.setMessage("Subscription code is invalid. Please call customer care.");
 		activationResult.setStatus(ActivationStatus.INVALID.getValue());
+		return activationResult;
+	}
+
+	private ActivationResult newActivationResult() {
+		ActivationResult activationResult = new ActivationResult();
+		activationResult.setAccount(0);
 		return activationResult;
 	}
 
@@ -56,6 +65,18 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl imp
 		subscription.setStatus(ComponentStatus.ACTIVATED);
 		subscription.setExpiration(LocalDate.now().plus(DEFAULT_SUBSCRIPTION_PERIOD));
 		ipTvSubscriptionRepository.save(subscription);
+	}
+
+	@Override
+	public Long delete(Long id) {
+		try {
+			ipTvSubscriptionRepository.delete(id);
+		} catch (DataIntegrityViolationException err) {
+			return -1L;
+		} catch (Exception err) {
+			return -100L;
+		}
+		return id;
 	}
 
 	@Override
@@ -67,7 +88,7 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl imp
 	public Boolean isValidIPTVSubscription(SubscriptionDto subscription) {
 		return isValidSubscription(subscription);
 	}
-	
+
 	@Override
 	public List<IPTVSubscription> getAllIPTVSubscriptions() {
 		return ipTvSubscriptionRepository.findAll();

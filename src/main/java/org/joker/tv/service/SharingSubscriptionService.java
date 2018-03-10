@@ -18,4 +18,6 @@ public interface SharingSubscriptionService {
 
 	Servers activateSharingSubscription(IksRequest iksData);
 	
+	Long delete(Long id);
+	
 }

@@ -21,7 +21,7 @@ public abstract class BaseSubscription extends BaseEntity {
 
 	@PrePersist
 	private void generateActiveCode() {
-		activeCode = RandomStringUtils.randomAlphanumeric(10);
+		activeCode = RandomStringUtils.randomNumeric(10);
 	}
 
 	@Column(unique = true)

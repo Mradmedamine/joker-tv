@@ -36,7 +36,7 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
-		return subscription.getStatus() == ComponentStatus.ACTIVATED && subscription.getExpiration().isAfter(LocalDate.now());
+		return subscription.getStatus() == ComponentStatus.ACTIVATED && subscription.getExpiration().isBefore(LocalDate.now());
 	}
 
 	protected boolean isNotExpired(BaseSubscription subscription) {

@@ -22,6 +22,7 @@ import org.joker.tv.repository.ServerRepository;
 import org.joker.tv.repository.SharingSubscriptionRepository;
 import org.joker.tv.service.SharingSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,6 +64,18 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 		return subscription.map(subscr -> handleActivation(subscr, servers)).orElse(wrongActivationCode(servers));
 	}
 
+	@Override
+	public Long delete(Long authorId) {
+		try {
+			sharingSubscriptionRepository.delete(authorId);
+		} catch (DataIntegrityViolationException err) {
+			return -1L;
+		} catch (Exception err) {
+			return -100L;
+		}
+		return authorId;
+	}
+	
 	private Servers wrongActivationCode(Servers servers) {
 		servers.setMessage(new MessageDetails("2", "Wrong activation code"));
 		return servers;

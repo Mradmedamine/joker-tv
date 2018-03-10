@@ -34,7 +34,7 @@ $(function() {
 	$(document).on('click', ".table-uca tr[class*='clickable']", function(event) {
 		window.open($(this).data('href'), $(this).data('target'));
 	});
-	
+		
 	$(window).bind('load resize', function() {
 		var topOffset = 50;
 		var width = (this.window.innerWidth > 0) ? this.window.innerWidth
@@ -94,6 +94,7 @@ $(function() {
 			}
 		});
 	});
+	
 	toastr.options = {
 		"closeButton" : false,
 		"debug" : false,

@@ -20,5 +20,7 @@ public interface IPTVSubscriptionService {
 	List<IPTVSubscription> getAllIPTVSubscriptions();
 
 	void newIPTVSubscription(DeviceDto device) throws HasSubscriptionAlreadyException;
+
+	Long delete(Long id);
 	
 }
