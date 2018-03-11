@@ -13,7 +13,7 @@
                        	<i class="fa fa-film fa-fw"></i>
                         Servers
                     </span>
-                    <a id="importServers" class="btn btn-default uca btn-add pull-right">
+                    <a id="addServer" class="btn btn-default uca btn-add pull-right">
 			  			<i class="fa fa-plus fa-fw"></i>
 			  			Add
 			  		</a>
@@ -30,6 +30,11 @@
 			</div>
 		</div>
 	</div>
+	
+	<th:block layout:fragment="modals"> 	
+		<th:block th:include="~{modules/sharing/addServer::content}">
+		</th:block>
+	</th:block>
 	
 	<th:block layout:fragment="js-import"> 	
 		<script th:src="@{/js/servers.js}" ></script> 

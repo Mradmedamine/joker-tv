@@ -13,11 +13,16 @@
 		 	 </tr>
 	     </thead>
 	     <tbody>
-			<tr th:each="server : ${servers}" class="clickable">
+			<tr th:each="server : ${servers}" class="clickable" th:attr="data-href=@{__${ '/servers/' + subscription.id}__}">
 				<td class="hidden" th:text="${server.id}"></td>
 				<td th:text="${server.serverid}"></td>
 				<td th:text="${server.host}"></td>
 				<td th:text="${server.port}"></td>
+				<td>
+			    	<a class="btn btn-default btn-delete"><i class="fa fa-trash-o"></i>
+			    		<th:block th:text="#{common.delete}"></th:block>
+			    	</a>
+			    </td>
 			</tr>
 	    </tbody>
 	</table>
