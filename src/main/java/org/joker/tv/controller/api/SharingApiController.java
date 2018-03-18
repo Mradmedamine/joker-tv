@@ -18,7 +18,7 @@ public class SharingApiController {
 	@Autowired
 	private SharingSubscriptionService subscriptionService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	@ResponseBody
 	public IksResponse activation(IksRequest iksData, Model model) {
 		Servers servers = subscriptionService.activateSharingSubscription(iksData);

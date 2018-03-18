@@ -1,4 +1,4 @@
-package org.joker.tv.validator;
+package org.joker.tv.common.validator;
 
 import org.joker.tv.model.entity.User;
 import org.joker.tv.service.UserService;

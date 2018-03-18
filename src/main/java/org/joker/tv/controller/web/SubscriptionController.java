@@ -1,6 +1,5 @@
 package org.joker.tv.controller.web;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joker.tv.common.Constants;
 import org.joker.tv.model.HasSubscriptionAlreadyException;
 import org.joker.tv.model.front.web.DeviceDto;
@@ -40,14 +39,14 @@ public class SubscriptionController {
 		} catch (HasSubscriptionAlreadyException ex) {
 			return Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE;
 		}
-		return StringUtils.EMPTY;
+		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
 	}
 
 	@DeleteMapping("/IPTV/subscriptions/{id}")
 	public @ResponseBody Long delete(Model model, @PathVariable Long id) {
 		return iptvSubscriptionService.delete(id);
 	}
-	
+
 	@GetMapping("/sharing/subscriptions")
 	public String sharingSubscriptions(Model model) {
 		model.addAttribute("subscriptions", sharingSubscriptionService.getAllSharingSubscriptions());
@@ -65,10 +64,10 @@ public class SubscriptionController {
 		}
 		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
 	}
-	
+
 	@DeleteMapping("/SHARING/subscriptions/{id}")
 	public @ResponseBody Long deleteSharingSubscription(Model model, @PathVariable Long id) {
 		return sharingSubscriptionService.delete(id);
 	}
-	
+
 }

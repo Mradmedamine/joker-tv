@@ -63,9 +63,15 @@
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li>
-                        	<a href="#"><i class="fa fa-user fa-fw"></i><th:block th:text="#{desktop.layout.topbar.userProfile}"/></a>
-                        </li>
+                    	<th:block th:each="tenant : ${T(org.joker.tv.model.front.web.Tenant).values()}">
+	                        <li th:if="${tenant.visible}">
+<!-- 	                        	<span sec:authentication="principal.tenant"></span> -->
+	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}">
+	                        		<i class="fa fa-building fa-fw"></i>
+	                        		<th:block th:text="${tenant.id}"></th:block>
+	                        	</a>
+	                        </li>
+	                    </th:block>
                         <li class="divider"></li>
                         <li>
                         	<a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <th:block th:text="#{desktop.layout.topbar.logout}"/></a>

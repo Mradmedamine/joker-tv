@@ -2,10 +2,10 @@ package org.joker.tv.controller.web;
 
 import java.util.Locale;
 
+import org.joker.tv.common.validator.UserValidator;
 import org.joker.tv.model.entity.User;
 import org.joker.tv.service.SecurityService;
 import org.joker.tv.service.UserService;
-import org.joker.tv.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;

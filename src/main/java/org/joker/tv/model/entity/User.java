@@ -2,6 +2,7 @@ package org.joker.tv.model.entity;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,6 +19,7 @@ public class User extends BaseEntity {
 	private String passwordConfirm;
 	private Set<Role> roles;
 
+	@Column(unique=true)
 	public String getUsername() {
 		return username;
 	}

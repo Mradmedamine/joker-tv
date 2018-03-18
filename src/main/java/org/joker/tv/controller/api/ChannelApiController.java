@@ -2,6 +2,7 @@ package org.joker.tv.controller.api;
 
 import java.util.List;
 
+import org.joker.tv.common.Constants;
 import org.joker.tv.model.front.web.SubscriptionDto;
 import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
 import org.joker.tv.model.front.web.iptv.vod.Movie;
@@ -27,24 +28,24 @@ public class ChannelApiController {
 
 	@GetMapping("/channels")
 	@ResponseBody
-	public ChannelsResult channels(SubscriptionDto device, Model model) {
+	public Object channels(SubscriptionDto device, Model model) {
 		if (subscriptionService.isValidIPTVSubscription(device)) {
 			ChannelsResult channels = channelService.getChannels();
 			return channels;
 		}
-		return null;
+		return Constants.INVALID_SUBSCRIPTION_MESSAGE;
 	}
 
 	@GetMapping("/movies")
 	@ResponseBody
-	public VodsResult vods(SubscriptionDto device, Model model) {
+	public Object vods(SubscriptionDto device, Model model) {
 		if (subscriptionService.isValidIPTVSubscription(device)) {
 			List<Movie> movies = channelService.getMovies();
 			VodsResult vodsResult = new VodsResult();
 			vodsResult.setMovies(movies);
 			return vodsResult;
 		}
-		return null;
+		return Constants.INVALID_SUBSCRIPTION_MESSAGE;
 	}
 
 }

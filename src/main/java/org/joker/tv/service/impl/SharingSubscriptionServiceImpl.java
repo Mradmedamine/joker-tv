@@ -60,8 +60,7 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 	public Servers activateSharingSubscription(IksRequest iksData) {
 		SubscriptionDto subscriptionDto = mapToSubscriptionDto(iksData);
 		Optional<SharingSubscription> subscription = getSharingSubscription(subscriptionDto);
-		Servers servers = new Servers();
-		return subscription.map(subscr -> handleActivation(subscr, servers)).orElse(wrongActivationCode(servers));
+		return subscription.isPresent() ? handleActivation(subscription.get()) : wrongActivationCode();
 	}
 
 	@Override
@@ -75,13 +74,15 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 		}
 		return authorId;
 	}
-	
-	private Servers wrongActivationCode(Servers servers) {
+
+	private Servers wrongActivationCode() {
+		Servers servers = new Servers();
 		servers.setMessage(new MessageDetails("2", "Wrong activation code"));
 		return servers;
 	}
 
-	private Servers handleActivation(SharingSubscription subscription, Servers servers) {
+	private Servers handleActivation(SharingSubscription subscription) {
+		Servers servers = new Servers();
 		if (isExpired(subscription)) {
 			servers.setMessage(new MessageDetails("3", "code Expired !"));
 		} else {

@@ -39,8 +39,7 @@ $(function() {
 		$(actionForm).submit(function() {
 			if ($(actionForm).valid()) {
 				var formObject = $(this).serializeObject();
-				var url = subscriptionType === IPTV ? '/iptv' : '/sharing';
-				url += '/subscriptions';
+				var url = '/servers'
 
 				$.ajax({
 					type : 'POST',

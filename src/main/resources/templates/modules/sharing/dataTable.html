@@ -10,10 +10,11 @@
 		     	<th width="10%">Server Id</th>
 		     	<th width="14%">Host</th>
 		     	<th width="24%">Port</th>
+		     	<th width="10%"></th>
 		 	 </tr>
 	     </thead>
 	     <tbody>
-			<tr th:each="server : ${servers}" class="clickable" th:attr="data-href=@{__${ '/servers/' + subscription.id}__}">
+			<tr th:each="server : ${servers}" class="clickable" th:attr="data-href=@{__${ '/servers/' + server.id}__}">
 				<td class="hidden" th:text="${server.id}"></td>
 				<td th:text="${server.serverid}"></td>
 				<td th:text="${server.host}"></td>

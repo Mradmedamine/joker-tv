@@ -16,7 +16,8 @@ public enum ComponentStatus {
 
 	public static ComponentStatus fromValue(Long value) {
 		Objects.requireNonNull(value, "value cannot be null");
-		Optional<ComponentStatus> status = Arrays.asList(ComponentStatus.values()).stream().filter(value::equals)
+		Optional<ComponentStatus> status = Arrays.asList(ComponentStatus.values()).stream()
+				.filter(e -> value.equals(e.getValue()))
 		        .findFirst();
 		return status.orElseThrow(() -> new IllegalArgumentException("no Component Status found for value " + value));
 	}

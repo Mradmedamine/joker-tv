@@ -2,7 +2,6 @@ package org.joker.tv.configuration;
 
 import java.util.Locale;
 
-import org.joker.tv.common.converter.MyGsonHttpMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -10,7 +9,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -81,14 +79,6 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		viewResolver.setTemplateEngine(templateEngine());
 		viewResolver.setCharacterEncoding("UTF-8");
 		return viewResolver;
-	}
-
-	@Bean
-	public RestTemplate restTemplate() {
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getMessageConverters().add(new MyGsonHttpMessageConverter());
-		// restTemplate.getInterceptors().add(new RestLoggingInterceptor());
-		return restTemplate;
 	}
 
 	private IDialect springSecurityDialect() {

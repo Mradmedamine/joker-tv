@@ -8,16 +8,16 @@
 		     <tr> 
 		     	<th class="hidden">id</th>
 		     	<th width="14%">Active Code</th>
-		     	<th width="19%">Mac Address</th>
+		     	<th width="16%">Mac Address</th>
 		     	<th width="16%">Serial Number</th>
 				<th width="9%">Model</th>
-				<th width="10%">Status</th>
 				<th:block th:if="${subscriptionType.name} == 'SHARING'">
-					<th width="12%">user</th>
-					<th width="12%">Password</th>
+					<th width="10%">user</th>
+					<th width="10%">Pass</th>
 				</th:block>
+				<th width="10%">Status</th>
 				<th width="12%">Expiration</th>
-				<th width="10%"></th>
+				<th width="11%"></th>
 		 	 </tr>
 	     </thead>
 	     <tbody>
@@ -27,13 +27,13 @@
 				<td th:text="${subscription.device.macAddress}"></td>
 				<td th:text="${subscription.device.serialNumber}"></td>
 				<td th:text="${subscription.device.model}"></td>
-				<td>
-					<i class="fa fa-check-circle fa-1x" th:classappend="${subscription.status.name == 'ACTIVATED' ? 'green' : ''}"></i>
-				</td> 
 				<th:block th:if="${subscriptionType.name} == 'SHARING'">
 					<td th:text="${subscription.user}"></td>
 					<td th:text="${subscription.pass}"></td>
 				</th:block>
+				<td>
+					<i class="fa fa-check-circle fa-1x" th:classappend="${subscription.status.name == 'ACTIVATED' ? 'green' : ''}"></i>
+				</td> 
 				<td th:text="${subscription.expiration}"></td>
 				<td>
 			    	<a class="btn btn-default btn-delete"><i class="fa fa-trash-o"></i>
