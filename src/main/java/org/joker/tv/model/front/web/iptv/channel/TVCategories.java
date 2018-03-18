@@ -1,14 +1,16 @@
 package org.joker.tv.model.front.web.iptv.channel;
 
+import java.util.List;
+
 public class TVCategories {
 
-	private TVCategory[] tv_category;
+	private List<TVCategory> tv_category;
 
-	public TVCategory[] getTv_category() {
+	public List<TVCategory> getTv_category() {
 		return tv_category;
 	}
 
-	public void setTv_category(TVCategory[] tv_category) {
+	public void setTv_category(List<TVCategory> tv_category) {
 		this.tv_category = tv_category;
 	}
 

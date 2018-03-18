@@ -2,6 +2,7 @@ package org.joker.tv.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.iptv.m3u.Encoding;
@@ -12,11 +13,15 @@ import org.iptv.m3u.data.Playlist;
 import org.iptv.m3u.data.TrackData;
 import org.joker.tv.common.util.MappingUtils;
 import org.joker.tv.model.entity.BaseChannel;
+import org.joker.tv.model.entity.CategoryEntity;
 import org.joker.tv.model.entity.ChannelEntity;
 import org.joker.tv.model.entity.Vod;
 import org.joker.tv.model.front.web.iptv.channel.ChannelsResult;
+import org.joker.tv.model.front.web.iptv.channel.TVCategories;
+import org.joker.tv.model.front.web.iptv.channel.TVCategory;
 import org.joker.tv.model.front.web.iptv.channel.TVChannel;
 import org.joker.tv.model.front.web.iptv.vod.Movie;
+import org.joker.tv.repository.CategoryRepository;
 import org.joker.tv.repository.ChannelRepository;
 import org.joker.tv.repository.VodRepository;
 import org.joker.tv.service.ChannelService;
@@ -32,6 +37,40 @@ public class ChannelServiceImpl implements ChannelService {
 
 	@Autowired
 	private VodRepository vodRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
+
+	@Override
+	public ChannelsResult getChannels() {
+		List<ChannelEntity> channels = channelRepository.findAll();
+		ChannelsResult channelsResult = new ChannelsResult();
+		List<TVChannel> tvChannels = new ArrayList<TVChannel>(channels.size());
+		channels.forEach(channel -> {
+			TVChannel tvChannel = MappingUtils.map(channel, TVChannel.class);
+			TVCategory tvCategory = new TVCategory();
+			tvCategory.setCaption(channel.getCategory().getCaption());
+			tvCategory.setId(channel.getCategory().getId().toString());
+			tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
+			tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
+			tvChannels.add(tvChannel);
+		});
+		channelsResult.setTv_channel(tvChannels);
+		return channelsResult;
+	}
+
+	@Override
+	public List<Movie> getMovies() {
+		List<Vod> vods = vodRepository.findAll();
+		List<Movie> movies = new ArrayList<Movie>(vods.size());
+		vods.forEach(vod -> {
+			Movie movie = new Movie();
+			movie.setCaption(vod.getCaption());
+			movie.setV_url(vod.getStreaming_url());
+			movies.add(movie);
+		});
+		return movies;
+	}
 
 	@Override
 	public void extractChannelsFromM3uFile(MultipartFile multipart) {
@@ -51,7 +90,7 @@ public class ChannelServiceImpl implements ChannelService {
 		try {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
 			PlaylistParser m3uParser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8,
-			        ParsingMode.LENIENT);
+					ParsingMode.LENIENT);
 			Playlist playlist = m3uParser.parse();
 			inputStream.close();
 			return buildChannelList(playlist, clazz);
@@ -61,49 +100,39 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz)
-	        throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException {
 		List<T> entityChannels = new ArrayList<>();
+		categoryRepository.deleteAll();
+		CategoryEntity currentCategory = null;
 		for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
 			String name = "";
 			if (trackData.getTrackInfo() != null) {
 				name = trackData.getTrackInfo().getTitle();
+				if (isCategoryItem(name)) {
+					currentCategory = new CategoryEntity();
+					currentCategory.setCaption(name);
+					currentCategory = categoryRepository.save(currentCategory);
+					continue;
+				}
 			}
 			String url = trackData.getUri();
-			T channelOb = newChannelObject(clazz, name, url);
-			entityChannels.add(channelOb);
+			T channelObject = newChannelObject(clazz, name, url);
+			channelObject.setCategory(currentCategory);
+			entityChannels.add(channelObject);
 		}
 		return entityChannels;
 	}
 
+	private boolean isCategoryItem(String name) {
+		return name.contains("*-*-*");
+	}
+
 	private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url)
-	        throws InstantiationException, IllegalAccessException {
-		T channelOb = clazz.newInstance();
-		channelOb.setStreaming_url(url);
-		channelOb.setCaption(name);
-		return channelOb;
-	}
-
-	@Override
-	public ChannelsResult getChannels() {
-		List<ChannelEntity> channels = channelRepository.findAll();
-		ChannelsResult channelsResult = new ChannelsResult();
-		List<TVChannel> tvChannels = new ArrayList<TVChannel>(channels.size());
-		channels.forEach(channel -> tvChannels.add(MappingUtils.map(channel, TVChannel.class)));
-		channelsResult.setTv_channel(tvChannels);
-		return channelsResult;
-	}
-
-	@Override
-	public List<Movie> getMovies() {
-		List<Vod> vods = vodRepository.findAll();
-		List<Movie> movies = new ArrayList<Movie>(vods.size());
-		vods.forEach(vod -> {
-			Movie movie = new Movie();
-			movie.setCaption(vod.getCaption());
-			movie.setV_url(vod.getStreaming_url());
-			movies.add(movie);
-		});
-		return movies;
+			throws InstantiationException, IllegalAccessException {
+		T channelObject = clazz.newInstance();
+		channelObject.setStreaming_url(url);
+		channelObject.setCaption(name);
+		return channelObject;
 	}
 
 }

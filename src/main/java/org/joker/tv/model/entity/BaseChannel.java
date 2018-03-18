@@ -1,5 +1,7 @@
 package org.joker.tv.model.entity;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
@@ -13,7 +15,8 @@ public abstract class BaseChannel extends BaseEntity  {
 	private String number;
 	private String num_future_epg_days;
 	private String num_past_epg_days;
-
+	private CategoryEntity category;
+	
 	public BaseChannel() {
 		super();
 	}
@@ -86,6 +89,16 @@ public abstract class BaseChannel extends BaseEntity  {
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	public CategoryEntity getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
 	}
 
 }

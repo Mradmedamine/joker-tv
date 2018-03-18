@@ -1,9 +1,10 @@
 package org.joker.tv.model.front.web.iptv.channel;
 
+import java.util.List;
+
 public class TVChannel {
 
 	private String id;
-	private TVCategories[] tv_categories;
 	private String num_future_epg_days;
 	private String num_past_epg_days;
 	private String streaming_url;
@@ -12,7 +13,8 @@ public class TVChannel {
 	private String bitrate;
 	private String caption;
 	private String number;
-
+	private List<TVCategories> tv_categories;
+	
 	public String getId() {
 		return id;
 	}
@@ -21,11 +23,11 @@ public class TVChannel {
 		this.id = id;
 	}
 
-	public TVCategories[] getTv_categories() {
+	public List<TVCategories> getTv_categories() {
 		return tv_categories;
 	}
 
-	public void setTv_categories(TVCategories[] tv_categories) {
+	public void setTv_categories(List<TVCategories> tv_categories) {
 		this.tv_categories = tv_categories;
 	}
 

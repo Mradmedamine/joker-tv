@@ -14,7 +14,7 @@ public class SharingSubscription extends BaseSubscription {
 	private String pass;
 
 	@PrePersist
-	void generateUserAnsPass() {
+	void generateUserAndPass() {
 		this.user = RandomStringUtils.randomAlphanumeric(6);
 		this.pass = RandomStringUtils.randomAlphanumeric(8);
 	}
