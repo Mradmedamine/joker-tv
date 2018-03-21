@@ -63,7 +63,7 @@
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                    	<th:block th:each="tenant : ${T(org.joker.tv.model.front.web.Tenant).values()}">
+                    	<th:block th:each="tenant : ${T(org.bsshare.tv.model.front.web.Tenant).values()}">
 	                        <li th:if="${tenant.visible}">
 <!-- 	                        	<span sec:authentication="principal.tenant"></span> -->
 	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}">
