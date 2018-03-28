@@ -51,16 +51,21 @@ $(function() {
 					type : 'POST',
 					url : url,
 					data : formObject,
-					success : function(result) {
+					success : function(data, textStatus, xhr) {
+						var toastrLevel = 'success';
+						if (xhr.status == 302) {
+							toastrLevel = 'warning';
+						}
 						$(modal).hide();
-						toastr['success'](result);
+						toastr[toastrLevel](data);
 						$('#toast-container .toast-success').show();
 						timer = setTimeout(function() {
 							location.reload();
 						}, 1000);
 					},
 					error : function(error) {
-						toastr['error']("error occured ! ");
+						var message = "Device already existing with different Serial Number/Mac Address";
+						toastr['error'](message);
 						$('#toast-container .toast-error').show();
 					}
 				});

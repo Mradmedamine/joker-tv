@@ -9,4 +9,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
 	Optional<DeviceEntity> findOneBySerialNumber(String serial);
 
+	Optional<DeviceEntity> findOneByMacAddress(String serial);
+	
 }

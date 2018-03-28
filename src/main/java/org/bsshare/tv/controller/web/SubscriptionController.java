@@ -1,12 +1,15 @@
 package org.bsshare.tv.controller.web;
 
 import org.bsshare.tv.common.Constants;
+import org.bsshare.tv.model.DeviceDataConsistancyException;
 import org.bsshare.tv.model.HasSubscriptionAlreadyException;
 import org.bsshare.tv.model.front.web.DeviceDto;
 import org.bsshare.tv.model.front.web.SubscriptionType;
 import org.bsshare.tv.service.IPTVSubscriptionService;
 import org.bsshare.tv.service.SharingSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,13 +36,16 @@ public class SubscriptionController {
 
 	@PostMapping("/iptv/subscriptions")
 	@ResponseBody
-	public String addIptvSubscription(DeviceDto device, Model model) {
+	public ResponseEntity<String> addIptvSubscription(DeviceDto device, Model model) {
 		try {
 			iptvSubscriptionService.newIPTVSubscription(device);
 		} catch (HasSubscriptionAlreadyException ex) {
-			return Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE;
+			return new ResponseEntity<String>(Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE, HttpStatus.FOUND);
+		} catch (DeviceDataConsistancyException ex) {
+			return new ResponseEntity<String>(Constants.REDUNDANT_DEVICE_INFORMATION_MESSAGE,
+					HttpStatus.PRECONDITION_FAILED);
 		}
-		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
+		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/IPTV/subscriptions/{id}")
@@ -56,13 +62,16 @@ public class SubscriptionController {
 
 	@PostMapping("/sharing/subscriptions")
 	@ResponseBody
-	public String addSharingSubscription(DeviceDto device, Model model) {
+	public ResponseEntity<String> addSharingSubscription(DeviceDto device, Model model) {
 		try {
 			sharingSubscriptionService.newSharingSubscription(device);
 		} catch (HasSubscriptionAlreadyException ex) {
-			return Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE;
+			return new ResponseEntity<String>(Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE, HttpStatus.FOUND);
+		} catch (DeviceDataConsistancyException ex) {
+			return new ResponseEntity<String>(Constants.REDUNDANT_DEVICE_INFORMATION_MESSAGE,
+					HttpStatus.PRECONDITION_FAILED);
 		}
-		return Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE;
+		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/SHARING/subscriptions/{id}")

@@ -45,6 +45,8 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl imp
 			activationResult.setMessage("ID:1 Your Account is now Active until: " + expiration);
 			activationResult.setStatus(ActivationStatus.OK.getValue());
 		}
+		getLogger().debug("Activation Result Response :\n message" + activationResult.getMessage() + "\n Status : "
+				+ activationResult.getStatus());
 		return activationResult;
 	}
 
@@ -70,7 +72,10 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl imp
 	@Override
 	public Long delete(Long id) {
 		try {
+			Long deviceId = ipTvSubscriptionRepository.findOne(id).getDevice().getId();
 			ipTvSubscriptionRepository.delete(id);
+			getLogger().debug("Deleted IPTV Subscription with id :" + id);
+			deleteCorrespondingDevice(deviceId);
 		} catch (DataIntegrityViolationException err) {
 			return -1L;
 		} catch (Exception err) {

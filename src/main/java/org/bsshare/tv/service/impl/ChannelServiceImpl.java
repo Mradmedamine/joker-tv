@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.bsshare.tv.common.util.MappingUtils;
 import org.bsshare.tv.model.entity.BaseChannel;
 import org.bsshare.tv.model.entity.CategoryEntity;
@@ -73,6 +75,7 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	@Override
+	@Transactional
 	public void extractChannelsFromM3uFile(MultipartFile multipart) {
 		List<ChannelEntity> channels = processM3UFile(multipart, ChannelEntity.class);
 		channelRepository.deleteAll();
@@ -102,7 +105,6 @@ public class ChannelServiceImpl implements ChannelService {
 	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz)
 			throws InstantiationException, IllegalAccessException {
 		List<T> entityChannels = new ArrayList<>();
-		categoryRepository.deleteAll();
 		CategoryEntity currentCategory = null;
 		for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
 			String name = "";
@@ -110,7 +112,7 @@ public class ChannelServiceImpl implements ChannelService {
 				name = trackData.getTrackInfo().getTitle();
 				if (isCategoryItem(name)) {
 					currentCategory = new CategoryEntity();
-					currentCategory.setCaption(name);
+					currentCategory.setCaption(trimCategoryName(name));
 					currentCategory = categoryRepository.save(currentCategory);
 					continue;
 				}
@@ -121,6 +123,10 @@ public class ChannelServiceImpl implements ChannelService {
 			entityChannels.add(channelObject);
 		}
 		return entityChannels;
+	}
+
+	private String trimCategoryName(String name) {
+		return name.replace("*", "").replace("-", "").replace("_", "");
 	}
 
 	private boolean isCategoryItem(String name) {

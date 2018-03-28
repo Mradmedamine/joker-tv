@@ -58,21 +58,25 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 
 	@Override
 	public Servers activateSharingSubscription(IksRequest iksData) {
+		getLogger().debug("Activating sharing subscription " + iksData.toString());
 		SubscriptionDto subscriptionDto = mapToSubscriptionDto(iksData);
 		Optional<SharingSubscription> subscription = getSharingSubscription(subscriptionDto);
 		return subscription.isPresent() ? handleActivation(subscription.get()) : wrongActivationCode();
 	}
 
 	@Override
-	public Long delete(Long authorId) {
+	public Long delete(Long id) {
 		try {
-			sharingSubscriptionRepository.delete(authorId);
+			Long deviceId = sharingSubscriptionRepository.findOne(id).getDevice().getId();
+			sharingSubscriptionRepository.delete(id);
+			getLogger().debug("Deleted Sharing Subscription with id :" + id);
+			deleteCorrespondingDevice(deviceId);
 		} catch (DataIntegrityViolationException err) {
 			return -1L;
 		} catch (Exception err) {
 			return -100L;
 		}
-		return authorId;
+		return id;
 	}
 
 	private Servers wrongActivationCode() {
@@ -96,6 +100,8 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 			servers.setMessage(new MessageDetails("1", messageBody));
 			servers.setServer(getServerSubscriptionInfoList(subscription));
 		}
+		getLogger().debug("Servers Result: \n message :" + servers.getMessage().getMessageBody() + "\n servers: "
+				+ servers.getServer().toString());
 		return servers;
 	}
 

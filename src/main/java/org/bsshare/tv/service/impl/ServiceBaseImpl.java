@@ -1,5 +1,7 @@
 package org.bsshare.tv.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.util.StringUtils;
 
 public abstract class ServiceBaseImpl {
@@ -11,5 +13,9 @@ public abstract class ServiceBaseImpl {
 			text = "%" + text.toUpperCase() + "%";
 		}
 		return text;
+	}
+
+	protected Logger getLogger() {
+		return LoggerFactory.getLogger(this.getClass());
 	}
 }

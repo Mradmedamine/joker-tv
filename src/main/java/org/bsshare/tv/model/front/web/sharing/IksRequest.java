@@ -30,4 +30,9 @@ public class IksRequest {
 		this.sn = sn;
 	}
 
+	@Override
+	public String toString() {
+		return "IksRequest [ac=" + ac + ", ma=" + ma + ", sn=" + sn + "]";
+	}
+
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.bsshare.tv.model.DeviceDataConsistancyException;
 import org.bsshare.tv.model.HasSubscriptionAlreadyException;
 import org.bsshare.tv.model.entity.BaseSubscription;
 import org.bsshare.tv.model.entity.DeviceEntity;
@@ -16,11 +17,12 @@ import org.bsshare.tv.model.front.web.SubscriptionType;
 import org.bsshare.tv.repository.BaseSubscriptionRepository;
 import org.bsshare.tv.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 
 	@Autowired
-	private DeviceRepository deviceRepo;
+	private DeviceRepository deviceRepository;
 
 	protected Optional<BaseSubscription> getSubscription(SubscriptionDto device) {
 		String login = device.getLogin();
@@ -36,7 +38,8 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
-		return subscription.getStatus() == ComponentStatus.ACTIVATED && subscription.getExpiration().isBefore(LocalDate.now());
+		return subscription.getStatus() == ComponentStatus.ACTIVATED
+				&& subscription.getExpiration().isBefore(LocalDate.now());
 	}
 
 	protected boolean isNotExpired(BaseSubscription subscription) {
@@ -50,7 +53,7 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 
 	protected Boolean hasAnyValidOrNewSubscription(DeviceDto deviceDto) {
 		List<? extends BaseSubscription> subscriptions = getSubscriptionRepository()
-		        .findByDevice_SerialNumber(deviceDto.getSerialNumber());
+				.findByDevice_SerialNumber(deviceDto.getSerialNumber());
 		return subscriptions.stream().anyMatch(this::isNotExpired);
 	}
 
@@ -58,26 +61,33 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 		if (hasAnyValidOrNewSubscription(deviceDto)) {
 			throw new HasSubscriptionAlreadyException();
 		}
-		DeviceEntity entityDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
+		DeviceEntity entityDevice = saveNewDevice(deviceDto);
 		BaseSubscription subscription = type == SubscriptionType.IPTV ? new IPTVSubscription()
-		        : new SharingSubscription();
+				: new SharingSubscription();
 		subscription.setDevice(entityDevice);
 		subscription.setStatus(ComponentStatus.NEW);
 		getSubscriptionRepository().save(subscription);
-
 	}
 
-	protected DeviceEntity saveSubscriptionDeviceIfNotExistant(DeviceDto device) {
-		Optional<DeviceEntity> entityDevice = deviceRepo.findOneBySerialNumber(device.getSerialNumber());
-		return entityDevice.orElseGet(() -> deviceRepo.save(newDevice(device)));
+	private DeviceEntity saveNewDevice(DeviceDto device) {
+		try {
+			DeviceEntity entityDevice = new DeviceEntity();
+			entityDevice.setMacAddress(device.getMacAddress());
+			entityDevice.setSerialNumber(device.getSerialNumber());
+			entityDevice.setModel(device.getModel());
+			return deviceRepository.save(entityDevice);
+		} catch (Exception ex) {
+			throw new DeviceDataConsistancyException();
+		}
 	}
 
-	private DeviceEntity newDevice(DeviceDto device) {
-		DeviceEntity entityDevice = new DeviceEntity();
-		entityDevice.setMacAddress(device.getMacAddress());
-		entityDevice.setSerialNumber(device.getSerialNumber());
-		entityDevice.setModel(device.getModel());
-		return entityDevice;
+	protected void deleteCorrespondingDevice(Long deviceId) {
+		try {
+			deviceRepository.delete(deviceId);
+			getLogger().debug("Subscription Corresponding Device has been deleted deviceId :" + deviceId);
+		} catch (DataIntegrityViolationException err) {
+			// DO NOTHING
+		}
 	}
 
 	protected abstract BaseSubscriptionRepository getSubscriptionRepository();

@@ -1,5 +1,6 @@
 package org.bsshare.tv.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -91,7 +92,7 @@ public abstract class BaseChannel extends BaseEntity  {
 		this.number = number;
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	public CategoryEntity getCategory() {
 		return category;
