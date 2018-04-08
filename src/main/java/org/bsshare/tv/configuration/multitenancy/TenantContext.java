@@ -55,8 +55,10 @@ public class TenantContext {
 	}
 
 	private static Optional<UserTenantDetails> getUserTenantDetails() {
-		Object userDetails = Optional.ofNullable(SecurityContextHolder.getContext()).map(x -> x.getAuthentication())
-				.map(x -> x.getPrincipal()).orElse(null);
+		Object userDetails = Optional.ofNullable(SecurityContextHolder.getContext())
+				.map(x -> x.getAuthentication())
+				.map(x -> x.getPrincipal())
+				.orElse(null);
 		if (userDetails instanceof UserTenantDetails) {
 			return Optional.of(((UserTenantDetails) userDetails));
 		}

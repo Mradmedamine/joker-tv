@@ -65,8 +65,7 @@
                     <ul class="dropdown-menu dropdown-user">
                     	<th:block th:each="tenant : ${T(org.bsshare.tv.model.front.web.Tenant).values()}">
 	                        <li th:if="${tenant.visible}">
-<!-- 	                        	<span sec:authentication="principal.tenant"></span> -->
-	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}">
+	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}" th:class="${ tenant == #authentication.principal?.tenant ? 'active' : '' }">
 	                        		<i class="fa fa-building fa-fw"></i>
 	                        		<th:block th:text="${tenant.id}"></th:block>
 	                        	</a>
