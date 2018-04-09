@@ -29,7 +29,7 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 		String uuid = device.getUid();
 		String serial = device.getSerial();
 		List<? extends BaseSubscription> queryResult = null;
-		queryResult = getSubscriptionRepository().findOneByCriteria(login, uuid, serial);
+		queryResult = getSubscriptionRepository().findOneByCriteria(login);
 		BaseSubscription subscription = null;
 		if (queryResult != null && !queryResult.isEmpty()) {
 			subscription = queryResult.get(0);
@@ -61,19 +61,24 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 		if (hasAnyValidOrNewSubscription(deviceDto)) {
 			throw new HasSubscriptionAlreadyException();
 		}
-		DeviceEntity entityDevice = saveNewDevice(deviceDto);
+		DeviceEntity entityDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
 		BaseSubscription subscription = type == SubscriptionType.IPTV ? new IPTVSubscription()
 				: new SharingSubscription();
 		subscription.setDevice(entityDevice);
 		subscription.setStatus(ComponentStatus.NEW);
 		getSubscriptionRepository().save(subscription);
 	}
+	
+	protected DeviceEntity saveSubscriptionDeviceIfNotExistant(DeviceDto device) {
+		Optional<DeviceEntity> entityDevice = deviceRepository.findOneBySerialNumber(device.getSerialNumber());
+		return entityDevice.orElseGet(() -> saveNewDevice(device));
+	}
 
 	private DeviceEntity saveNewDevice(DeviceDto device) {
 		try {
 			DeviceEntity entityDevice = new DeviceEntity();
-			entityDevice.setMacAddress(device.getMacAddress());
-			entityDevice.setSerialNumber(device.getSerialNumber());
+			entityDevice.setMacAddress(device.getMacAddress().trim());
+			entityDevice.setSerialNumber(device.getSerialNumber().trim());
 			entityDevice.setModel(device.getModel());
 			return deviceRepository.save(entityDevice);
 		} catch (Exception ex) {

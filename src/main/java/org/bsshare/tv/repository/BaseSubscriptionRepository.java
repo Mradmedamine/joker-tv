@@ -6,7 +6,7 @@ import org.bsshare.tv.model.entity.BaseSubscription;
 
 public interface BaseSubscriptionRepository {
 
-	List<? extends BaseSubscription> findOneByCriteria(String activeCode, String macAddress, String serial);
+	List<? extends BaseSubscription> findOneByCriteria(String activeCode);
 
 	void save(BaseSubscription subscription);
 

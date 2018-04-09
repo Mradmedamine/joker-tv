@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
 
-	Optional<DeviceEntity> findOneBySerialNumber(String serial);
-
-	Optional<DeviceEntity> findOneByMacAddress(String serial);
+	Optional<DeviceEntity> findOneBySerialNumber(String serialNumber);
 	
 }

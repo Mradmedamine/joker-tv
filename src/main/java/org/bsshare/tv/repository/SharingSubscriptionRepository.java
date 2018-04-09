@@ -14,7 +14,6 @@ public interface SharingSubscriptionRepository
 	// AND e.device.macAddress = :macAddress "
 	// + "AND e.device.serialNumber = :serialNumber")
 	@Query("SELECT e FROM SharingSubscription e WHERE e.activeCode = :activeCode")
-	List<SharingSubscription> findOneByCriteria(@Param("activeCode") String activeCode,
-			@Param("macAddress") String macAddress, @Param("serialNumber") String from);
+	List<SharingSubscription> findOneByCriteria(@Param("activeCode") String activeCode);
 
 }
