@@ -1,9 +1,6 @@
 package org.bsshare.tv.controller.web;
 
 import org.bsshare.tv.common.Constants;
-import org.bsshare.tv.model.DeviceDataConsistancyException;
-import org.bsshare.tv.model.HasSubscriptionAlreadyException;
-import org.bsshare.tv.model.front.web.DeviceDto;
 import org.bsshare.tv.model.front.web.SubscriptionType;
 import org.bsshare.tv.service.IPTVSubscriptionService;
 import org.bsshare.tv.service.SharingSubscriptionService;
@@ -36,15 +33,8 @@ public class SubscriptionController {
 
 	@PostMapping("/iptv/subscriptions")
 	@ResponseBody
-	public ResponseEntity<String> addIptvSubscription(DeviceDto device, Model model) {
-		try {
-			iptvSubscriptionService.newIPTVSubscription(device);
-		} catch (HasSubscriptionAlreadyException ex) {
-			return new ResponseEntity<String>(Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE, HttpStatus.FOUND);
-		} catch (DeviceDataConsistancyException ex) {
-			return new ResponseEntity<String>(Constants.REDUNDANT_DEVICE_INFORMATION_MESSAGE,
-					HttpStatus.PRECONDITION_FAILED);
-		}
+	public ResponseEntity<String> addIptvSubscription(Model model) {
+		iptvSubscriptionService.newIPTVSubscription();
 		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 
@@ -62,15 +52,8 @@ public class SubscriptionController {
 
 	@PostMapping("/sharing/subscriptions")
 	@ResponseBody
-	public ResponseEntity<String> addSharingSubscription(DeviceDto device, Model model) {
-		try {
-			sharingSubscriptionService.newSharingSubscription(device);
-		} catch (HasSubscriptionAlreadyException ex) {
-			return new ResponseEntity<String>(Constants.DEVICE_HAS_ALREADY_SUBSCRIPTION_MESSAGE, HttpStatus.FOUND);
-		} catch (DeviceDataConsistancyException ex) {
-			return new ResponseEntity<String>(Constants.REDUNDANT_DEVICE_INFORMATION_MESSAGE,
-					HttpStatus.PRECONDITION_FAILED);
-		}
+	public ResponseEntity<String> addSharingSubscription(Model model) {
+		sharingSubscriptionService.newSharingSubscription();
 		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 

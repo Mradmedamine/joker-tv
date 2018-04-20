@@ -6,10 +6,10 @@ import org.bsshare.tv.model.entity.BaseSubscription;
 
 public interface BaseSubscriptionRepository {
 
-	List<? extends BaseSubscription> findOneByCriteria(String activeCode);
-
-	void save(BaseSubscription subscription);
+	<T extends BaseSubscription> T findOneByActiveCode(String activeCode);
 
 	List<? extends BaseSubscription> findByDevice_SerialNumber(String serial);
+
+	void save(BaseSubscription subscription);
 
 }

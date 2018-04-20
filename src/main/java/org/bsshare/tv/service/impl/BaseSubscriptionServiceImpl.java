@@ -19,22 +19,24 @@ import org.bsshare.tv.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
+public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> extends ServiceBaseImpl {
 
 	@Autowired
 	private DeviceRepository deviceRepository;
 
-	protected Optional<BaseSubscription> getSubscription(SubscriptionDto device) {
-		String login = device.getLogin();
-		String uuid = device.getUid();
-		String serial = device.getSerial();
-		List<? extends BaseSubscription> queryResult = null;
-		queryResult = getSubscriptionRepository().findOneByCriteria(login);
-		BaseSubscription subscription = null;
-		if (queryResult != null && !queryResult.isEmpty()) {
-			subscription = queryResult.get(0);
+	public Optional<T> getSubscription(SubscriptionDto subscriptionDto) {
+		Optional<T> subscription = Optional
+				.ofNullable(getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin()));
+		if (subscription.isPresent() && subscription.get().getDevice() == null) {
+			DeviceDto deviceDto = new DeviceDto();
+			deviceDto.setMacAddress(subscriptionDto.getUid());
+			deviceDto.setSerialNumber(subscriptionDto.getSerial());
+			deviceDto.setModel(subscriptionDto.getModel());
+			DeviceEntity savedDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
+			subscription.get().setDevice(savedDevice);
+			getSubscriptionRepository().save(subscription.get());
 		}
-		return Optional.ofNullable(subscription);
+		return subscription;
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
@@ -47,7 +49,7 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 	}
 
 	protected Boolean isValidSubscription(SubscriptionDto subscriptionDto) {
-		Optional<BaseSubscription> subscription = getSubscription(subscriptionDto);
+		Optional<? extends BaseSubscription> subscription = getSubscription(subscriptionDto);
 		return subscription.isPresent() && !isExpired(subscription.get());
 	}
 
@@ -68,7 +70,14 @@ public abstract class BaseSubscriptionServiceImpl extends ServiceBaseImpl {
 		subscription.setStatus(ComponentStatus.NEW);
 		getSubscriptionRepository().save(subscription);
 	}
-	
+
+	protected void newSubscription(SubscriptionType type) {
+		BaseSubscription subscription = type == SubscriptionType.IPTV ? new IPTVSubscription()
+				: new SharingSubscription();
+		subscription.setStatus(ComponentStatus.NEW);
+		getSubscriptionRepository().save(subscription);
+	}
+
 	protected DeviceEntity saveSubscriptionDeviceIfNotExistant(DeviceDto device) {
 		Optional<DeviceEntity> entityDevice = deviceRepository.findOneBySerialNumber(device.getSerialNumber());
 		return entityDevice.orElseGet(() -> saveNewDevice(device));

@@ -12,7 +12,7 @@ public class DeviceEntity extends BaseEntity {
 	private String macAddress;
 	private String model;
 
-	@Column(unique=true)
+	@Column(unique=true, nullable=true)
 	public String getMacAddress() {
 		return macAddress;
 	}
@@ -21,7 +21,7 @@ public class DeviceEntity extends BaseEntity {
 		this.macAddress = macAddress;
 	}
 
-	@Column(unique=true)
+	@Column(unique=true, nullable=true)
 	public String getSerialNumber() {
 		return serialNumber;
 	}

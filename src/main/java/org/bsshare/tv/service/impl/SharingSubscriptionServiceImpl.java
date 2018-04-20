@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.bsshare.tv.model.entity.ServerEntity;
 import org.bsshare.tv.model.entity.SharingSubscription;
 import org.bsshare.tv.model.front.web.ComponentStatus;
-import org.bsshare.tv.model.front.web.DeviceDto;
 import org.bsshare.tv.model.front.web.MessageDetails;
 import org.bsshare.tv.model.front.web.ServerSubscriptionInfo;
 import org.bsshare.tv.model.front.web.SubscriptionDto;
@@ -26,7 +25,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl implements SharingSubscriptionService {
+public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<SharingSubscription>
+		implements SharingSubscriptionService {
 
 	private static final Period DEFAULT_SUBSCRIPTION_PERIOD = Period.ofYears(1);
 
@@ -47,8 +47,8 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl 
 	}
 
 	@Override
-	public void newSharingSubscription(DeviceDto deviceDto) {
-		newSubscription(deviceDto, SubscriptionType.SHARING);
+	public void newSharingSubscription() {
+		newSubscription(SubscriptionType.SHARING);
 	}
 
 	@Override

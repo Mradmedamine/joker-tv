@@ -24,9 +24,9 @@
 			<tr th:each="subscription : ${subscriptions}" th:attr="data-href=@{__${ '/' + subscriptionType.name + '/subscriptions/' + subscription.id}__}">
 				<td class="hidden" th:text="${subscription.id}"></td>
 				<td th:text="${subscription.activeCode}"></td>
-				<td th:text="${subscription.device.macAddress}"></td>
-				<td th:text="${subscription.device.serialNumber}"></td>
-				<td th:text="${subscription.device.model}"></td>
+				<td th:text="${subscription.device?.macAddress}"></td>
+				<td th:text="${subscription.device?.serialNumber}"></td>
+				<td th:text="${subscription.device?.model}"></td>
 				<th:block th:if="${subscriptionType.name} == 'SHARING'">
 					<td th:text="${subscription.user}"></td>
 					<td th:text="${subscription.pass}"></td>

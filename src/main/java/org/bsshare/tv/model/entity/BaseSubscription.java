@@ -3,6 +3,7 @@ package org.bsshare.tv.model.entity;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -49,7 +50,7 @@ public abstract class BaseSubscription extends BaseEntity {
 		this.status = status;
 	}
 
-	@ManyToOne
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "device_id")
 	public DeviceEntity getDevice() {
 		return device;
