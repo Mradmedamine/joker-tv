@@ -36,7 +36,7 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 	private ActivationResult getValidActivationResult(IPTVSubscription subscription) {
 		ActivationResult activationResult = newActivationResult();
 		if (subscription.getStatus() == ComponentStatus.ACTIVATED) {
-			activationResult.setMessage("Code already activated. now Active until: " + subscription.getExpiration());
+			activationResult.setMessage("Code already activated.Account Active until: " + subscription.getExpiration());
 			activationResult.setStatus(ActivationStatus.OK.getValue());
 		} else {
 			activateNewIPTVSubscription(subscription);

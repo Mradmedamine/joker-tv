@@ -3,21 +3,13 @@ package org.bsshare.tv.model.front.web.iptv.vod;
 public class MovieDetails {
 
 	private String vod_producer;
-
 	private String vod_price;
-
 	private String vod_country;
-
 	private String vod_year;
-
 	private String vod_duration;
-
 	private String value;
-
 	private String vod_description;
-
 	private String caption;
-
 	private String vod_actors;
 
 	public String getVod_producer() {
