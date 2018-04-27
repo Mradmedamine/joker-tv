@@ -71,7 +71,9 @@
 	                        	</a>
 	                        </li>
 	                    </th:block>
-                        <li class="divider"></li>
+                        <li>
+                        	<a th:href="@{/signup}"><i class="fa fa-user-plus fa-fw"></i> add user</a>
+                        </li>
                         <li>
                         	<a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <th:block th:text="#{desktop.layout.topbar.logout}"/></a>
                         </li>

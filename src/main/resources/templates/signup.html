@@ -27,9 +27,6 @@
 					            <errors th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></errors>
 					        </div>
 					     <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{common.submit}"></button>
-					     <h4 class="text-center">
-					     	<a th:href="@{/login}" th:text="#{common.login.account.already}"></a>
-					     </h4>
 					    </fieldset>
 					</form>
 				 </div>

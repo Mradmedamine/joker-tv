@@ -33,8 +33,10 @@ public class SubscriptionController {
 
 	@PostMapping("/iptv/subscriptions")
 	@ResponseBody
-	public ResponseEntity<String> addIptvSubscription(Model model) {
-		iptvSubscriptionService.newIPTVSubscription();
+	public ResponseEntity<String> addIptvSubscription(int number, Model model) {
+		for (int i = 0; i < number; i++) {
+			iptvSubscriptionService.newIPTVSubscription();
+		}
 		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 
@@ -52,8 +54,10 @@ public class SubscriptionController {
 
 	@PostMapping("/sharing/subscriptions")
 	@ResponseBody
-	public ResponseEntity<String> addSharingSubscription(Model model) {
-		sharingSubscriptionService.newSharingSubscription();
+	public ResponseEntity<String> addSharingSubscription(int number, Model model) {
+		for (int i = 0; i < number; i++) {
+			sharingSubscriptionService.newSharingSubscription();
+		}
 		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 

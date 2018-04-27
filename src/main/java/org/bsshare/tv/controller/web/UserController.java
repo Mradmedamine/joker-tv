@@ -3,8 +3,9 @@ package org.bsshare.tv.controller.web;
 import java.util.Locale;
 
 import org.bsshare.tv.common.validator.UserValidator;
+import org.bsshare.tv.configuration.multitenancy.TenantContext;
 import org.bsshare.tv.model.entity.User;
-import org.bsshare.tv.service.SecurityService;
+import org.bsshare.tv.model.front.web.Tenant;
 import org.bsshare.tv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,9 +23,6 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private SecurityService securityService;
-
-	@Autowired
 	private UserValidator userValidator;
 
 	@Autowired
@@ -38,18 +36,19 @@ public class UserController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String signup(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+		TenantContext.setCurrentTenant(Tenant.ANONYMOUS.getId());
 		userValidator.validate(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
 			return "signup";
 		}
 		userService.save(userForm);
-		securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
+		TenantContext.setDefaultTenant();
 		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model, String error, String logout, Locale locale) {
-		Object[] args = new Object[]{};
+		Object[] args = new Object[] {};
 		if (error != null) {
 			String loginFailureMessage = messageSource.getMessage("common.login.failure", args, locale);
 			model.addAttribute("error", loginFailureMessage);

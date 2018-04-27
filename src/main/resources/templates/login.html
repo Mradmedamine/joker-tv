@@ -24,11 +24,9 @@
 					       <div th:class="|form-group ${error != null ? 'has-error' : ''}|">
 					            <input name="password" type="password" class="form-control" th:placeholder="#{common.login.password}"/>
 					            <span th:text="${error}"></span>
-					        </div>    
-				            <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{common.login}"></button>
-				            <h4 class="text-center">
-				            	<a href="#" th:text="#{common.login.account.create}"></a>
-				            </h4>
+					       </div>    
+				           <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{common.login}"></button>
+				           <br>
                         </fieldset>
                     </form>
                 </div>
