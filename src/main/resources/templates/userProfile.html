@@ -18,11 +18,11 @@
 					</div>
 					<div class="panel-body">
 				        <form id="tab">
-				        	<div class="form-group">
+				        	<div class="form-group col-md-6">
 							    <label for="username">Username</label>
 							    <input name="username" type="text" th:value="${userProfile.username}" class="form-control">
 						    </div>
-				          	<div>
+				          	<div class="form-group col-md-12">
 				        	    <a th:href="@{/signup}" class="btn btn-primary">Create User</a>
 				        	    <a th:href="@{/}" class="btn btn-primary">Home</a>
 				        	</div>
@@ -34,11 +34,11 @@
 	      		<div>
 					<div class="panel-body">
 				    	<form id="changePassword" th:action="@{/userProfile/changePassword}" method="POST">
-				        	<div class="form-group">
+				        	<div class="form-group col-md-6">
 							    <label for="password">New Password</label>
 							    <input name="password" type="password" class="form-control">
 						    </div>
-				        	<div>
+				        	<div class="form-group col-md-12">
 				        	    <button class="btn btn-primary">Update</button>
 				        	</div>
 				    	</form>
