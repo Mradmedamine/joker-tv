@@ -21,7 +21,6 @@ import org.bsshare.tv.repository.ServerRepository;
 import org.bsshare.tv.repository.SharingSubscriptionRepository;
 import org.bsshare.tv.service.SharingSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -66,17 +65,7 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<
 
 	@Override
 	public Long delete(Long id) {
-		try {
-			Long deviceId = sharingSubscriptionRepository.findOne(id).getDevice().getId();
-			sharingSubscriptionRepository.delete(id);
-			getLogger().debug("Deleted Sharing Subscription with id :" + id);
-			deleteCorrespondingDevice(deviceId);
-		} catch (DataIntegrityViolationException err) {
-			return -1L;
-		} catch (Exception err) {
-			return -100L;
-		}
-		return id;
+		return super.deleteSubscription(id);
 	}
 
 	private Servers wrongActivationCode() {

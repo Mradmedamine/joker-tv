@@ -95,10 +95,27 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 		}
 	}
 
+	protected Long deleteSubscription(Long id) {
+		try {
+			Long deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice()).map(e -> e.getId())
+					.orElse(null);
+			getSubscriptionRepository().delete(id);
+			getLogger().debug("Deleted Sharing Subscription with id :" + id);
+			deleteCorrespondingDevice(deviceId);
+		} catch (DataIntegrityViolationException err) {
+			return -1L;
+		} catch (Exception err) {
+			return -100L;
+		}
+		return id;
+	}
+
 	protected void deleteCorrespondingDevice(Long deviceId) {
 		try {
-			deviceRepository.delete(deviceId);
-			getLogger().debug("Subscription Corresponding Device has been deleted deviceId :" + deviceId);
+			if (deviceId != null) {
+				deviceRepository.delete(deviceId);
+				getLogger().debug("Subscription Corresponding Device has been deleted deviceId :" + deviceId);
+			}
 		} catch (DataIntegrityViolationException err) {
 			// DO NOTHING
 		}

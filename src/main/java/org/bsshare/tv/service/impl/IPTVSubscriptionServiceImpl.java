@@ -16,7 +16,6 @@ import org.bsshare.tv.repository.BaseSubscriptionRepository;
 import org.bsshare.tv.repository.IPTVSubscriptionRepository;
 import org.bsshare.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -70,17 +69,7 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 
 	@Override
 	public Long delete(Long id) {
-		try {
-			Long deviceId = ipTvSubscriptionRepository.findOne(id).getDevice().getId();
-			ipTvSubscriptionRepository.delete(id);
-			getLogger().debug("Deleted IPTV Subscription with id :" + id);
-			deleteCorrespondingDevice(deviceId);
-		} catch (DataIntegrityViolationException err) {
-			return -1L;
-		} catch (Exception err) {
-			return -100L;
-		}
-		return id;
+		return super.deleteSubscription(id);
 	}
 
 	@Override
