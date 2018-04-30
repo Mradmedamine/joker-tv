@@ -97,8 +97,7 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected Long deleteSubscription(Long id) {
 		try {
-			Long deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice()).map(e -> e.getId())
-					.orElse(null);
+			Optional<Long> deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice()).map(e -> e.getId());
 			getSubscriptionRepository().delete(id);
 			getLogger().debug("Deleted Sharing Subscription with id :" + id);
 			deleteCorrespondingDevice(deviceId);
@@ -110,12 +109,12 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 		return id;
 	}
 
-	protected void deleteCorrespondingDevice(Long deviceId) {
+	protected void deleteCorrespondingDevice(Optional<Long> deviceId) {
 		try {
-			if (deviceId != null) {
-				deviceRepository.delete(deviceId);
-				getLogger().debug("Subscription Corresponding Device has been deleted deviceId :" + deviceId);
-			}
+			deviceId.ifPresent((id) -> {
+				deviceRepository.delete(id);
+				getLogger().debug("Subscription Corresponding Device has been deleted deviceId :" + id);
+			});
 		} catch (DataIntegrityViolationException err) {
 			// DO NOTHING
 		}
