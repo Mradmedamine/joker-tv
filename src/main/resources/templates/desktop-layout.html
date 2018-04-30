@@ -55,7 +55,7 @@
                 </a>
             </div>
 
-            <ul class="nav navbar-top-links navbar-right top-nav">
+           <ul class="nav navbar-top-links navbar-right top-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> 
@@ -63,20 +63,34 @@
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                    	<th:block th:each="tenant : ${T(org.bsshare.tv.model.front.web.Tenant).values()}">
-	                        <li th:if="${tenant.visible}">
-	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}" th:class="${ tenant == #authentication.principal?.tenant ? 'active' : '' }">
-	                        		<i class="fa fa-building fa-fw"></i>
-	                        		<th:block th:text="${tenant.id}"></th:block>
-	                        	</a>
-	                        </li>
-	                    </th:block>
                         <li>
-                        	<a th:href="@{/signup}"><i class="fa fa-user-plus fa-fw"></i> add user</a>
+                        	<a th:href="@{/userProfile}"><i class="fa fa-user fa-fw"></i> User profile</a>
                         </li>
+                        <li>
+                        	<a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
                         <li>
                         	<a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <th:block th:text="#{desktop.layout.topbar.logout}"/></a>
                         </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-top-links navbar-right top-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-sliders fa-fw"></i> 
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                    	<th:block th:each="tenant : ${T(org.bsshare.tv.model.front.web.Tenant).values()}">
+	                        <li th:if="${tenant.visible}">
+	                        	<a th:href="@{/internal/multitenancy/__${tenant.id}__}" th:class="${ tenant == #authentication.principal?.tenant ? 'active' : '' }">
+	                        		<i class="fa fa-sliders fa-fw"></i>
+	                        		<th:block th:text="${#strings.substring(tenant.id, 8)}"></th:block>
+	                        	</a>
+	                        </li>
+	                    </th:block>
                     </ul>
                 </li>
             </ul>
