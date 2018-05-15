@@ -50,11 +50,14 @@ public class ChannelServiceImpl implements ChannelService {
 		List<TVChannel> tvChannels = new ArrayList<TVChannel>(channels.size());
 		channels.forEach(channel -> {
 			TVChannel tvChannel = MappingUtils.map(channel, TVChannel.class);
-			TVCategory tvCategory = new TVCategory();
-			tvCategory.setCaption(channel.getCategory().getCaption());
-			tvCategory.setId(channel.getCategory().getId().toString());
-			tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
-			tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
+			CategoryEntity channelCategory = channel.getCategory();
+			if (channelCategory != null) {
+				TVCategory tvCategory = new TVCategory();
+				tvCategory.setCaption(channelCategory.getCaption());
+				tvCategory.setId(channelCategory.getId().toString());
+				tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
+				tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
+			}
 			tvChannels.add(tvChannel);
 		});
 		channelsResult.setTv_channel(tvChannels);
@@ -102,8 +105,7 @@ public class ChannelServiceImpl implements ChannelService {
 		}
 	}
 
-	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz)
-			throws InstantiationException, IllegalAccessException {
+	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz) {
 		List<T> entityChannels = new ArrayList<>();
 		CategoryEntity currentCategory = null;
 		for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
@@ -133,12 +135,15 @@ public class ChannelServiceImpl implements ChannelService {
 		return name.contains("*-*-*");
 	}
 
-	private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url)
-			throws InstantiationException, IllegalAccessException {
-		T channelObject = clazz.newInstance();
-		channelObject.setStreaming_url(url);
-		channelObject.setCaption(name);
-		return channelObject;
+	private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url) {
+		try {
+			T channelObject = clazz.newInstance();
+			channelObject.setStreaming_url(url);
+			channelObject.setCaption(name);
+			return channelObject;
+		} catch (InstantiationException | IllegalAccessException ex) {
+			throw new RuntimeException("instantiation error", ex);
+		}
 	}
 
 }

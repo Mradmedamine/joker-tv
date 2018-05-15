@@ -19,7 +19,7 @@
 				<td class="hidden" th:text="${channel.id}"></td>
 				<td><img th:src="${channel.icon_url}" alt="" height="60px" width="60px"></td>
 				<td th:text="${channel.caption}"></td>
-				<td th:text="${#strings.replace(channel.tv_categories[0].tv_category[0].caption, '*-', '')}"></td>
+				<td th:text="${channel?.tv_categories[0]?.tv_category[0]?.caption}"></td>
 				<td>unknown</td>
 				<td>
 					<i class="fa fa-check-circle fa-1x"></i>
