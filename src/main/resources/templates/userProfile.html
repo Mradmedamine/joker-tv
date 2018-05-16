@@ -4,30 +4,28 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{desktop-layout}">
 
-<div class="panel" layout:fragment="desktop-page-content">
+<div class="userProfile" layout:fragment="desktop-page-content">
 	<div class="well mb-0">
 	    <ul class="nav nav-tabs">
 	      <li class="active"><a href="#home" data-toggle="tab">Profile</a></li>
 	      <li><a href="#profile" data-toggle="tab">Password</a></li>
 	    </ul>
 	    <div id="myTabContent" class="tab-content">
-	      <div id="home" class="tab-pane active in">
-		      <div>
-					<div th:if="${message}" class="alert alert-success fade in">
-						Success ! <th:block th:text="${message}"/>
-					</div>
-					<div class="panel-body">
-				        <form id="tab">
-				        	<div class="form-group col-md-6">
-							    <label for="username">Username</label>
-							    <input name="username" type="text" th:value="${userProfile.username}" class="form-control" readonly>
-						    </div>
-				          	<div class="form-group col-md-12">
-				        	    <a th:href="@{/signup}" class="btn btn-primary">New User</a>
-				        	</div>
-				        </form>
-				     </div>
-				</div>
+	    <div id="home" class="tab-pane active in">
+			<div th:if="${message}" class="alert alert-success fade in">
+				Success ! <th:block th:text="${message}"/>
+			</div>
+			<div class="panel-body">
+		       <form id="tab">
+		       	<div class="form-group col-md-6">
+				    <label for="username">Username</label>
+				    <input name="username" type="text" th:value="${userProfile.username}" class="form-control" readonly>
+			    </div>
+		         	<div class="form-group col-md-12">
+		       	    <a th:href="@{/signup}" class="btn btn-primary">New User</a>
+		       	</div>
+		       </form>
+		    </div>
 	      </div>
 	      <div class="tab-pane fade" id="profile">
 	      		<div>
