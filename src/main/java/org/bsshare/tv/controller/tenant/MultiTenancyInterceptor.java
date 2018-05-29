@@ -16,8 +16,7 @@ public class MultiTenancyInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		String uri = req.getRequestURI().trim();
 		if (uri.startsWith(API_URI_HEAD)) {
-			String tenantStr = extractTenantName(uri);
-			Tenant tenant = parseTenantString(tenantStr);
+			Tenant tenant = parseTenantString(extractTenantName(uri));
 			if (tenant == null) {
 				TenantContext.setDefaultTenant();
 			} else {
@@ -36,12 +35,15 @@ public class MultiTenancyInterceptor extends HandlerInterceptorAdapter {
 	private String extractTenantName(String uri) {
 		String tenantStr = null;
 		try {
-			int lastIndexOfApiURIHead = uri.indexOf(API_URI_HEAD) + API_URI_HEAD.length();
-			tenantStr = uri.substring(lastIndexOfApiURIHead, uri.indexOf("/", lastIndexOfApiURIHead));
+			tenantStr = uri.substring(indexOfLastCharacter(uri, API_URI_HEAD), uri.indexOf("/", indexOfLastCharacter(uri, API_URI_HEAD)));
 		} catch (IndexOutOfBoundsException ex) {
 			return null;
 		}
 		return tenantStr;
+	}
+
+	private int indexOfLastCharacter(String target, String searchedString) {
+		return target.indexOf(searchedString) + searchedString.length();
 	}
 
 	private Tenant parseTenantString(String tenantStr) {

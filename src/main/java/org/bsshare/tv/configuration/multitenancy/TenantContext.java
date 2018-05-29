@@ -43,7 +43,8 @@ public class TenantContext {
 			return userTenantDetails.get().getTenant().getId();
 		} else {
 			String tenantId = getRequestAttributes()
-					.map(attributes -> attributes.getAttribute(TENANT_ID_KEY, SCOPE_REQUEST)).map(attr -> (String) attr)
+					.map(attributes -> attributes.getAttribute(TENANT_ID_KEY, SCOPE_REQUEST))
+					.map(String.class::cast)
 					.orElse(null);
 			return tenantId != null ? tenantId : ANONYMOUS_TENANT_ID;
 		}
