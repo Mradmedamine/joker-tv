@@ -61,7 +61,7 @@ public class SubscriptionController {
 		return new ResponseEntity<String>(Constants.SUBSCRIPTION_ADDED_SUCCESSFULLY_MESSAGE, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/SHARING/subscriptions/{id}")
+	@DeleteMapping("/sharing/subscriptions/{id}")
 	public @ResponseBody Long deleteSharingSubscription(Model model, @PathVariable Long id) {
 		return sharingSubscriptionService.delete(id);
 	}

@@ -28,8 +28,8 @@ public class ChannelApiController {
 
 	@GetMapping("/channels")
 	@ResponseBody
-	public Object channels(SubscriptionDto device, Model model) {
-		if (subscriptionService.isValidIPTVSubscription(device)) {
+	public Object channels(SubscriptionDto subscriptionDto, Model model) {
+		if (subscriptionService.isValidIPTVSubscription(subscriptionDto)) {
 			ChannelsResult channels = channelService.getChannels();
 			return channels;
 		}

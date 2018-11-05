@@ -18,7 +18,7 @@ public class TenantContext {
 	private static final String TENANT_ID_KEY = "tenantId";
 
 	public static final String ANONYMOUS_TENANT_ID = Tenant.ANONYMOUS.getId();
-	public static final String DEFAULT_TENANT_ID = Tenant._7STAR.getId();
+	public static final String DEFAULT_TENANT_ID = Tenant.JOKER.getId();
 
 	public static void setCurrentTenant(String tenantId) {
 		logger.debug("Setting tenant to " + tenantId);
