@@ -58,9 +58,9 @@ public class UserLoader extends BaseDataLoader {
 		log.info("Saved Role :" + ADMIN_ROLE + " id: " + adminRole.getId());
 
 		User user = new User();
-		user.setUsername("editorial");
-		user.setPassword(bCryptPasswordEncoder.encode("editorial"));
-		user.setPasswordConfirm("editorial");
+		user.setUsername("bsshare");
+		user.setPassword(bCryptPasswordEncoder.encode("bsshare"));
+		user.setPasswordConfirm(bCryptPasswordEncoder.encode("bsshare"));
 		user.setRoles(Collections.singleton(userRole));
 		user = userRepository.save(user);
 
