@@ -4,7 +4,7 @@ import org.bsshare.tv.model.entity.User;
 
 public interface UserService {
 
-	void save(User user);
+	void saveUser(User user);
 
 	User findByUsername(String username);
 	

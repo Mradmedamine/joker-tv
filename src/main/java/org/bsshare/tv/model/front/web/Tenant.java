@@ -7,7 +7,9 @@ import java.util.Optional;
 public enum Tenant {
 
 	ANONYMOUS("bsshare_system", false),
-	JOKER("bsshare_joker", true);
+	JOKER("bsshare_joker", true),
+	_7STAR("bsshare_7star", true),
+	REDLINE("bsshare_redline", true);
 
 	private String id;
 	private boolean visible;

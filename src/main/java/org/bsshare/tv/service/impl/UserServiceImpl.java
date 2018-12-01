@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import org.bsshare.tv.configuration.multitenancy.TenantContext;
 import org.bsshare.tv.model.entity.User;
+import org.bsshare.tv.model.front.web.RoleEnum;
 import org.bsshare.tv.model.front.web.Tenant;
 import org.bsshare.tv.repository.RoleRepository;
 import org.bsshare.tv.repository.UserRepository;
@@ -30,9 +31,9 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public void save(User user) {
+	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		user.setRoles(new HashSet<>(roleRepository.findAll()));
+		user.setRoles(new HashSet<>(roleRepository.findByName(RoleEnum.USER_ROLE.getValue())));
 		userRepository.save(user);
 		TenantContext.setDefaultTenant();
 	}
@@ -51,4 +52,5 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(currentUser);
 		TenantContext.setDefaultTenant();
 	}
+
 }
