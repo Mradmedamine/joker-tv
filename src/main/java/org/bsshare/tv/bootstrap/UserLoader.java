@@ -1,6 +1,8 @@
 package org.bsshare.tv.bootstrap;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.bsshare.tv.model.entity.Role;
@@ -56,10 +58,10 @@ public class UserLoader extends BaseDataLoader {
 		log.info("Saved Role :" + RoleEnum.ADMIN_ROLE.getValue() + " id: " + adminRole.getId());
 
 		User user = new User();
-		user.setUsername("bsshare");
+		user.setUsername("bsshareAdmin");
 		user.setPassword(bCryptPasswordEncoder.encode("bsshare"));
 		user.setPasswordConfirm(bCryptPasswordEncoder.encode("bsshare"));
-		user.setRoles(Collections.singleton(userRole));
+		user.setRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
 		user = userRepository.save(user);
 
 		log.info("Saved User - id: " + user.getId());

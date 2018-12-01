@@ -21,7 +21,7 @@
 				    <label for="username">Username</label>
 				    <input name="username" type="text" th:value="${userProfile.username}" class="form-control" readonly>
 			    </div>
-		        <div sec:authorize="hasRole('ADMIN_ROLE')" class="form-group col-md-12">
+		        <div class="form-group col-md-12">
 		       	    <a th:href="@{/signup}" class="btn btn-primary">New User</a>
 		       	</div>
 		       </form>

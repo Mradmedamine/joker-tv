@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = { "/unsecured/api/{tenantId}", "/unsecured/api" })
-public class IPTVApiController<T> {
+public class IPTVApiController {
 
 	@Autowired
 	private IPTVSubscriptionService activationService;
