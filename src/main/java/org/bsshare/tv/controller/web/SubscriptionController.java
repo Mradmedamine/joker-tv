@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class SubscriptionController {
+public class SubscriptionController extends BaseController {
 
 	@Autowired
 	private IPTVSubscriptionService iptvSubscriptionService;

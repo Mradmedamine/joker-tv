@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-public class ChannelController {
+public class ChannelController extends BaseController {
 
 	@Autowired
 	private ChannelService channelService;

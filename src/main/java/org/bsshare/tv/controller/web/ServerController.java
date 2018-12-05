@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class ServerController {
+public class ServerController extends BaseController {
 
 	@Autowired
 	private ServerRepository serverRepository;

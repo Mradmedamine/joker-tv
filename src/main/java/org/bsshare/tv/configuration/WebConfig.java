@@ -35,7 +35,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	private MessageSource messageSource;
 
 	private ApplicationContext applicationContext;
-
+	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
