@@ -13,7 +13,7 @@
                        	<i class="fa fa-film fa-fw"></i>
                         Movies
                     </span>
-                    <a id="importMovies" class="btn btn-default uca btn-add pull-right">
+                    <a sec:authorize="${hasAuthority('USER_ROLE')}" id="importMovies" class="btn btn-default uca btn-add pull-right">
 			  			<i class="fa fa-plus fa-fw"></i>
 			  			Import
 			  		</a>

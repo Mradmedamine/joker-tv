@@ -76,7 +76,7 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-top-links navbar-right top-nav">
+            <ul sec:authorize="${hasAuthority('USER_ROLE')}" class="nav navbar-top-links navbar-right top-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-sliders fa-fw"></i> 
@@ -102,7 +102,7 @@
 
         <div id="page-wrapper" >
         	<div layout:fragment="desktop-page-content"></div>
-       		<div class="panel-footer container">
+       		<div class="panel-footer">
 				<div class="text-center">
 	          		<small>Copyright © Bsshare <th:block th:text="${#dates.year(#dates.createNow())}"/> - v <th:block th:text="${buildProperties.version}"></small>
 	        	</div>

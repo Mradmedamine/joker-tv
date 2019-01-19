@@ -3,11 +3,12 @@ package org.bsshare.tv.controller.web;
 import java.util.Locale;
 
 import org.bsshare.tv.common.validator.UserValidator;
-import org.bsshare.tv.model.entity.User;
+import org.bsshare.tv.model.front.web.SignUpUser;
 import org.bsshare.tv.service.SecurityService;
 import org.bsshare.tv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,13 +44,15 @@ public class UserController extends BaseController {
 	}
 
 	@GetMapping("/signup")
+	@PreAuthorize("hasRole('ADMIN_ROLE')")
 	public String signup(Model model) {
-		model.addAttribute("userForm", new User());
+		model.addAttribute("userForm", new SignUpUser());
 		return "signup";
 	}
 
 	@PostMapping("/signup")
-	public String signup(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+	@PreAuthorize("hasRole('ADMIN_ROLE')")
+	public String signup(@ModelAttribute("userForm") SignUpUser userForm, BindingResult bindingResult, Model model) {
 		userValidator.validate(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
 			return "signup";

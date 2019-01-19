@@ -13,7 +13,7 @@
                        	<i class="fa fa-server fa-fw"></i>
                         Servers
                     </span>
-                    <a id="addServer" class="btn btn-default uca btn-add pull-right">
+                    <a sec:authorize="${hasAuthority('USER_ROLE')}" id="addServer" class="btn btn-default uca btn-add pull-right">
 			  			<i class="fa fa-plus fa-fw"></i>
 			  			Add
 			  		</a>

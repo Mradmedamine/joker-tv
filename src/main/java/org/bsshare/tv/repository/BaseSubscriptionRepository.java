@@ -16,6 +16,4 @@ public interface BaseSubscriptionRepository {
 
 	void delete(Long id);
 
-	
-
 }

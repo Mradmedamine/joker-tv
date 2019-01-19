@@ -13,7 +13,7 @@
                        	<i class="fa fa-user fa-fw"></i>
                         User Profile
                     </span>
-			  		<a th:href="@{/signup}" class="btn btn-primary pull-right">New User</a>
+			  		<a sec:authorize="${hasAuthority('ADMIN_ROLE')}" th:href="@{/signup}" class="btn btn-primary pull-right">New User</a>
                  </div>
        		</div>
 		</div>				
@@ -29,7 +29,7 @@
 						    <input name="username" type="text" th:value="${userProfile.username}" class="form-control" readonly>
 					    </div>
 			        </form>
-			        <hr>
+			        <br>
 					<form id="changePassword" th:action="@{/userProfile/changePassword}" method="POST">
 					   	<div class="form-group">
 					  		<label for="password">Change Password</label>

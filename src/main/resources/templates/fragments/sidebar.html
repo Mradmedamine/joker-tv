@@ -30,7 +30,7 @@
 					</li>
                 </ul>
             </li>
-            <li>
+            <li sec:authorize="${hasAuthority('USER_ROLE')}">
                 <a href="#">
                 	<i class="fa fa-share-alt fa-fw"></i> &nbsp; Sharing
                 	<i class="fa arrow"></i></a>

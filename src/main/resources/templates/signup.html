@@ -26,7 +26,14 @@
 					            <input type="password" th:field="*{passwordConfirm}" class="form-control" th:placeholder="#{common.signup.password.confirm}"></input>
 					            <errors th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></errors>
 					        </div>
-					     <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{common.submit}"></button>
+			    			<div class="input-group">
+			    				<div id="accountType" class="btn-group">
+				    				<a class="btn btn-primary btn-sm" data-toggle="accountTypeValue" data-value="WATCHER_ROLE" th:text="Watcher"></a>
+			    					<a class="btn btn-primary btn-sm" data-toggle="accountTypeValue" data-value="USER_ROLE" th:text="User"></a>
+			    				</div>
+			    				<input id="accountTypeValue" type="hidden" name="role">
+			    			</div>
+					     	<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{common.submit}"></button>
 					    </fieldset>
 					    <br>
 					</form>
@@ -34,7 +41,7 @@
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/signup.js}" ></script> 
 </div>
-		
 
 </html>

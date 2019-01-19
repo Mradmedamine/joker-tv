@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public enum RoleEnum {
 
-	USER_ROLE("USER_ROLE"), ADMIN_ROLE("ADMIN_ROLE");
+	USER_ROLE("USER_ROLE"), ADMIN_ROLE("ADMIN_ROLE"), WATCHER_ROLE("WATCHER_ROLE");
 
 	private String value;
 

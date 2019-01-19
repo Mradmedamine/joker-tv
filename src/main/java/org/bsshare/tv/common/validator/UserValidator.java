@@ -1,6 +1,7 @@
 package org.bsshare.tv.common.validator;
 
 import org.bsshare.tv.model.entity.User;
+import org.bsshare.tv.model.front.web.SignUpUser;
 import org.bsshare.tv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class UserValidator implements Validator {
 
 	@Override
 	public void validate(Object o, Errors errors) {
-		User user = (User) o;
+		SignUpUser user = (SignUpUser) o;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "validation.notempty");
 		if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {

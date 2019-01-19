@@ -13,7 +13,7 @@
                        	<i class="fa fa-television fa-fw"></i>
                         Channels
                     </span>
-                    <a id="importChannels" class="btn btn-default uca btn-add pull-right">
+                    <a sec:authorize="${hasAuthority('USER_ROLE')}" id="importChannels" class="btn btn-default uca btn-add pull-right">
 			  			<i class="fa fa-plus fa-fw"></i>
 			  			Import
 			  		</a>

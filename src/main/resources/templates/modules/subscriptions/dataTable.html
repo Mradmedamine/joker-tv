@@ -36,7 +36,7 @@
 				</td> 
 				<td th:text="${subscription.expiration}"></td>
 				<td>
-			    	<a class="btn btn-default btn-delete"><i class="fa fa-trash-o"></i>
+			    	<a sec:authorize="${hasAuthority('USER_ROLE')}" class="btn btn-default btn-delete"><i class="fa fa-trash-o"></i>
 			    		<th:block th:text="#{common.delete}"></th:block>
 			    	</a>
 			    </td>
