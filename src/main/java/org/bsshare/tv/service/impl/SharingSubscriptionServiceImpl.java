@@ -127,7 +127,7 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<
 		return device;
 	}
 
-	private Optional<SharingSubscription> getSharingSubscription(SubscriptionDto device) {
-		return getSubscription(device).map(v -> (SharingSubscription) v);
+	private Optional<SharingSubscription> getSharingSubscription(SubscriptionDto subsc) {
+		return getSubscription(subsc).map(v -> (SharingSubscription) v);
 	}
 }

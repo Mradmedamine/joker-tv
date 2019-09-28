@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.bsshare.tv.model.HasSubscriptionAlreadyException;
+import org.bsshare.tv.model.entity.DeviceEntity;
 import org.bsshare.tv.model.entity.IPTVSubscription;
 import org.bsshare.tv.model.front.web.ActivationResult;
 import org.bsshare.tv.model.front.web.ActivationStatus;
 import org.bsshare.tv.model.front.web.ComponentStatus;
+import org.bsshare.tv.model.front.web.DeviceDto;
 import org.bsshare.tv.model.front.web.SubscriptionDto;
 import org.bsshare.tv.model.front.web.SubscriptionType;
 import org.bsshare.tv.repository.BaseSubscriptionRepository;
@@ -28,8 +31,18 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 	private IPTVSubscriptionRepository ipTvSubscriptionRepository;
 
 	@Override
-	public ActivationResult activateIPTVSubscription(SubscriptionDto device) {
-		return getSubscription(device).map(this::getValidActivationResult).orElse(invalidActivationResult());
+	public ActivationResult activateIPTVSubscription(SubscriptionDto subscriptionDto) {
+		Optional<IPTVSubscription> subscription = getSubscription(subscriptionDto);
+		if (subscription.isPresent() && subscription.get().getDevice() == null) {
+			DeviceDto deviceDto = new DeviceDto();
+			deviceDto.setMacAddress(subscriptionDto.getUid());
+			deviceDto.setSerialNumber(subscriptionDto.getSerial());
+			deviceDto.setModel(subscriptionDto.getModel());
+			DeviceEntity savedDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
+			subscription.get().setDevice(savedDevice);
+			getSubscriptionRepository().save(subscription.get());
+		}
+		return subscription.map(this::getValidActivationResult).orElse(invalidActivationResult());
 	}
 
 	private ActivationResult getValidActivationResult(IPTVSubscription subscription) {

@@ -25,18 +25,7 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 	private DeviceRepository deviceRepository;
 
 	public Optional<T> getSubscription(SubscriptionDto subscriptionDto) {
-		Optional<T> subscription = Optional
-				.ofNullable(getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin()));
-		if (subscription.isPresent() && subscription.get().getDevice() == null) {
-			DeviceDto deviceDto = new DeviceDto();
-			deviceDto.setMacAddress(subscriptionDto.getUid());
-			deviceDto.setSerialNumber(subscriptionDto.getSerial());
-			deviceDto.setModel(subscriptionDto.getModel());
-			DeviceEntity savedDevice = saveSubscriptionDeviceIfNotExistant(deviceDto);
-			subscription.get().setDevice(savedDevice);
-			getSubscriptionRepository().save(subscription.get());
-		}
-		return subscription;
+		return Optional.ofNullable(getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin()));
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
@@ -50,7 +39,11 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected Boolean isValidSubscription(SubscriptionDto subscriptionDto) {
 		Optional<? extends BaseSubscription> subscription = getSubscription(subscriptionDto);
-		return subscription.isPresent() && !isExpired(subscription.get());
+		return subscription.isPresent() && !isExpired(subscription.get()) && sameDevice(subscriptionDto, subscription.get());
+	}
+
+	private boolean sameDevice(SubscriptionDto subscriptionDto, BaseSubscription baseSubscription) {
+		return baseSubscription.getDevice().getMacAddress().equals(subscriptionDto.getUid());
 	}
 
 	protected Boolean hasAnyValidOrNewSubscription(DeviceDto deviceDto) {
@@ -79,7 +72,15 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 	}
 
 	protected DeviceEntity saveSubscriptionDeviceIfNotExistant(DeviceDto device) {
-		Optional<DeviceEntity> entityDevice = deviceRepository.findOneBySerialNumber(device.getSerialNumber());
+		Optional<DeviceEntity> entityDevice;
+		if(device.getSerialNumber() != null) {
+			entityDevice = deviceRepository.findOneBySerialNumber(device.getSerialNumber());
+		} else if (device.getSerialNumber() != null) {
+			entityDevice = deviceRepository.findOneByMacAddress(device.getMacAddress());
+		} else {
+			throw new RuntimeException("device doesnt have serialnumber nor max address");
+		}
+	
 		return entityDevice.orElseGet(() -> saveNewDevice(device));
 	}
 
