@@ -29,8 +29,11 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
-		return subscription.getStatus() == ComponentStatus.ACTIVATED
-				&& subscription.getExpiration().isBefore(LocalDate.now());
+		boolean activated = subscription.getStatus() == ComponentStatus.ACTIVATED;
+		boolean notExpired = subscription.getExpiration().isBefore(LocalDate.now());
+		getLogger().debug("account is " + (activated ? "" : "not") + " activated");
+		getLogger().debug("account is " + (notExpired ? " not " : "") + " expired");
+		return activated && notExpired;
 	}
 
 	protected boolean isNotExpired(BaseSubscription subscription) {
@@ -39,11 +42,12 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected Boolean isValidSubscription(SubscriptionDto subscriptionDto) {
 		Optional<? extends BaseSubscription> subscription = getSubscription(subscriptionDto);
-		return subscription.isPresent() && !isExpired(subscription.get()) && sameDevice(subscriptionDto, subscription.get());
+		return subscription.isPresent() && !isExpired(subscription.get())
+				&& sameDevice(subscriptionDto, subscription.get());
 	}
 
 	private boolean sameDevice(SubscriptionDto subscriptionDto, BaseSubscription baseSubscription) {
-		return baseSubscription.getDevice().getMacAddress().equals(subscriptionDto.getUid());
+		return baseSubscription.getDevice().getMacAddress().trim().equals(subscriptionDto.getUid().trim());
 	}
 
 	protected Boolean hasAnyValidOrNewSubscription(DeviceDto deviceDto) {
@@ -73,14 +77,14 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected DeviceEntity saveSubscriptionDeviceIfNotExistant(DeviceDto device) {
 		Optional<DeviceEntity> entityDevice;
-		if(device.getSerialNumber() != null) {
+		if (device.getSerialNumber() != null) {
 			entityDevice = deviceRepository.findOneBySerialNumber(device.getSerialNumber());
 		} else if (device.getSerialNumber() != null) {
 			entityDevice = deviceRepository.findOneByMacAddress(device.getMacAddress());
 		} else {
 			throw new RuntimeException("device doesnt have serialnumber nor max address");
 		}
-	
+
 		return entityDevice.orElseGet(() -> saveNewDevice(device));
 	}
 
@@ -98,7 +102,8 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected Long deleteSubscription(Long id) {
 		try {
-			Optional<Long> deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice()).map(e -> e.getId());
+			Optional<Long> deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice())
+					.map(e -> e.getId());
 			getSubscriptionRepository().delete(id);
 			getLogger().debug("Deleted Sharing Subscription with id :" + id);
 			deleteCorrespondingDevice(deviceId);
