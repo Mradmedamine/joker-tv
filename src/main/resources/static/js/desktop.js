@@ -17,8 +17,6 @@ var dataTablesMessages = {
 }
 
 var dataTablesConfig = {
-	"dom": 'Bfrtip',
-	"buttons": ['csv', 'excel'],
     "language" : dataTablesMessages
 }
 
