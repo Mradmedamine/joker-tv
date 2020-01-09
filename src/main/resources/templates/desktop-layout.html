@@ -24,7 +24,7 @@
     <link th:href="@{/library/toastr/toastr.min.css}" rel="stylesheet">
     
   	<!-- DataTables CSS -->
-  	<link th:href="@{/library/datatables/css/dataTables.buttons.min.css}" rel="stylesheet">
+    <link th:href="@{/library/datatables/css/dataTables.buttons.min.css}" rel="stylesheet">
     <link th:href="@{/library/datatables-plugins/dataTables.bootstrap.css}" rel="stylesheet">
     <link th:href="@{/library/datatables-responsive/dataTables.responsive.css}" rel="stylesheet">
 
@@ -135,15 +135,16 @@
     <script th:src="@{/library/datatables/js/dataTables.buttons.min.js}"></script>
     <script th:src="@{/library/datatables-plugins/dataTables.bootstrap.min.js}"></script>
     <script th:src="@{/library/datatables-responsive/dataTables.responsive.js}"></script>
-    <script th:src="@{/library/buttons.html5.min.js}"></script>
-    
+    <script th:src="@{/library/datatables/js/buttons.html5.min.js}"></script>
+    <script th:src="@{/library/datatables/js/buttons.print.min.js}"></script>
+
     <!---- UCA ---->
     <th:block th:include="i18n::content"></th:block>
     
 	<script th:src="@{/js/jquery.extend.js}" ></script>
 	<script th:src="@{/js/desktop.js}" ></script>
 		
-	<th:block layout:fragment="js-import"></th:block>
+    <th:block layout:fragment="js-import"></th:block>
 	
 </body>
 
