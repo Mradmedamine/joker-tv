@@ -25,8 +25,6 @@ import org.springframework.stereotype.Service;
 public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPTVSubscription>
 		implements IPTVSubscriptionService {
 
-	private static final Period DEFAULT_SUBSCRIPTION_PERIOD = Period.ofYears(1);
-
 	@Autowired
 	private IPTVSubscriptionRepository ipTvSubscriptionRepository;
 
@@ -76,7 +74,7 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 
 	private void activateNewIPTVSubscription(IPTVSubscription subscription) {
 		subscription.setStatus(ComponentStatus.ACTIVATED);
-		subscription.setExpiration(LocalDate.now().plus(DEFAULT_SUBSCRIPTION_PERIOD));
+		subscription.setExpiration(LocalDate.now().plus(Period.ofMonths(subscription.getPeriodInMonths())));
 		ipTvSubscriptionRepository.save(subscription);
 	}
 
@@ -101,8 +99,8 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 	}
 
 	@Override
-	public void newIPTVSubscription() throws HasSubscriptionAlreadyException {
-		newSubscription(SubscriptionType.IPTV);
+	public void newIPTVSubscription(int period) throws HasSubscriptionAlreadyException {
+		newSubscription(SubscriptionType.IPTV, period);
 	}
 
 }

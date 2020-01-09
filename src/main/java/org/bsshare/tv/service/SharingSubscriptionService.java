@@ -13,7 +13,7 @@ public interface SharingSubscriptionService {
 
 	Boolean isValidSharingSubscription(SubscriptionDto subscription);
 
-	void newSharingSubscription();
+	void newSharingSubscription(int period);
 
 	Servers activateSharingSubscription(IksRequest iksData);
 

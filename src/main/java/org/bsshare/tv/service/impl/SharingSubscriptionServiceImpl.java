@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<SharingSubscription>
 		implements SharingSubscriptionService {
 
-	private static final Period DEFAULT_SUBSCRIPTION_PERIOD = Period.ofYears(1);
 
 	@Autowired
 	private SharingSubscriptionRepository sharingSubscriptionRepository;
@@ -46,8 +45,8 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<
 	}
 
 	@Override
-	public void newSharingSubscription() {
-		newSubscription(SubscriptionType.SHARING);
+	public void newSharingSubscription(int period) {
+		newSubscription(SubscriptionType.SHARING, period);
 	}
 
 	@Override
@@ -113,7 +112,7 @@ public class SharingSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<
 	}
 
 	private SharingSubscription doActivateNewSubscription(SharingSubscription subscription) {
-		LocalDate expirationDate = LocalDate.now().plus(DEFAULT_SUBSCRIPTION_PERIOD);
+		LocalDate expirationDate = LocalDate.now().plus(Period.ofMonths(subscription.getPeriodInMonths()));
 		subscription.setExpiration(expirationDate);
 		subscription.setStatus(ComponentStatus.ACTIVATED);
 		return sharingSubscriptionRepository.save(subscription);

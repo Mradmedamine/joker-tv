@@ -16,6 +16,7 @@
 					<th width="10%">Pass</th>
 				</th:block>
 				<th width="10%">Status</th>
+			     	<th width="12%">Period</th>
 				<th width="12%">Expiration</th>
 				<th width="11%"></th>
 		 	 </tr>
@@ -33,7 +34,10 @@
 				</th:block>
 				<td>
 					<i class="fa fa-check-circle fa-1x" th:classappend="${subscription.status.name == 'ACTIVATED' ? 'green' : ''}"></i>
-				</td> 
+				</td>
+				<td>
+					<th:block th:text="${subscription.periodInMonths}"></th:block> Months
+				</td>
 				<td th:text="${subscription.expiration}"></td>
 				<td>
 			    	<a sec:authorize="${hasAuthority('USER_ROLE')}" class="btn btn-default btn-delete"><i class="fa fa-trash-o"></i>
