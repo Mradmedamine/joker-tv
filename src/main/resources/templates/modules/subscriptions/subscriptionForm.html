@@ -7,18 +7,16 @@
 
 <th:block th:fragment="content">
         <div class="form-group">
-                <label for="number" class="col-sm-4 control-label">Number</label>
+        		<label for="number" class="col-sm-4 control-label">Number</label>
                 <div class="col-sm-5">
-                        <input type="text" id="number" name="number" class="form-control" placeholder="number"/>
+                    <input type="text" id="number" name="number" class="form-control" placeholder="10"/>
                 </div>
         </div>
         <div class="form-group">
-                <label for="period" class="col-sm-4 control-label">Periodicity</label>
-                <div class="col-sm-5">
-                        <input type="text" id="period" name="period" class="form-control"
-                               placeholder="period"/>
-                        <small>Months</small>
-                </div>
+             <label for="period" class="col-sm-4 control-label">Period (months)</label>
+             <div class="col-sm-5">
+                     <input type="text" id="period" name="period" class="form-control" placeholder="12 Months"/>
+             </div>
         </div>
 </th:block>
 
