@@ -16,19 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> extends ServiceBaseImpl {
 
-    protected static final Period DEFAULT_EXPIRATION = Period.ofMonths(12);
+    protected abstract BaseSubscriptionRepository getSubscriptionRepository();
 
     @Autowired
     private DeviceRepository deviceRepository;
 
     public Optional<T> getSubscription(SubscriptionDto subscriptionDto) {
-        return Optional.ofNullable(getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin()));
+        return getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin());
     }
 
     protected boolean isExpired(BaseSubscription subscription) {
@@ -46,10 +45,10 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
     protected Boolean isValidSubscription(SubscriptionDto subscriptionDto) {
         Optional<? extends BaseSubscription> subscription = getSubscription(subscriptionDto);
         return subscription.isPresent() && !isExpired(subscription.get())
-                && sameDevice(subscriptionDto, subscription.get());
+                && isSameDevice(subscriptionDto, subscription.get());
     }
 
-    private boolean sameDevice(SubscriptionDto subscriptionDto, BaseSubscription baseSubscription) {
+    private boolean isSameDevice(SubscriptionDto subscriptionDto, BaseSubscription baseSubscription) {
         return baseSubscription.getDevice().getMacAddress().trim().equals(subscriptionDto.getUid().trim());
     }
 
@@ -129,7 +128,5 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
             // DO NOTHING
         }
     }
-
-    protected abstract BaseSubscriptionRepository getSubscriptionRepository();
 
 }
