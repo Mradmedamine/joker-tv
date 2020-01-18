@@ -1,18 +1,20 @@
 package org.bsshare.tv.repository;
 
-import org.bsshare.tv.model.entity.BaseSubscription;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface BaseSubscriptionRepository<T extends BaseSubscription, ID extends Serializable> extends JpaRepository<T, ID> {
+import org.bsshare.tv.model.entity.BaseSubscription;
 
-    T findOneById(Long id);
+public interface BaseSubscriptionRepository<T extends BaseSubscription> {
 
-    Optional<T> findOneByActiveCode(String activeCode);
+	T findById(Long id);
 
-    List<T> findByDevice_SerialNumber(String serial);
+	Optional<T> findOneByActiveCode(String activeCode);
 
+	List<T> findByDevice_SerialNumber(String serial);
+
+	T save(T entity);
+	
+	void delete(Long id);
+	
 }

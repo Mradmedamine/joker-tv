@@ -14,8 +14,6 @@ import org.bsshare.tv.model.front.web.ActivationStatus;
 import org.bsshare.tv.model.front.web.ComponentStatus;
 import org.bsshare.tv.model.front.web.DeviceDto;
 import org.bsshare.tv.model.front.web.SubscriptionDto;
-import org.bsshare.tv.model.front.web.SubscriptionType;
-import org.bsshare.tv.repository.BaseSubscriptionRepository;
 import org.bsshare.tv.repository.IPTVSubscriptionRepository;
 import org.bsshare.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,10 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 
 	@Autowired
 	private IPTVSubscriptionRepository ipTvSubscriptionRepository;
+
+	public IPTVSubscriptionServiceImpl() {
+		super(IPTVSubscription.class);
+	}
 
 	@Override
 	public ActivationResult activateIPTVSubscription(SubscriptionDto subscriptionDto) {
@@ -94,13 +96,13 @@ public class IPTVSubscriptionServiceImpl extends BaseSubscriptionServiceImpl<IPT
 	}
 
 	@Override
-	protected BaseSubscriptionRepository getSubscriptionRepository() {
+	protected IPTVSubscriptionRepository getSubscriptionRepository() {
 		return ipTvSubscriptionRepository;
 	}
 
 	@Override
 	public void newIPTVSubscription(int period) throws HasSubscriptionAlreadyException {
-		newSubscription(SubscriptionType.IPTV, period);
+		newSubscription(period);
 	}
 
 }

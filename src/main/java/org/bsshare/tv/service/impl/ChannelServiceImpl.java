@@ -1,5 +1,6 @@
 package org.bsshare.tv.service.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -105,7 +106,7 @@ public class ChannelServiceImpl implements ChannelService {
     private <T extends BaseChannel> List<T> processM3UFile(MultipartFile multipart, Class<T> clazz) {
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
-            String fileContent = IOUtils.toString(inputStream, "UTF-8");
+            String fileContent = IOUtils.toString(multipart.getBytes(), "UTF-8");
             if (fileContent.contains(TVG_TAG)) {
                 return parseTvgM3U(clazz, inputStream);
             } else {
@@ -169,6 +170,7 @@ public class ChannelServiceImpl implements ChannelService {
             } else {
                 currentCategory.setCaption(entry.getValue().stream().findFirst().get().getExtInfo().getGroupTitle());
             }
+            System.out.println(currentCategory.getIcon_url());
             currentCategory = categoryRepository.save(currentCategory);
 
             for (Track track: entry.getValue()) {
