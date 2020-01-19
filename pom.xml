@@ -23,7 +23,7 @@
 
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.finalName>library_uca</project.build.finalName>
+		<project.build.finalName>bsshare.tv</project.build.finalName>
 
 		<!-- Thymeleaf -->
 		<thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>

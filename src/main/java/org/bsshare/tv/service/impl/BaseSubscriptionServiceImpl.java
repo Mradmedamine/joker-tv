@@ -17,7 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> extends ServiceBaseImpl {
 
-	protected abstract BaseSubscriptionRepository<T> getSubscriptionRepository();
+	protected abstract BaseSubscriptionRepository getSubscriptionRepository();
 
 	private Class<T> subscriptionType;
 
@@ -30,7 +30,8 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 	}
 
 	public Optional<T> getSubscription(SubscriptionDto subscriptionDto) {
-		return getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin());
+		return Optional
+				.ofNullable(getSubscriptionRepository().findOneByActiveCode(subscriptionDto.getLogin()));
 	}
 
 	protected boolean isExpired(BaseSubscription subscription) {
@@ -100,7 +101,7 @@ public abstract class BaseSubscriptionServiceImpl<T extends BaseSubscription> ex
 
 	protected Long deleteSubscription(Long id) {
 		try {
-			Optional<Long> deviceId = Optional.ofNullable(getSubscriptionRepository().findById(id).getDevice())
+			Optional<Long> deviceId = Optional.ofNullable(getSubscriptionRepository().findOneById(id).getDevice())
 					.map(e -> e.getId());
 			getSubscriptionRepository().delete(id);
 			getLogger().debug("Deleted Sharing Subscription with id :" + id);

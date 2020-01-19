@@ -1,14 +1,16 @@
 package org.bsshare.tv.service.impl;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import com.w3ma.m3u8parser.data.Track;
-import com.w3ma.m3u8parser.exception.PlaylistParseException;
 import org.apache.commons.io.IOUtils;
 import org.bsshare.tv.common.util.MappingUtils;
 import org.bsshare.tv.model.entity.BaseChannel;
@@ -36,170 +38,173 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.w3ma.m3u8parser.data.Track;
+import com.w3ma.m3u8parser.exception.PlaylistParseException;
 import com.w3ma.m3u8parser.parser.M3U8Parser;
 import com.w3ma.m3u8parser.scanner.M3U8ItemScanner;
 
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
-    public static final String TVG_TAG = "tvg-";
-    @Autowired
-    private ChannelRepository channelRepository;
+	public static final String TVG_TAG = "tvg-";
+	@Autowired
+	private ChannelRepository channelRepository;
 
-    @Autowired
-    private VodRepository vodRepository;
+	@Autowired
+	private VodRepository vodRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
 
-    @Override
-    public ChannelsResult getChannels() {
-        List<ChannelEntity> channels = channelRepository.findAll();
-        ChannelsResult channelsResult = new ChannelsResult();
-        List<TVChannel> tvChannels = new ArrayList<>(channels.size());
-        channels.forEach(channel -> {
-            TVChannel tvChannel = MappingUtils.map(channel, TVChannel.class);
-            CategoryEntity channelCategory = channel.getCategory();
-            if (channelCategory != null) {
-                TVCategory tvCategory = new TVCategory();
-                tvCategory.setCaption(channelCategory.getCaption());
-                tvCategory.setIcon_url(channelCategory.getIcon_url());
-                tvCategory.setId(channelCategory.getId().toString());
-                tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
-                tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
-            }
-            tvChannels.add(tvChannel);
-        });
-        channelsResult.setTv_channel(tvChannels);
-        return channelsResult;
-    }
+	@Override
+	public ChannelsResult getChannels() {
+		List<ChannelEntity> channels = channelRepository.findAll();
+		ChannelsResult channelsResult = new ChannelsResult();
+		List<TVChannel> tvChannels = new ArrayList<>(channels.size());
+		channels.forEach(channel -> {
+			TVChannel tvChannel = MappingUtils.map(channel, TVChannel.class);
+			CategoryEntity channelCategory = channel.getCategory();
+			if (channelCategory != null) {
+				TVCategory tvCategory = new TVCategory();
+				tvCategory.setCaption(channelCategory.getCaption());
+				tvCategory.setIcon_url(channelCategory.getIcon_url());
+				tvCategory.setId(channelCategory.getId().toString());
+				tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
+				tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
+			}
+			tvChannels.add(tvChannel);
+		});
+		channelsResult.setTv_channel(tvChannels);
+		return channelsResult;
+	}
 
-    @Override
-    public List<Movie> getMovies() {
-        List<Vod> vods = vodRepository.findAll();
-        List<Movie> movies = new ArrayList<Movie>(vods.size());
-        vods.forEach(vod -> {
-            Movie movie = new Movie();
-            movie.setCaption(vod.getCaption());
-            movie.setV_url(vod.getStreaming_url());
-            movie.setPoster_url(vod.getIcon_url());
-            movies.add(movie);
-        });
-        return movies;
-    }
+	@Override
+	public List<Movie> getMovies() {
+		List<Vod> vods = vodRepository.findAll();
+		List<Movie> movies = new ArrayList<Movie>(vods.size());
+		vods.forEach(vod -> {
+			Movie movie = new Movie();
+			movie.setCaption(vod.getCaption());
+			movie.setV_url(vod.getStreaming_url());
+			movie.setPoster_url(vod.getIcon_url());
+			movies.add(movie);
+		});
+		return movies;
+	}
 
-    @Override
-    @Transactional
-    public void extractChannelsFromM3uFile(MultipartFile multipart) {
-        List<ChannelEntity> channels = processM3UFile(multipart, ChannelEntity.class);
-        channelRepository.deleteAll();
-        channelRepository.save(channels);
-    }
+	@Override
+	@Transactional
+	public void extractChannelsFromM3uFile(MultipartFile multipart) {
+		List<ChannelEntity> channels = processM3UFile(multipart, ChannelEntity.class);
+		channelRepository.deleteAll();
+		channelRepository.save(channels);
+	}
 
-    @Override
-    public void extractVodsFromM3uFile(MultipartFile multipart) {
-        List<Vod> vods = processM3UFile(multipart, Vod.class);
-        vodRepository.deleteAll();
-        vodRepository.save(vods);
-    }
+	@Override
+	public void extractVodsFromM3uFile(MultipartFile multipart) {
+		List<Vod> vods = processM3UFile(multipart, Vod.class);
+		vodRepository.deleteAll();
+		vodRepository.save(vods);
+	}
 
-    private <T extends BaseChannel> List<T> processM3UFile(MultipartFile multipart, Class<T> clazz) {
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
-            String fileContent = IOUtils.toString(multipart.getBytes(), "UTF-8");
-            if (fileContent.contains(TVG_TAG)) {
-                return parseTvgM3U(clazz, inputStream);
-            } else {
-                return parseSimpleM3u(clazz, inputStream);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
+	private <T extends BaseChannel> List<T> processM3UFile(MultipartFile multipart, Class<T> clazz) {
+		try {
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(multipart.getBytes());
+			String fileContent = IOUtils.toString(multipart.getBytes(), "UTF-8");
+			if (fileContent.contains(TVG_TAG)) {
+				return parseTvgM3U(clazz, inputStream);
+			} else {
+				return parseSimpleM3u(clazz, inputStream);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 
-    private <T extends BaseChannel> List<T> parseTvgM3U(Class<T> clazz, ByteArrayInputStream inputStream)
+	private <T extends BaseChannel> List<T> parseTvgM3U(Class<T> clazz, ByteArrayInputStream inputStream)
 			throws IOException, java.text.ParseException, PlaylistParseException {
-        M3U8Parser parser = new M3U8Parser(inputStream, M3U8ItemScanner.Encoding.UTF_8);
-        com.w3ma.m3u8parser.data.Playlist playlist = parser.parse();
-        inputStream.close();
-        return buildChannelList(playlist, clazz);
-    }
+		M3U8Parser parser = new M3U8Parser(inputStream, M3U8ItemScanner.Encoding.UTF_8);
+		com.w3ma.m3u8parser.data.Playlist playlist = parser.parse();
+		inputStream.close();
+		return buildChannelList(playlist, clazz);
+	}
 
-    private <T extends BaseChannel> List<T> parseSimpleM3u(Class<T> clazz, ByteArrayInputStream inputStream)
-            throws IOException, ParseException, PlaylistException {
-        PlaylistParser simpleM3uParser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8,
-                ParsingMode.LENIENT);
-        Playlist playlist = simpleM3uParser.parse();
-        inputStream.close();
-        return buildChannelList(playlist, clazz);
-    }
+	private <T extends BaseChannel> List<T> parseSimpleM3u(Class<T> clazz, ByteArrayInputStream inputStream)
+			throws IOException, ParseException, PlaylistException {
+		PlaylistParser simpleM3uParser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8,
+				ParsingMode.LENIENT);
+		Playlist playlist = simpleM3uParser.parse();
+		inputStream.close();
+		return buildChannelList(playlist, clazz);
+	}
 
-    private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz) {
-        List<T> entityChannels = new ArrayList<>();
-        CategoryEntity currentCategory = null;
-        for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
-            String name = "";
-            if (trackData.getTrackInfo() != null) {
-                name = trackData.getTrackInfo().getTitle();
-                if (isCategoryItem(name)) {
-                    currentCategory = new CategoryEntity();
-                    currentCategory.setCaption(trimCategoryName(name));
-                    currentCategory = categoryRepository.save(currentCategory);
-                    continue;
-                }
-            }
-            String url = trackData.getUri();
-            T channelObject = newChannelObject(clazz, name, url);
-            channelObject.setCategory(currentCategory);
-            entityChannels.add(channelObject);
-        }
-        return entityChannels;
-    }
+	private <T extends BaseChannel> List<T> buildChannelList(Playlist playlist, Class<T> clazz) {
+		List<T> entityChannels = new ArrayList<>();
+		CategoryEntity currentCategory = null;
+		for (TrackData trackData : playlist.getMediaPlaylist().getTracks()) {
+			String name = "";
+			if (trackData.getTrackInfo() != null) {
+				name = trackData.getTrackInfo().getTitle();
+				if (isCategoryItem(name)) {
+					currentCategory = new CategoryEntity();
+					currentCategory.setCaption(trimCategoryName(name));
+					currentCategory = categoryRepository.save(currentCategory);
+					continue;
+				}
+			}
+			String url = trackData.getUri();
+			T channelObject = newChannelObject(clazz, name, url);
+			channelObject.setCategory(currentCategory);
+			entityChannels.add(channelObject);
+		}
+		return entityChannels;
+	}
 
-    private <T extends BaseChannel> List<T> buildChannelList(com.w3ma.m3u8parser.data.Playlist playlist, Class<T> clazz) {
-        List<T> entityChannels = new ArrayList<>();
-        CategoryEntity currentCategory;
-        for (Map.Entry<String, Set<Track>> entry : playlist.getTrackSetMap().entrySet()) {
+	private <T extends BaseChannel> List<T> buildChannelList(com.w3ma.m3u8parser.data.Playlist playlist,
+			Class<T> clazz) {
+		List<T> entityChannels = new ArrayList<>();
+		CategoryEntity currentCategory;
+		for (Map.Entry<String, Set<Track>> entry : playlist.getTrackSetMap().entrySet()) {
 
-            Optional<Track> category = entry.getValue().stream().filter(e -> isCategoryItem(e.getExtInfo().getTvgName())).findFirst();
-            currentCategory = new CategoryEntity();
-            if (category.isPresent()) {
-                currentCategory.setIcon_url(category.get().getExtInfo().getTvgLogoUrl());
-                currentCategory.setCaption(category.get().getExtInfo().getTvgName());
-                entry.getValue().removeIf(e -> isCategoryItem(e.getExtInfo().getTvgName()));
-            } else {
-                currentCategory.setCaption(entry.getValue().stream().findFirst().get().getExtInfo().getGroupTitle());
-            }
-            System.out.println(currentCategory.getIcon_url());
-            currentCategory = categoryRepository.save(currentCategory);
+			Optional<Track> category = entry.getValue().stream()
+					.filter(e -> isCategoryItem(e.getExtInfo().getTvgName())).findFirst();
+			currentCategory = new CategoryEntity();
+			if (category.isPresent()) {
+				currentCategory.setIcon_url(category.get().getExtInfo().getTvgLogoUrl());
+				currentCategory.setCaption(category.get().getExtInfo().getTvgName());
+				entry.getValue().removeIf(e -> isCategoryItem(e.getExtInfo().getTvgName()));
+			} else {
+				currentCategory.setCaption(entry.getValue().stream().findFirst().get().getExtInfo().getGroupTitle());
+			}
+			currentCategory = categoryRepository.save(currentCategory);
 
-            for (Track track: entry.getValue()) {
-                T channelObject = newChannelObject(clazz, track.getExtInfo().getTvgName(), track.getUrl());
-                channelObject.setIcon_url(track.getExtInfo().getTvgLogoUrl());
-                channelObject.setCategory(currentCategory);
-                entityChannels.add(channelObject);
-            }
-        }
-        return entityChannels;
-    }
+			for (Track track : entry.getValue()) {
+				T channelObject = newChannelObject(clazz, track.getExtInfo().getTvgName(), track.getUrl());
+				channelObject.setIcon_url(track.getExtInfo().getTvgLogoUrl());
+				channelObject.setCategory(currentCategory);
+				entityChannels.add(channelObject);
+			}
+		}
+		return entityChannels;
+	}
 
-    private String trimCategoryName(String name) {
-        return name.replace("*", "").replace("-", "").replace("_", "");
-    }
+	private String trimCategoryName(String name) {
+		return name.replace("*", "").replace("-", "").replace("_", "");
+	}
 
-    private boolean isCategoryItem(String name) {
-        return name.contains("*-") || name.contains("--");
-    }
+	private boolean isCategoryItem(String name) {
+		return name.contains("*-") || name.contains("--");
+	}
 
-    private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url) {
-        try {
-            T channelObject = clazz.newInstance();
-            channelObject.setStreaming_url(url);
-            channelObject.setCaption(name);
-            return channelObject;
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new RuntimeException("Instantiation error", ex);
-        }
-    }
+	private <T extends BaseChannel> T newChannelObject(Class<T> clazz, String name, String url) {
+		try {
+			T channelObject = clazz.newInstance();
+			channelObject.setStreaming_url(url);
+			channelObject.setCaption(name);
+			return channelObject;
+		} catch (InstantiationException | IllegalAccessException ex) {
+			throw new RuntimeException("Instantiation error", ex);
+		}
+	}
 
 }
