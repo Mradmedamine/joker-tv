@@ -22,6 +22,8 @@ import org.bsshare.tv.model.front.web.iptv.channel.TVCategories;
 import org.bsshare.tv.model.front.web.iptv.channel.TVCategory;
 import org.bsshare.tv.model.front.web.iptv.channel.TVChannel;
 import org.bsshare.tv.model.front.web.iptv.vod.Movie;
+import org.bsshare.tv.model.front.web.iptv.vod.VodCategories;
+import org.bsshare.tv.model.front.web.iptv.vod.VodCategory;
 import org.bsshare.tv.repository.CategoryRepository;
 import org.bsshare.tv.repository.ChannelRepository;
 import org.bsshare.tv.repository.VodRepository;
@@ -84,6 +86,15 @@ public class ChannelServiceImpl implements ChannelService {
 		List<Movie> movies = new ArrayList<Movie>(vods.size());
 		vods.forEach(vod -> {
 			Movie movie = new Movie();
+			CategoryEntity channelCategory = vod.getCategory();
+			if (channelCategory != null) {
+				VodCategory category = new VodCategory();
+				category.setCaption(channelCategory.getCaption());
+				category.setIcon_url(channelCategory.getIcon_url());
+				category.setId(channelCategory.getId().toString());
+				movie.setVod_categories(Collections.singletonList(new VodCategories()));
+				movie.getVod_categories().get(0).setVod_category(Collections.singletonList(category));
+			}
 			movie.setCaption(vod.getCaption());
 			movie.setV_url(vod.getStreaming_url());
 			movie.setPoster_url(vod.getIcon_url());
@@ -165,7 +176,6 @@ public class ChannelServiceImpl implements ChannelService {
 		List<T> entityChannels = new ArrayList<>();
 		CategoryEntity currentCategory;
 		for (Map.Entry<String, Set<Track>> entry : playlist.getTrackSetMap().entrySet()) {
-
 			Optional<Track> category = entry.getValue().stream()
 					.filter(e -> isCategoryItem(e.getExtInfo().getTvgName())).findFirst();
 			currentCategory = new CategoryEntity();

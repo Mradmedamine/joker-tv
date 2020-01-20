@@ -9,7 +9,7 @@
 		     	<th class="hidden">id</th>
 		     	<th width="14%">Icon</th>
 		     	<th width="24%">Caption</th>
-		     	<th width="13%">Bitrate</th>
+		     	<th width="13%">Group</th>
 		     	<th width="13%">Status</th>
 		 	 </tr>
 	     </thead>
@@ -18,7 +18,7 @@
 				<td class="hidden" th:text="${movie.id}"></td>
 				<td><img th:src="${movie.poster_url}" alt="" height="60px" width="60px"></td>
 				<td th:text="${movie.caption}"></td>
-				<td>unknown</td>
+				<td th:text="${movie?.vod_categories?.get(0)?.vod_category?.get(0)?.caption}"></td>
 				<td>
 					<i class="fa fa-check-circle fa-1x"></i>
 				</td>
