@@ -1,12 +1,7 @@
 package org.bsshare.tv.controller.api;
 
-import java.util.List;
-
 import org.bsshare.tv.common.Constants;
 import org.bsshare.tv.model.front.web.SubscriptionDto;
-import org.bsshare.tv.model.front.web.iptv.channel.ChannelsResult;
-import org.bsshare.tv.model.front.web.iptv.vod.Movie;
-import org.bsshare.tv.model.front.web.iptv.vod.VodsResult;
 import org.bsshare.tv.service.ChannelService;
 import org.bsshare.tv.service.IPTVSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +25,7 @@ public class ChannelApiController {
 	@ResponseBody
 	public Object channels(SubscriptionDto subscriptionDto, Model model) {
 		if (subscriptionService.isValidIPTVSubscription(subscriptionDto)) {
-			ChannelsResult channels = channelService.getChannels();
-			return channels;
+			return channelService.getChannels();
 		}
 		return Constants.INVALID_SUBSCRIPTION_MESSAGE;
 	}
@@ -40,10 +34,7 @@ public class ChannelApiController {
 	@ResponseBody
 	public Object vods(SubscriptionDto device, Model model) {
 		if (subscriptionService.isValidIPTVSubscription(device)) {
-			List<Movie> movies = channelService.getMovies();
-			VodsResult vodsResult = new VodsResult();
-			vodsResult.setMovies(movies);
-			return vodsResult;
+			return channelService.getMovies();
 		}
 		return Constants.INVALID_SUBSCRIPTION_MESSAGE;
 	}

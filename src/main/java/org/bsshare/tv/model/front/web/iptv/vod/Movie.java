@@ -1,7 +1,6 @@
 package org.bsshare.tv.model.front.web.iptv.vod;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Movie implements Serializable {
 
@@ -11,7 +10,7 @@ public class Movie implements Serializable {
 	private String v_url;
 	private String poster_url;
 	private MovieDetails[] details;
-	private List<VodCategories> vod_categories;
+	private VodCategory vod_category;
 
 	public String getId() {
 		return id;
@@ -53,12 +52,12 @@ public class Movie implements Serializable {
 		this.details = details;
 	}
 
-	public List<VodCategories> getVod_categories() {
-		return vod_categories;
+	public VodCategory getVod_category() {
+		return vod_category;
 	}
 
-	public void setVod_categories(List<VodCategories> vod_categories) {
-		this.vod_categories = vod_categories;
+	public void setVod_category(VodCategory vod_category) {
+		this.vod_category = vod_category;
 	}
 
 }

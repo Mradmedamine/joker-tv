@@ -59,7 +59,7 @@ public class ChannelController extends BaseController {
 
 	@GetMapping("/movies")
 	public String movies(Model model) {
-		List<Movie> movies = channelService.getMovies();
+		List<Movie> movies = channelService.getMovies().getMovies();
 		model.addAttribute("movies", movies);
 		return "modules/movies/main";
 	}

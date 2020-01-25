@@ -24,6 +24,7 @@ import org.bsshare.tv.model.front.web.iptv.channel.TVChannel;
 import org.bsshare.tv.model.front.web.iptv.vod.Movie;
 import org.bsshare.tv.model.front.web.iptv.vod.VodCategories;
 import org.bsshare.tv.model.front.web.iptv.vod.VodCategory;
+import org.bsshare.tv.model.front.web.iptv.vod.VodsResult;
 import org.bsshare.tv.repository.CategoryRepository;
 import org.bsshare.tv.repository.ChannelRepository;
 import org.bsshare.tv.repository.VodRepository;
@@ -63,6 +64,7 @@ public class ChannelServiceImpl implements ChannelService {
 		List<ChannelEntity> channels = channelRepository.findAll();
 		ChannelsResult channelsResult = new ChannelsResult();
 		List<TVChannel> tvChannels = new ArrayList<>(channels.size());
+		TVCategories tvCategories = new TVCategories();
 		channels.forEach(channel -> {
 			TVChannel tvChannel = MappingUtils.map(channel, TVChannel.class);
 			CategoryEntity channelCategory = channel.getCategory();
@@ -73,34 +75,40 @@ public class ChannelServiceImpl implements ChannelService {
 				tvCategory.setId(channelCategory.getId().toString());
 				tvChannel.setTv_categories(Collections.singletonList(new TVCategories()));
 				tvChannel.getTv_categories().get(0).setTv_category(Collections.singletonList(tvCategory));
+				tvCategories.getTv_category().add(tvCategory);
 			}
 			tvChannels.add(tvChannel);
 		});
 		channelsResult.setTv_channel(tvChannels);
+		channelsResult.setTv_categories(tvCategories);
 		return channelsResult;
 	}
 
 	@Override
-	public List<Movie> getMovies() {
+	public VodsResult getMovies() {
+		VodsResult vodsResult = new VodsResult();
+		VodCategories vodCategories = new VodCategories();
 		List<Vod> vods = vodRepository.findAll();
 		List<Movie> movies = new ArrayList<Movie>(vods.size());
 		vods.forEach(vod -> {
 			Movie movie = new Movie();
-			CategoryEntity channelCategory = vod.getCategory();
-			if (channelCategory != null) {
-				VodCategory category = new VodCategory();
-				category.setCaption(channelCategory.getCaption());
-				category.setIcon_url(channelCategory.getIcon_url());
-				category.setId(channelCategory.getId().toString());
-				movie.setVod_categories(Collections.singletonList(new VodCategories()));
-				movie.getVod_categories().get(0).setVod_category(Collections.singletonList(category));
+			CategoryEntity category = vod.getCategory();
+			if (category != null) {
+				VodCategory vodCategory = new VodCategory();
+				vodCategory.setCaption(category.getCaption());
+				vodCategory.setIcon_url(category.getIcon_url());
+				vodCategory.setId(category.getId().toString());
+				movie.setVod_category(vodCategory);
+				vodCategories.getVod_category().add(vodCategory);
 			}
 			movie.setCaption(vod.getCaption());
 			movie.setV_url(vod.getStreaming_url());
 			movie.setPoster_url(vod.getIcon_url());
 			movies.add(movie);
 		});
-		return movies;
+		vodsResult.setMovies(movies);
+		vodsResult.setVod_categories(vodCategories);
+		return vodsResult;
 	}
 
 	@Override

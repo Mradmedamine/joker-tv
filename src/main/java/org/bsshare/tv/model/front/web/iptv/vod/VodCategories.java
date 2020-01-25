@@ -1,6 +1,7 @@
 package org.bsshare.tv.model.front.web.iptv.vod;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VodCategories implements Serializable {
@@ -10,6 +11,9 @@ public class VodCategories implements Serializable {
 	private List<VodCategory> vod_category;
 
 	public List<VodCategory> getVod_category() {
+		if (vod_category == null) {
+			vod_category = new ArrayList<>();
+		}
 		return vod_category;
 	}
 

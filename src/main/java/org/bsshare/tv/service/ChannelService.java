@@ -1,9 +1,7 @@
 package org.bsshare.tv.service;
 
-import java.util.List;
-
 import org.bsshare.tv.model.front.web.iptv.channel.ChannelsResult;
-import org.bsshare.tv.model.front.web.iptv.vod.Movie;
+import org.bsshare.tv.model.front.web.iptv.vod.VodsResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ChannelService {
@@ -14,6 +12,6 @@ public interface ChannelService {
 
 	ChannelsResult getChannels();
 
-	List<Movie> getMovies();
+	VodsResult getMovies();
 
 }
